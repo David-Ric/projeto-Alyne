@@ -17,7 +17,7 @@ export default function Game() {
     <>
       <Navbar />
       <div className='content-sobre'>
-      {user !=''?(<>
+      {user !=null?(<>
         <SubMenu/>
       </>):(<></>)}
 
