@@ -1,0 +1,131 @@
+@import url('https://fonts.cdnfonts.com/css/avenir');
+
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500&display=swap');
+
+.content-home {
+    font-family: 'Unbounded', cursive;
+    width: 100%;
+    padding-top: 170px;
+    min-height: 800px;
+    height: auto !important;
+    background-color: #4169e1;
+    flex-direction: column; 
+    align-items: center;
+    display: flex;
+    .content{
+        padding-left: 80px;
+        padding-right: 80px;
+        justify-content:space-between !important;
+        align-items: center;
+        display: flex;
+    }
+    h2{
+        font-size: 30px;
+        color: aliceblue;
+    }
+    .logoOle{
+        width: 40%;
+        justify-content: center;
+        img{
+            width: 60%;
+        }
+        img:hover{
+            width: 65%;
+        }
+    }
+    .bloco2{
+        align-items: center;
+        display: flex;
+        width: 60%;
+        height: 400px;
+        background-color: #3b60cf;
+        border-radius: 20px;
+        .text-btn{
+            justify-content: center !important;
+            text-align: center !important;
+        }
+        .btn-entrar{
+            margin-top: 30px;
+            width: 260px;
+            padding: 15px;
+            border-radius: 50px;
+            background: linear-gradient(0deg, #ffd700 0%, #ffff00 100%);
+            
+        }
+        .btn-entrar:hover{
+            background:  linear-gradient(0deg, #ffa500 0%, #ffff00 100%);
+            width: 270px;
+            padding: 18px;
+            color: aliceblue;
+        }
+    .logoAvatar{
+        width: 60%;
+     //   height: 60%;
+        justify-content: center;
+        display: flex;
+        img{
+            width: 80%;
+        }
+       
+    }
+    }
+    @media(max-width:1100px) {
+            padding-top: 90px;
+            padding-bottom: 90px;
+            min-height: 1000px; 
+            .content{
+                padding-left: 10px;
+                padding-right: 10px;
+                flex-direction: column; 
+            }
+            .logoOle{
+                justify-content: center !important;
+                align-items: center;
+                width: 70%;
+                img{
+                    width: 100%;
+                }
+                img:hover{
+                    width: 100%;
+                }
+            }
+            .logoOle:hover{
+                width: 50%;
+            }
+            .bloco2{
+                padding: 20px;
+                width: 90%;
+                height: auto !important;
+                flex-direction: column;
+                .btn-entrar{
+                    width: 80%;
+                }
+                .btn-entrar:hover{
+                    width: 80%;
+                }
+            }
+}
+}
+.menu-mob{
+display: flex;
+a{
+    h2{
+        color: gold !important;
+    }
+    text-decoration: none;
+}
+    @media(min-width:1100px) {
+        display: none;
+    }
+}
+.submenu{
+    justify-content: center;
+margin-top: 30px;
+    h2{
+        color: gold !important;
+        font-size: 20px;
+    }
+    span{
+        font-size: 15px;
+    }
+}

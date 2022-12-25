@@ -1,0 +1,174 @@
+@import url('https://fonts.cdnfonts.com/css/avenir');
+
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500&display=swap');
+
+.content-game {
+    font-family: 'Unbounded', cursive;
+    width: 100%;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-top: 60px;
+    min-height: 800px;
+    height: auto !important;
+    background-color: #4169e1;
+    justify-content:center !important;
+    align-items: center;
+    display: flex;
+ 
+        .btn-entrar{
+            margin-top: 30px;
+            width: 260px;
+            padding: 15px;
+            border-radius: 50px;
+            background: linear-gradient(0deg, #ffd700 0%, #ffff00 100%);
+            
+        }
+        .btn-entrar:hover{
+            background:  linear-gradient(0deg, #ffa500 0%, #ffff00 100%);
+            width: 270px;
+            padding: 18px;
+            color: aliceblue;
+        }
+    
+
+    @media(max-width:1100px) {
+            flex-direction: column; 
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-bottom: 90px;
+            min-height: 1200px; 
+          }
+                .btn-entrar{
+                    width: 80%;
+                }
+                .btn-entrar:hover{
+                    width: 80%;
+                }
+                @media(max-width:500px) {
+                    min-height: 900px; 
+                  }
+          
+}
+.conteudo-game{
+    align-items: center;
+    justify-content: center !important;
+    background-color: #3253b4;
+    background-image: url(../../assets/ole-escuro.png);
+    background-repeat: no-repeat, repeat;
+    background-position: right 100px;
+    background-size: 40%;
+    width: 70%;
+    min-height:500px;
+    border-radius: 20px;
+    padding: 30px;
+    .equipe{
+        padding: 10px;
+        background-color: #28428e;
+        margin-bottom: 20px;
+    }
+    h1{
+    font-size: 25px;
+    text-align: center;
+    }
+    @media(max-width:1100px) {
+        width: 100%;
+        padding: 10px;
+        h2{
+            line-height: 20px;
+        }
+        background-size: 40%;
+        background-position: right 60px;
+    }
+    @media(max-width:500px) {
+        width: 100%;
+        padding: 10px;
+        h2{
+            line-height: 20px;
+        }
+        background-size: 15%;
+        background-position: right 110px;
+    }
+    @media(max-width:380px) {
+        width: 100%;
+        padding: 10px;
+      
+        background-size: 15%;
+        background-position: right 148px;
+    }
+   }
+   #gif-equipe{
+    width: 500px;
+    height: 200px;
+   }
+   .total-pontos{
+    text-align: center;
+   // margin-right: 60px;
+    h2{
+        font-size: 17px;
+        color: antiquewhite;
+    }
+   }
+   .colocacao{
+padding-top: 50px;
+text-align: center;
+align-items: center;
+background-color: gold;
+border-radius: 50%;
+width: 150px;
+height: 150px;
+margin: 10px;
+text-align: center;
+box-shadow: 0 4px 8px 1px #121213;
+    h1{
+        font-size: 55px;
+        color:red;
+        margin: 8px;
+     text-shadow: #121213;
+     font-weight: bold;
+    }
+    @media(max-width:380px) {
+        padding-top: 40px;
+        width: 140px;
+        height: 140px;
+    }
+   }
+   .nota-ole{
+        h1{
+            
+            color:#28428e;
+        }
+   }
+   .pontos{
+    display: flex;
+    justify-content: space-between;
+   }
+   .notas{
+    padding: 10px;
+    justify-content: center !important;
+    align-items: center !important;
+   }
+   .conjunto-notas{
+    display: flex;
+    justify-content: space-between !important;
+   }
+   .resultado{
+    margin-top: 60px;
+    background-color: #28428e;
+    padding: 10px;
+    color: antiquewhite;
+   }
+   .btn-classific{
+    margin-left: 10%;
+   }
+   .conrteudo-frame{
+    font-family: 'Unbounded', cursive;
+    width: 100%;
+    padding-left: 80px;
+    padding-right: 80px;
+    padding-bottom: 60px;
+    height: auto !important;
+    background-color: #4169e1;
+    justify-content:center !important;
+    align-items: center;
+    display: flex;
+   }
