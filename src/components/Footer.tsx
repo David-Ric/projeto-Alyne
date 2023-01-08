@@ -10,8 +10,8 @@ export default function Footer() {
 
     return (
         <>
-            <div className='content-footer'>
-                <div>
+            <div className='content-footer d-flex'>
+                
                 <div className="social" >
                     <a className="redes"  target="_blank" href="https://pt-br.facebook.com/grupoalynecosmeticos/">
                     <BsFacebook fontSize={25} /> </a>
@@ -25,7 +25,7 @@ export default function Footer() {
                     <a className="redes"  target="_blank" href="https://www.youtube.com/channel/UCX4t2MySUE_-dIM5OV5gmYA">
                         <BsYoutube fontSize={25} /> </a>
                 </div>
-                </div>
+                <h1 className='portal-footer'>Portal Grupo Alyne</h1>
             </div>
         </>
 

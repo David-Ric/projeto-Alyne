@@ -1,0 +1,13 @@
+.logo-comercial{
+    margin: auto !important;
+    width: 70%;
+    height:540px;
+    background-image: url("../../assets/comercial-home.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        margin-top: 60px !important;
+        width: 90%;
+     }
+}

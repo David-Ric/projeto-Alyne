@@ -12,33 +12,41 @@
     flex-direction: column; 
     align-items: center;
     display: flex;
-    .content{
+    
+    .contentrec{
         position: relative;
         width: 100%;
         min-height: 700px;
         padding-left: 80px;
         padding-right: 80px;
         justify-content:flex-end;
-        background-image: url("../../assets/fundo-portal.png");
-        background-size: 100%;
-        background-repeat: no-repeat, repeat;
         align-items: center;
         display: flex;
-       
+        background-color: #EDEEE9;
+        .logo-recuperar{
+            width: 600px;
+            height: 420px;
+            background-image: url("../../assets/RecuperarSenha.png");
+            background-size: 70%;
+            background-repeat: no-repeat, repeat;
+            margin-bottom: 180px;
+        }
         
         @media(max-width:900px) {
         padding-left: 10px;
         padding-right: 10px;
         justify-content:center;
-        background-image: url("../../assets/fundo-mobile.png");
+        //background-image: url("../../assets/fundo-mobile.png");
         min-height: 1020px;
         }
         @media(max-width:790px) {
             padding-left: 10px;
             padding-right: 10px;
             justify-content:center;
-          
             min-height: 700px;
+            .logo-recuperar{
+                display: none;
+            }
             }
             @media(max-width:790px) {
                 padding-left: 10px;
@@ -137,18 +145,19 @@ margin-top: 30px;
      
   }
 
-  .btn-entrar{
+  .btn-enviar{
     margin-top: 30px;
     width: 260px;
     padding: 15px;
     border-radius: 50px;
-    background: linear-gradient(0deg, #ffd700 0%, #ffff00 100%);
+    background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+    color: aliceblue;
     @media(max-width:290px) {
         width: 170px;
     }
 }
-.btn-entrar:hover{
-    background:  linear-gradient(0deg, #ffa500 0%, #ffff00 100%);
+.btn-enviar:hover{
+    background:  linear-gradient(0deg, #033049 0%, #2f7aa2 100%);
     color: aliceblue;
 }
 .register-link{

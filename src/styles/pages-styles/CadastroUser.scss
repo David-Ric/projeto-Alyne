@@ -1,0 +1,243 @@
+
+.conteudo{
+    position: relative;
+    justify-content: flex-end !important;
+        width: 800px;
+    min-height: auto;
+    box-shadow: 0 4px 8px 1px #121213;
+    padding: 15px;
+   background-color: #fff;
+   top: 20px !important;
+   @media (max-width:768px){
+       width: 100%;
+       padding: 8px;
+     }
+     .btn-direito{
+      position: absolute;
+      float: right !important;
+      right:0;
+      margin-right: 12px;
+     }
+}
+
+.form-cadastro-user{
+  //  width: 800px;
+   // min-height: 560px;
+   // box-shadow: 0 4px 8px 1px #121213;
+   // padding: 15px;
+    background-color: #fff;
+    top: 20px !important;
+    @media (max-width:768px){
+		width: 100%;
+        padding: 8px;
+	  }
+}
+.acesso-personalizado-edit{
+    width: 100%;
+    margin-top: 5px;
+    height: 195px;
+    background-color: #f9f5f5;
+    box-shadow: 0 4px 8px 1px #c6c6ca;
+    flex: 0 0 auto;
+    padding: 15px;
+}
+.acesso-personalizado{
+    width: 100%;
+    margin-top: 5px;
+    height: 208px;
+    background-color: #f9f5f5;
+    box-shadow: 0 4px 8px 1px #c6c6ca;
+    flex: 0 0 auto;
+    padding: 15px;
+}
+.check-grupo{
+    display: flex;
+    text-align: center;
+    margin-right: 15px;
+    height: 25px;
+    margin-bottom: 20px;
+    }
+    #grupo{
+        width: 20px;
+        height: 20px;
+        margin-right: 15px;
+        margin-top: 5px;
+        
+   
+}
+.text{
+    font-size: 15px;
+    color: #6b6868 !important;
+}
+.btn-editar{
+margin-top: 85px !important;
+}
+.btn-cancelar{
+    margin-top: 25px !important;
+    width:100%;
+    padding: 15px;
+   // border-radius: 50px;
+    background: linear-gradient(0deg, #711e1e 0%, #e56e6e 100%);
+    color: aliceblue;
+    @media(max-width:290px) {
+        width: 170px;
+    }
+}
+.btn-cancelar:hover{
+    background:  linear-gradient(0deg, #8e1c1c 0%, #b54444 100%);
+    color: aliceblue;
+}
+.btn-cadastrar{
+    margin-top: 25px;
+    width:100%;
+    padding: 15px;
+   // border-radius: 50px;
+    background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+    color: aliceblue;
+    @media(max-width:290px) {
+        width: 170px;
+    }
+}
+.btn-cadastrar:hover{
+    background:  linear-gradient(0deg, #033049 0%, #2f7aa2 100%);
+    color: aliceblue;
+}
+#btn-mob{
+    display: none;
+    @media(max-width:790px) {
+     display: block;
+    }
+}
+#btn-desck{
+    display: block;
+    @media(max-width:790px) {
+     display: none;
+    }
+}
+.logo-cadastro{
+    margin-top: 60px;
+    width: 280px;
+   height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/cadastro-user.png");
+    background-size: 90%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+.modal-cadastro-user{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    width: 830px;
+    height: auto;
+    top: -30px;
+    left: -30%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: 0%;
+        top:0px;
+      }
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
+.modal-edit-user{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+        justify-content: center !important;
+    width: 1200px;
+    height: auto;
+    top: -30px;
+    left: -70%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: -3%;
+        top:0px;
+      }
+    }
+    .modal-body{
+        justify-content: center !important;
+        align-items: center !important;
+        display: flex;
+        padding-top: 0 !important;
+        @media(max-width:790px) {
+          flex-direction: column !important;
+          }
+    }
+    .conteudo-user{
+        line-height: 10px !important;
+        padding-top: 60px;
+        margin: auto !important;
+        margin-bottom: 250px !important;
+        align-items: center;
+        width: 250px;
+        img{
+            margin-left: 50px;
+        }
+        h2{
+            text-align: center;
+            max-height: 25px;
+        }
+        @media(max-width:790px) {
+            justify-content: center !important;
+            padding: 10px;
+            margin-bottom: 0px !important;
+            }
+    }
+    .form-cadastro-user{
+        width: 75%;
+        @media(max-width:790px) {
+            width: 100%;
+          }
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
+.alerta-user{
+    width:270%;
+    margin:auto !important;
+    text-align: center;
+    @media(max-width:790px) {
+        text-align: left;
+      }
+}
+
+
+#nomePesquisa{
+    width: 300px !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       }
+    
+}
+#statusPesquisa{
+    width: 200px !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       }
+    
+}
+.btn-pesquisas{
+    font-size: 13px;
+}
+.div-pesquisa-status{
+    @media(max-width:790px) {
+        margin-top: 20px;
+       }
+}
+.conteudo-botoes{
+    display: flex;
+    justify-content: space-around;
+    @media(max-width:790px) {
+       flex-direction: column;
+      }
+}

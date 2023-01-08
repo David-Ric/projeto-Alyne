@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/pages-styles/Home.scss';
+import '../styles/pages-styles/RecuperarSenha.scss';
 import '../styles/global.scss';
 import Navbar from '../components/Navbar';
 import LogoOle from '../assets/ole-logo.png';
@@ -14,40 +14,23 @@ import Logo from '../assets/logo-dark.png';
 import api from '../services/api';
 import Alert from "../components/Alert";
 import { iDadosUsuario } from '../@types';
-import { Si1Password } from "react-icons/si";
+import { BsBackspaceFill } from "react-icons/bs";
 
-export default function Home() {
+export default function RecuperarSenha() {
   const history = useNavigate();
-  let [user, setUser] = useState('');
+  let [email, setEmail] = useState('');
   let [senha, setSenha] = useState('');
   const [error, setError] = useState("");
   const [msgErro, setMsgErro] = useState("");
   const [alertErro, setAlertErro] = useState(false);
   const usuario: iDadosUsuario = JSON.parse(
-    localStorage.getItem("@Portal/usuario") || "{}"
+    localStorage.getItem("@appePlus/usuario") || "{}"
   );
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    logado();
-   // console.log('usuario', usuario)
+    //console.log('usuario', usuario)
   },[]);
-
-  function logado(){
-   
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="1"){
-      history('/admin-home'); 
-    }
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="2"){
-      history('/comercial-home'); 
-    }
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="3"){
-      history('/representante-home'); 
-    }
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="4"){
-      history('/inicial-home'); 
-    }
-  }
 
   function LimparErro(){
     setAlertErro(false);
@@ -59,52 +42,44 @@ export default function Home() {
 
   //=========== fução login ==================================//
   async function Login() {
-     if(user ==''){
+     if(email ==''){
       let usuario: any;
       usuario = document.getElementById("user");
       //usuario.style.borderColor = "red";
       document.getElementById("user")?.focus();
       setAlertErro(true);
-      setMsgErro("Usuario não informado.");
+      setMsgErro("E-mail não informado.");
       return;
      }
-     if(senha ==''){
-      let usuario: any;
-      usuario = document.getElementById("senha");;
-      document.getElementById("senha")?.focus();
-      setAlertErro(true);
-      setMsgErro("Senha não informada.");
-      return;
-     }
+     
      api.post("/api/Account/Login",{
-      username: user,
-      password: senha
+      username: email,
+     
      })
      .then((response) => {
       console.log(response.data);
-     if(response.data.ativo=="1"){
+     if(response.data.ativo=="true"){
       localStorage.setItem(
         "@Portal/usuario",
         JSON.stringify(response.data)
       );
-       if(response.data.grupo =='1'){
+       if(response.data.grupo ='1'){
         history('/admin-home'); 
        }
-       if(response.data.grupo =='2'){
+       if(response.data.grupo ='2'){
         history('/comercial-home'); 
        }
-       if(response.data.grupo =='3'){
+       if(response.data.grupo ='3'){
         history('/representante-home'); 
        }
-       if(response.data.grupo =='4'){
+       if(response.data.grupo ='3'){
         history('/inicial-home'); 
        }
      }else{
-      setUser('');
-    user='';
-    setSenha('');
-    senha='';
-     document.getElementById("user")?.focus();
+      setEmail('');
+    email='';
+    
+     document.getElementById("email")?.focus();
      setAlertErro(true);
      setMsgErro("Usúario inativado, entre em contato com o suporte.");
      return;
@@ -114,13 +89,12 @@ export default function Home() {
     .catch((error) => {
       console.log("Ocorreu um erro ");
       if (error.response?.status === 401) {
-        setUser('');
-    user='';
-    setSenha('');
-    senha='';
-     document.getElementById("user")?.focus();
+        setEmail('');
+    email='';
+    
+     document.getElementById("email")?.focus();
      setAlertErro(true);
-     setMsgErro("Usúario ou senha invalidos.");
+     setMsgErro("E-mail não enviado.");
      return;
       }
     });
@@ -135,51 +109,49 @@ export default function Home() {
       
       <div className='content-home'>
       
-      <div className='content'>
+      <div className='contentrec'>
         
-          <div></div>
+          <div className='logo-recuperar'></div>
           <div className='bloco-login'>
           <img src={Logo} alt="" width={140} style={{marginBottom:10}}/>
           <div className='bloco-title'>
-          <h1>LOGIN</h1>
+          <h1 style={{fontWeight:"bold", 
+          textAlign: "left", 
+          marginLeft:33, 
+          fontSize: 18,
+          color: "red"
+          }}>ESQUECEU SUA SENHA?</h1>
+
+          <h1 style={{fontWeight:"bold", textAlign: "left", marginLeft:33}}>RECUPERAR SENHA</h1>
+          <h1 style={{textAlign: "left", marginLeft:33,maxWidth:280, lineHeight:2, fontSize:14, marginTop: 10 }}>informe seu e-mail cadastrado para recuperar sua senha:</h1>
+
           </div>
           {alertErro && (
-					<div className="mt-3 mb-0">
+					<div className="mt-3 mb-0" >
 						<Alert msg={msgErro} setAlertErro={setAlertErro} />
 					</div>
 					)}
-      <div style={{marginBottom:20}} className='bloco-input'>
-      <p className="labelform" >Usuario</p>
+      <div style={{marginBottom:20, marginTop:10}} className='bloco-input'>
+      <p className="labelform" >E-mail</p>
         <input className='form-coontrol inputlogin' 
-        id='user'
+        id='email'
         type="text"
         name='user' 
-        value={user}
+        value={email}
         onKeyDown={LimparErro} 
         onChange={(e)=>{ 
-          setUser(e.target.value.toLowerCase());
+          setEmail(e.target.value.toLowerCase());
         }}
         />
       </div>
-      <div className='bloco-input'>
-      <p className="labelform" >Senha</p>
-        <input className='form-coontrol inputlogin' 
-        id='senha'
-        type="password" 
-        name='password'
-        value={senha}
-        onKeyDown={LimparErro} 
-        onChange={(e)=>{
-          setSenha(e.target.value);
-        }}
-        />
+      
+      
+      <button style={{marginTop:0, marginBottom:10}} className='btn btn-enviar'onClick={Login}>Enviar</button>
+      <p className="center register-link">
+            <a href="/">Voltar ao login <BsBackspaceFill/> </a>
+          </p>
       </div>
-      <button className='btn btn-entrar'onClick={Login}>Entrar</button>
-       <p className="center register-link">
-            <a href="/recuperar-senha">Esqueci minha senha <Si1Password/> </a>
-          </p> 
-      </div>
-         
+      
 
         </div>
       </div>

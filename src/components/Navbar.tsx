@@ -23,13 +23,13 @@ export default function Navbar() {
   const [alertErro, setAlertErro] = useState(false);
   const [msgErro, setMsgErro] = useState("");
   const navBar = document.querySelector("#navBarTop")
-  const user = localStorage.getItem('@Ole/Usuario');
+
   const history = useNavigate();
-  console.log('user',user)
+  
 
   useEffect(() => {
     
-  })
+  },[])
 
   window.addEventListener("scroll", rooling);
   
@@ -82,7 +82,7 @@ export default function Navbar() {
           </a>
         </div>
 
-        <div className='menu'>
+        {/* <div className='menu'>
           <ul>
             <li><a href='/'><GoHome style={{marginRight:10}}/>Início</a></li>
             {user !=null?(<>
@@ -101,9 +101,9 @@ export default function Navbar() {
           </div>
           </>):(<></>)}
          
-        </div>
+        </div> */}
       
-        <div
+        {/* <div
           className={active ? "iconMenu iconActive" : "iconMenu"}
           onClick={ToggleMode}
           data-bs-toggle="collapse"
@@ -113,7 +113,7 @@ export default function Navbar() {
           aria-label="Toggle navigation"
         >
           <span className="hamburguer hamburguerIcon"></span>
-        </div>
+        </div> */}
 
         {/* =============== Menu Mobile =========================================================================== */}
 
@@ -121,9 +121,7 @@ export default function Navbar() {
           <ul className='menu-ul-mobile'>
             <div className='menu-mobile-li'>
             <li onClick={ToggleMode}><a href='/'><GoHome style={{marginRight:10}}/>Início</a></li><br></br>
-            {user !=null?(<>
-            <li  onClick={ToggleMode}><a href='/game'><TbDeviceGamepad2 style={{marginRight:10}}/> Game </a></li><br></br>
-            </>):(<></>)}
+            
             {/* <li><a href='/'><TbDeviceGamepad2 style={{marginRight:10}}/> Adm Game </a></li><br></br> */}
             <li  onClick={ToggleMode}><a href='/sobre'><BiFootball style={{marginRight:10}}/>Sobre o Olé</a></li>
             </div>

@@ -1,21 +1,30 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Game from '../pages/Game';
+import AdminPrincipal from '../pages/AdminPrincipal';
+import CadUsuarios from '../pages/CadastroUsuarios';
+import ComercialPrincipal from '../pages/ComercialPrincipal';
 import Home from '../pages/Home';
-import Interno from '../pages/Interno';
-import Login from '../pages/Login';
-import Sobre from '../pages/Sobre';
+import RecuperarSenha from '../pages/RecuperarSenha';
+import RepresentantePrincipal from '../pages/RepresentantePrincipal';
+import UsuarioPrincipal from '../pages/UsuarioPrincipal';
+import { iDadosUsuario } from '../@types';
 
 export interface IApplicationProps { }
-
+const usuario: iDadosUsuario = JSON.parse(
+    localStorage.getItem("@Portal/usuario") || "{}"
+  );
 const Router: React.FunctionComponent<IApplicationProps> = (props) => {
     return <BrowserRouter>
         <Routes>
             <Route path='/' element={<Home />} />
-            <Route path='/game' element={<Game />} />
-            <Route path='/sobre' element={<Sobre />} />
-            <Route path='/interno' element={<Interno />} />
-            <Route path='/login' element={<Login />} />
+            <Route path='/admin-home' element={<AdminPrincipal />} />
+            <Route path='/inicial-home' element={<UsuarioPrincipal />} />
+            <Route path='/comercial-home' element={<ComercialPrincipal />} />
+            <Route path='/representante-home' element={<RepresentantePrincipal />} />
+            <Route path='/recuperar-senha' element={<RecuperarSenha />} />
+            <Route path='/cadastro-usuarios' element={<CadUsuarios />} />
+            
+            
         </Routes>
 
     </BrowserRouter>
