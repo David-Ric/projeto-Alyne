@@ -31,7 +31,14 @@
             background-repeat: no-repeat, repeat;
             margin-bottom: 180px;
         }
-        
+        .logo-redefinir{
+            width: 600px;
+            height: 420px;
+            background-image: url("../../assets/redefinir.png");
+            background-size: 70%;
+            background-repeat: no-repeat, repeat;
+            margin-bottom: 180px;
+        }
         @media(max-width:900px) {
         padding-left: 10px;
         padding-right: 10px;
@@ -45,6 +52,9 @@
             justify-content:center;
             min-height: 700px;
             .logo-recuperar{
+                display: none;
+            }
+            .logo-redefinir{
                 display: none;
             }
             }

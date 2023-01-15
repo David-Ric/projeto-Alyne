@@ -1,34 +1,34 @@
 import internal from "stream"
 
 export interface iDadosUsuario {
-  userName: string,
+  
+  username: string,
   email: string,
   grupo: string,
-  ativo: string,
+  status: string,
   funcao:string,
   admin: boolean,
   usuario: boolean,
   comercial: boolean,
   representante: boolean,
   password: string,
-  primeiroNome: string,
-  ultimoNome: string,
+  nomeCompleto: string,
   token: string
+  imagemURL: string,
 }
 export interface iUsuarios {
 id: number,
-userName: string,
-primeiroNome: string,
-ultimoNome: string,
+username: string,
+nomeCompleto: string,
 grupo: string,
 funcao: string,
 email: string,
-phoneNumber: string,
+telefone: string,
 imagemURL: string,
 admin: boolean,
 representante: boolean,
 usuario:boolean
 comercial: boolean,
-ativo: string,
+status: string,
 }
 

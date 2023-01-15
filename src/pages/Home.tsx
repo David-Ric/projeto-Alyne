@@ -15,9 +15,12 @@ import api from '../services/api';
 import Alert from "../components/Alert";
 import { iDadosUsuario } from '../@types';
 import { Si1Password } from "react-icons/si";
+import { FaSearch } from "react-icons/fa";
+import Loading from "../components/Loading";
 
 export default function Home() {
   const history = useNavigate();
+  const [loading, setLoading] = useState(false);
   let [user, setUser] = useState('');
   let [senha, setSenha] = useState('');
   const [error, setError] = useState("");
@@ -35,16 +38,16 @@ export default function Home() {
 
   function logado(){
    
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="1"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupo=="1"){
       history('/admin-home'); 
     }
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="2"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupo=="2"){
       history('/comercial-home'); 
     }
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="3"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupo=="3"){
       history('/representante-home'); 
     }
-    if(usuario.token && usuario.ativo=="Ativo"&& usuario.grupo=="4"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupo=="4"){
       history('/inicial-home'); 
     }
   }
@@ -59,7 +62,9 @@ export default function Home() {
 
   //=========== fução login ==================================//
   async function Login() {
+   setLoading(true);
      if(user ==''){
+      setLoading(false);
       let usuario: any;
       usuario = document.getElementById("user");
       //usuario.style.borderColor = "red";
@@ -69,6 +74,7 @@ export default function Home() {
       return;
      }
      if(senha ==''){
+      setLoading(false);
       let usuario: any;
       usuario = document.getElementById("senha");;
       document.getElementById("senha")?.focus();
@@ -76,13 +82,14 @@ export default function Home() {
       setMsgErro("Senha não informada.");
       return;
      }
-     api.post("/api/Account/Login",{
+     api.post("/api/Auth/login",{
       username: user,
       password: senha
      })
      .then((response) => {
-      console.log(response.data);
-     if(response.data.ativo=="1"){
+      setLoading(false);
+    //  console.log(response.data);
+     if(response.data.status =="1"){
       localStorage.setItem(
         "@Portal/usuario",
         JSON.stringify(response.data)
@@ -112,15 +119,28 @@ export default function Home() {
      
     })
     .catch((error) => {
-      console.log("Ocorreu um erro ");
-      if (error.response?.status === 401) {
+      setLoading(false);
+      if (error.response?.status != 400) {
+        setAlertErro(true);
+        setMsgErro("Ops... aconteceu um erro inesperado, tente novamente mais tarde.");
+        setUser('');
+        user='';
+        setSenha('');
+        senha='';
+         document.getElementById("user")?.focus();
+         return;
+      }
+      console.log(error.response.data );
+      if (error.response?.status === 400) {
         setUser('');
     user='';
     setSenha('');
     senha='';
      document.getElementById("user")?.focus();
      setAlertErro(true);
-     setMsgErro("Usúario ou senha invalidos.");
+     const  data  = error.response.data;
+    setMsgErro(data);
+    //  setMsgErro("Usúario ou senha invalidos.");
      return;
       }
     });
@@ -174,7 +194,16 @@ export default function Home() {
         }}
         />
       </div>
-      <button className='btn btn-entrar'onClick={Login}>Entrar</button>
+      <button className='btn btn-entrar' disabled={loading} onClick={Login}>
+      {loading ? "Carregando " : "Entrar "}
+            {loading && (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}
+       </button>
        <p className="center register-link">
             <a href="/recuperar-senha">Esqueci minha senha <Si1Password/> </a>
           </p> 

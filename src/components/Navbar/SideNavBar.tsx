@@ -10,6 +10,7 @@ import { BsBuilding, BsPlusSquare,BsFillFileEarmarkRichtextFill,BsCardImage } fr
 import { GoThreeBars } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
 import { BiUserVoice } from "react-icons/bi";
+import { iDadosUsuario } from '../../@types';
 
 
 export default function SideNavBar() {
@@ -20,6 +21,12 @@ export default function SideNavBar() {
     const [menuFotos, setmenuFotos] = useState(false);
     const [textMenu, settextMenu] = useState(true);
     const [active, setMode] = useState(false);
+
+
+    const usuario: iDadosUsuario = JSON.parse(
+      localStorage.getItem("@Portal/usuario") || "{}"
+    );
+
     const ToggleMode = () => {
       setMode(!active);
     };
@@ -108,7 +115,8 @@ export default function SideNavBar() {
                 )}
               </Link>
             </li> */}
-            <li>
+            {usuario.grupo=="1"||usuario.admin==true?(<>
+              <li>
               <Link to="/cadastro-usuarios">
                 <span>
                   <AiOutlineUsergroupAdd id="logo1" fontSize={35}  />
@@ -119,7 +127,9 @@ export default function SideNavBar() {
                 <span className="textmobile">Usuarios</span>
               </Link>
             </li>
+            </>):(<></>)}
            
+            {usuario.grupo=="1" ||usuario.grupo=="2" ||usuario.comercial==true?(<>
              <li>
               <Link to="">
                 <span>
@@ -131,7 +141,8 @@ export default function SideNavBar() {
                 <span className="textmobile">Comercial</span>
               </Link>
             </li> 
-            
+             </>):(<></>)}
+             {usuario.grupo=="1"||usuario.admin==true?(<>
             <li>
               <Link to="">
                 <span>
@@ -143,6 +154,8 @@ export default function SideNavBar() {
                 <span className="textmobile">Promotor</span>
               </Link>
             </li>
+            </>):(<></>)}
+            {usuario.grupo=="1"||usuario.admin==true?(<>
             <li>
               <Link to="">
                 <span>
@@ -154,7 +167,7 @@ export default function SideNavBar() {
                 <span className="textmobile">Representante</span>
               </Link>
             </li>
-           
+            </>):(<></>)}
             
            
           </ul>

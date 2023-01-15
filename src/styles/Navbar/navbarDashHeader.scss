@@ -142,3 +142,42 @@ color: #FFF !important;
       margin:0px;
       padding: 0px;
     }
+    .dropdow{
+      position: absolute;
+      top:50px;
+      right: 70px;
+      width: 200px;
+      height: 80px;
+      text-align: center;
+      padding-top: 10px;
+      line-height: 30px;
+      background-color: #FFF;
+      box-shadow: 0 5px 6px 1px #9d9d9f;
+      li{
+        cursor: pointer;
+      }
+      li:hover{
+        color: #007bff;
+      }
+      @media(max-width:800px){
+        right: 10px;
+      }
+    }
+    .no-dropdow{
+      position: absolute;
+      top:50px;
+      right: 70px;
+      width: 200px;
+      height: 0px;
+      text-align: center;
+      padding-top: 10px;
+      line-height: 30px;
+      background-color: #FFF;
+      @media(max-width:800px){
+        right: 20px;
+      }
+     // box-shadow: 0 5px 6px 1px #9d9d9f;
+      ul{
+        display: none;
+      }
+    }

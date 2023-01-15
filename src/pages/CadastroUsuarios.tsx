@@ -28,6 +28,7 @@ import Paginacao from "../components/Paginacao";
 import { phoneMask } from '../Masks/Masks';
 import { FaSearchPlus } from "react-icons/fa";
 import { AiOutlineClear } from "react-icons/ai";
+import { iDadosUsuario } from '../@types';
 
 
 
@@ -37,6 +38,7 @@ export default function CadUsuarios() {
   const [primeiroNome, setPrimeiroNome] = useState('');
   const [ultimoNome, setUltimoNome] = useState('');
   const [usuario, setUsuario] = useState('');
+  const [nomeUsuario, setNomeUsuario] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [idUser, setIdUser] = useState(0);
@@ -84,14 +86,41 @@ export default function CadUsuarios() {
 
    const [pagina, setPagina] = useState(1);
    const [qtdePagina, setQtdePagina] = useState(10);
+
+   const usuariolog: iDadosUsuario = JSON.parse(
+    localStorage.getItem("@Portal/usuario") || "{}"
+  );
+
   // const handleShow = () => setShow(true);
   useEffect(() => { 
-    GetUsuariosAcount();
+    logado()
+   // GetUsuariosAcount();
   },[]);
+
+  function logado(){
+   
+    // if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="1"){
+    //   history('/admin-home'); 
+    // }
+    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="2" && usuariolog.admin !=true){
+      history('/comercial-home'); 
+    }
+    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="3" && usuariolog.admin !=true){
+      history('/representante-home'); 
+    }
+    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="4" && usuariolog.admin !=true){
+      history('/inicial-home'); 
+    }
+  }
  
   useEffect(() => {
     window.scrollTo(0, 0);
-    GetUsuarios();
+    if(!filter){
+      GetUsuarios();
+    }else{
+      GetUsuariosFilter();
+    }
+    
   },[pagina]);
   function handleShowMensage(){
    
@@ -133,13 +162,14 @@ export default function CadUsuarios() {
   function handleShow(){
     setPrimeiroNome('');
     setUltimoNome('');
+    setNomeUsuario('');
     setUsuario('');
     setEmail('');
     setSenha('');
     setSenhaConfirm('');
     setUrlPerfil('');
     setTelefone('');
-     setAtivo('Ativo');
+     setAtivo('1');
      setFuncao('');
      setGrupo('');
      setIdUser(0);
@@ -153,52 +183,32 @@ export default function CadUsuarios() {
   }
  
 
-
-
-
-  //=========== get todos usuarios ==================================//
-  async function GetUsuariosAcount() {
-    setLoading(true)
-    await api
-      .get(`api/Account`)
-      .then((response) => {
-        setUsuariosCount(response.data);
-        usuariosCount=response.data;
-        setTotalPaginas(Math.ceil(usuariosCount.length / qtdePagina));
-       // setTotalPaginas(usuariosCount.length / qtdePagina);
-        //totalPaginas=usuariosCount.length / qtdePagina;
-        totalPaginas=Math.ceil(usuariosCount.length / qtdePagina);
-        setLoading(false)
-        console.log('usuarios',usuariosCount);
-      console.log('usuarios',totalPaginas);
-      })
-      .catch((error) => {
-        setLoading(false)
-        console.log("Ocorreu um erro");
-      });
-     
-  }
   async function GetUsuarios() {
-   
+    setFilter(false);
     await api
-      .get(`api/Account?PageNumber=${pagina}&PageSize=${qtdePagina}`)
+    
+      .get(`/api/Usuarios?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
-        setUsuarios(response.data);
-        usuarios=response.data;
-     //  console.log('usuarios pesquisa',response.data);
+        setUsuarios(response.data.data);
+     //   console.log('dados',response.data);
+        usuarios=response.data.data;
+        setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
+        // setTotalPaginas(response.data.total / qtdePagina);
+     //  console.log('total de paginas',totalPaginas);
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
       });
      
   }
+
   async function GetUsuariosFilter() {
     setFilter(true);
     await api
-      .get(`api/Account?PageNumber=${pagina}&PageSize=${qtdePagina}&Term=${search || searchStatus}`)
+      .get(`/api/Usuarios/filter?pagina=${pagina}&totalpagina=${qtdePagina}&filter=${search || searchStatus}`)
       .then((response) => {
-        setUsuarios(response.data);
-        usuarios=response.data;
+        setUsuarios(response.data.data);
+        usuarios=response.data.data;
       //  setUsuariosFilter(response.data);
       //  usuariosFilter=response.data;
        console.log('usuarios pesquisa',usuarios);
@@ -214,6 +224,7 @@ export default function CadUsuarios() {
   async function GetUsuarioId(id:any) {
     setPrimeiroNome('');
     setUltimoNome('');
+    setNomeUsuario('');
     setUsuario('');
     setEmail('');
     setSenha('');
@@ -232,17 +243,17 @@ export default function CadUsuarios() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Account/${id}`)
+      .get(`/api/Usuarios/${id}`)
       .then((response) => {
           setUsuariosget(response.data)
           setIdUser(response.data.id);
-          setPrimeiroNome(response.data.primeiroNome);
-          setUltimoNome(response.data.ultimoNome);
+          setPrimeiroNome(response.data.nomeCompleto);
           setEmail(response.data.email);
-          setUsuario(response.data.userName);
+          setNomeUsuario(response.data.username);
+          setUsuario(response.data.username);
           setUrlPerfil(response.data.imagemURL);
-          setTelefone(response.data.phoneNumber);
-          setAtivo(response.data.ativo);
+          setTelefone(response.data.telefone);
+          setAtivo(response.data.status);
           setFuncao(response.data.funcao);
           setGrupo(response.data.grupo);
           setAdmin(response.data.admin);
@@ -259,16 +270,15 @@ export default function CadUsuarios() {
   //============ Editar Usuario ===============================//
   async function editUser(){
     setLoadingUpdate(true)
-  await api.put(`/api/Account/${idUser}`, {
+  await api.put(`/api/Usuarios/${idUser}`, {
   id: idUser,
-  userName:usuario,
+  username:usuario,
   password: senha,
-  primeiroNome:primeiroNome ,
-  ultimoNome: ultimoNome,
+  nomeCompleto:primeiroNome ,
   email: email,
-  phoneNumber:telefone,
+  telefone:telefone,
   grupo: grupo,
-  ativo: ativo,
+  status: ativo,
   funcao: funcao,
   admin: admin,
   usuario: tipoUsuario,
@@ -278,7 +288,7 @@ export default function CadUsuarios() {
   })
     .then(response => {
       handleCloseEdit()
-      GetUsuariosAcount();
+     // GetUsuariosAcount();
       GetUsuarios();
       setLoadingUpdate(false)
      // console.log('resposta', response)
@@ -316,14 +326,7 @@ export default function CadUsuarios() {
         setMsgErro("É obrigatório informar o primeiro nome.");
       return
       }
-      if(ultimoNome==''){
-        let senhaconf: any;
-        senhaconf = document.getElementById("ultnome");
-        document.getElementById("ultnome")?.focus();
-        setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o último nome.");
-      return
-      }
+
       if(email==''){
         let senhaconf: any;
         senhaconf = document.getElementById("email");
@@ -365,26 +368,24 @@ export default function CadUsuarios() {
       return
       }
   setLoadingCreate(true)
-      api.post("/api/Account/Register",{
-        userName: usuario,
+      api.post("/api/Auth/register",{
+        username: usuario,
         email: email,
         grupo: grupo,
-        ativo: ativo,
+        status: ativo,
         funcao: funcao,
         admin: admin,
         usuario: tipoUsuario,
         comercial: comercial,
         representante: representante,
         password: senha,
-        primeiroNome: primeiroNome,
-        ultimoNome: ultimoNome
+        nomeCompleto: primeiroNome,
        })
        
         .then(response => {
           setLoadingCreate(false)
-          GetUsuariosAcount();
+         // GetUsuariosAcount();
           GetUsuarios();
-
           handleClose ();
           handleShowMensage();
           setAlertErroMensage(true);
@@ -406,7 +407,7 @@ export default function CadUsuarios() {
               );
           }
           
-          
+          setLoadingCreate(false)
          
           return;
         });
@@ -415,6 +416,7 @@ export default function CadUsuarios() {
 function LimparPesquisa(){
   setSearch('');
   setSearchStatus('');
+  setPagina(1);
   setFilter(false);
   GetUsuarios();
 }
@@ -496,7 +498,7 @@ function LimparPesquisa(){
                         <option value="2">Inativo</option>
                     </select> 
                     </div>
-                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={GetUsuariosFilter}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
+                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetUsuariosFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas' onClick={LimparPesquisa}>Limpar<AiOutlineClear style={{marginLeft: 6}} fontSize={20}/></button>
                     </div>
           
@@ -521,18 +523,18 @@ function LimparPesquisa(){
                         <>
       {usuarios.map((usuarios,index)=> (
         <tr key={index}>
-         <td className='Nome-completo'>{usuarios.primeiroNome}{" "}{" "}{usuarios.ultimoNome}</td> 
+         <td className='Nome-completo'>{usuarios.nomeCompleto}</td> 
           <td style={{textAlign:'center'}}>
             {usuarios.grupo =="1"?'Administrativo'
             :usuarios.grupo =="2"?"Comercial"
             :usuarios.grupo =="3"?"Representante":"Usuario"}
             </td>
             <td style={usuarios.funcao ==null ||usuarios.funcao ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{usuarios.funcao?usuarios.funcao:"Não informado"}</td>
-            <td style={usuarios.ativo =='1'?{color:'#008000', textAlign:"center"}:{color:'red', textAlign:"center"}}>{usuarios.ativo =="1"?"Ativo":"Inativo"}</td>
+            <td style={usuarios.status =='1'?{color:'#008000', textAlign:"center"}:{color:'red', textAlign:"center"}}>{usuarios.status =="1"?"Ativo":"Inativo"}</td>
             <td >{usuarios.email}</td>
-            <td style={usuarios.phoneNumber ==null?{color:'red'}:{color:'#000'}} >
-            {usuarios.phoneNumber
-                            ? phoneMask(usuarios.phoneNumber)
+            <td style={usuarios.telefone ==null?{color:'red'}:{color:'#000'}} >
+            {usuarios.telefone
+                            ? phoneMask(usuarios.telefone)
                             : "Não informado"}</td>
             <td style={{color: "transparent"}} >.............</td>
             <td style={{textAlign:'center'}} className="fixed-table td-fixo">
@@ -618,7 +620,7 @@ function LimparPesquisa(){
         <div  className='form-cadastro-user' >
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
-            <p className="title-input"  >Primeiro Nome: <span style={{color:'red'}}>*</span></p>
+            <p className="title-input"  >Nome Completo: <span style={{color:'red'}}>*</span></p>
               <input className='form-coontrol inputlogin' 
               id='prinome'
               type="text"
@@ -631,20 +633,20 @@ function LimparPesquisa(){
               }}
               />
             </div>
-            <div  className='bloco-input'>
+            {/* <div  className='bloco-input'>
             <p className="title-input" >Último Nome: <span style={{color:'red'}}>*</span> </p>
               <input className='form-control inputlogin' 
               id='ultnome'
               type="text"
               //name='user' 
-              value={ultimoNome}
+              value={nomeUsuario}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setUltimoNome(e.target.value);
+                setNomeUsuario(e.target.value);
                 LimparTodos();
               }}
               />
-            </div>
+            </div> */}
             </div>
 
 
@@ -722,7 +724,7 @@ function LimparPesquisa(){
                           onChange={(e) => {setGrupo(e.target.value); LimparTodos();}}
                         >
                         <option value="">---</option>
-                        <option value="1">ADMINISTRATIVO</option>
+                        {/* <option value="1">ADMINISTRATIVO</option> */}
                         <option value="2">COMERCIAL</option>
                         <option value="3">REPRESENTANTE</option>
                         <option value="4">USUÁRIO</option>
@@ -850,15 +852,15 @@ function LimparPesquisa(){
               />
             </div>
             <div  className='bloco-input'>
-            <p className="title-input" >Último Nome: </p>
+            <p className="title-input" >Nome de Usuário: </p>
               <input className='form-control inputlogin' 
               id=''
               type="text"
               //name='user' 
-              value={ultimoNome}
+              value={nomeUsuario}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setUltimoNome(e.target.value);
+                setNomeUsuario(e.target.value);
               }}
               disabled
               />
@@ -906,6 +908,7 @@ function LimparPesquisa(){
               <select className="form-select select campo-select" 
             aria-label="Escolha o número de quartos" 
             value={ativo}
+            disabled={grupo=='1'}
                          onChange={(e) => {setAtivo(e.target.value);}}
                         >
                         <option value="1">Ativo</option>
@@ -914,9 +917,11 @@ function LimparPesquisa(){
             </div>
             <div className='bloco-input'>
             <p className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
-            <select className="form-select select campo-select" 
+            {grupo=="1"?(<>
+              <select className="form-select select campo-select" 
             aria-label="Escolha o número de quartos" 
             value={grupo}
+            disabled={grupo=='1'}
                          onChange={(e) => {setGrupo(e.target.value);
                         }}
                         >
@@ -925,13 +930,29 @@ function LimparPesquisa(){
                         <option value="2">COMERCIAL</option>
                         <option value="3">REPRESENTANTE</option>
                         <option value="4">USUÁRIO</option>
-                    </select>   
+                    </select> 
+            </>):(<>
+              <select className="form-select select campo-select" 
+            aria-label="Escolha o número de quartos" 
+            value={grupo}
+            disabled={grupo=='1'}
+                         onChange={(e) => {setGrupo(e.target.value);
+                        }}
+                        >
+                        <option value="">---</option>
+                        {/* <option value="1">ADMINISTRATIVO</option> */}
+                        <option value="2">COMERCIAL</option>
+                        <option value="3">REPRESENTANTE</option>
+                        <option value="4">USUÁRIO</option>
+                    </select> 
+            </>)}
+              
               
                </div>
             </div>
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
-            <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-desck' className='btn btn-cadastrar btn-editar'onClick={editUser}>Editar</button>
+            <button disabled={loadingUpdate||grupo=='1'} style={{marginTop: 135}} id='btn-desck' className='btn btn-cadastrar btn-editar'onClick={editUser}>Editar</button>
             <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-desck' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
             </div>
                     <div  className='bloco-input'>
@@ -943,6 +964,7 @@ function LimparPesquisa(){
                       <input 
                       type="checkbox" name="grupo" 
                       id="grupo" 
+                      disabled={grupo=='1'}
                       checked={admin}  
                       onChange={({ target }) => {
                       setAdmin(target.checked);
@@ -957,6 +979,7 @@ function LimparPesquisa(){
                       type="checkbox" 
                       name="grupo" 
                       id="grupo"
+                      disabled={grupo=='1'}
                       checked={comercial}  
                       onChange={({ target }) => {
                       setComercial(target.checked);
@@ -971,6 +994,7 @@ function LimparPesquisa(){
                       type="checkbox" 
                       name="grupo" 
                       id="grupo"
+                      disabled={grupo=='1'}
                       checked={representante}  
                       onChange={({ target }) => {
                       setRepresentante(target.checked);
@@ -985,6 +1009,7 @@ function LimparPesquisa(){
                       type="checkbox" 
                       name="grupo" 
                       id="grupo" 
+                      disabled={grupo=='1'}
                       checked={tipoUsuario}  
                       onChange={({ target }) => {
                       setTipoUsuario(target.checked);
@@ -996,7 +1021,7 @@ function LimparPesquisa(){
                     </div>
                     </div>
                     </div> 
-                    <button disabled={loadingUpdate} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={handleCloseEdit}>Editar</button>                  
+                    <button disabled={loadingUpdate ||grupo=='1'} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={handleCloseEdit}>Editar</button>                  
                     <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-mob' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
             </div>
            </>)}

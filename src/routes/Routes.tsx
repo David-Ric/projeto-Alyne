@@ -8,6 +8,7 @@ import RecuperarSenha from '../pages/RecuperarSenha';
 import RepresentantePrincipal from '../pages/RepresentantePrincipal';
 import UsuarioPrincipal from '../pages/UsuarioPrincipal';
 import { iDadosUsuario } from '../@types';
+import RedefinirSenha from '../pages/RedefinirSenha';
 
 export interface IApplicationProps { }
 const usuario: iDadosUsuario = JSON.parse(
@@ -22,7 +23,10 @@ const Router: React.FunctionComponent<IApplicationProps> = (props) => {
             <Route path='/comercial-home' element={<ComercialPrincipal />} />
             <Route path='/representante-home' element={<RepresentantePrincipal />} />
             <Route path='/recuperar-senha' element={<RecuperarSenha />} />
+            <Route path='/redefinir-senha' element={<RedefinirSenha />} />
             <Route path='/cadastro-usuarios' element={<CadUsuarios />} />
+            
+            
             
             
         </Routes>
