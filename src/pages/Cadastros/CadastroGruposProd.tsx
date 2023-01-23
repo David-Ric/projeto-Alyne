@@ -164,7 +164,7 @@ export default function CadastroGruposProdutos() {
     
     await api
     
-      .get(`/api/Grupos?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Grupo_Produtos?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setGrupos(response.data.data);
         console.log("grupo",grupos)
@@ -181,7 +181,7 @@ export default function CadastroGruposProdutos() {
   async function GetGruposFilter() {
     setFilter(true);
     await api
-      .get(`/api/Grupos/filter?pagina=${pagina}&totalpagina=999&Nome_Grupo=${search}`)
+      .get(`/api/Grupo_Produtos/filter?pagina=${pagina}&totalpagina=999&Nome_Grupo=${search}`)
       .then((response) => {
         setGrupos(response.data.data);
         grupos=response.data.data;
@@ -203,7 +203,7 @@ export default function CadastroGruposProdutos() {
  
     
     await api
-      .get(`/api/Grupos/${id}`)
+      .get(`/api/Grupo_Produtos/${id}`)
       .then((response) => {
          // setUsuariosget(response.data)
           setIdGrupo(response.data.id);
@@ -219,7 +219,7 @@ export default function CadastroGruposProdutos() {
   //============ Editar Usuario ===============================//
   async function EditGrupos(){
     setLoadingUpdate(true)
-  await api.put(`/api/Grupos/${idGrupo}`, {
+  await api.put(`/api/Grupo_Produtos/${idGrupo}`, {
   id: idGrupo,
   NameGrupo:nameGrupo
  
@@ -242,8 +242,8 @@ export default function CadastroGruposProdutos() {
       setAlertErroMensage(true);
      
     const { data } = error.response;
-    setMsgErro(data.message);
-     
+    //setMsgErro(data.message);
+    setMsgErro(error.response.data);
      
       return;
     });
@@ -257,13 +257,13 @@ export default function CadastroGruposProdutos() {
         senhaconf = document.getElementById("nomegrupoPesquisa");
         document.getElementById("nomegrupoPesquisa")?.focus();
         setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o nome du grupo de produto.");
+        setMsgErro("É obrigatório informar o nome do grupo de produto.");
       return
       }
 
       
   setLoading(true)
-  await api.post("/api/Grupos",{
+  await api.post("/api/Grupo_Produtos",{
         nameGrupo: search,
         
        })
@@ -295,7 +295,7 @@ export default function CadastroGruposProdutos() {
       //==== EXCLUIR GRUPO ======================================
       async function DeleteGrupo(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Grupos/${id}`)
+      await api.delete(`/api/Grupo_Produtos/${id}`)
         .then(response => {
           handleCloseEdit()
           GetGrupos();

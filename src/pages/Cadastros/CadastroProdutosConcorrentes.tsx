@@ -28,7 +28,7 @@ import Paginacao from "../../components/Paginacao";
 import { phoneMask } from '../../Masks/Masks';
 import { FaSearchPlus } from "react-icons/fa";
 import { AiOutlineClear } from "react-icons/ai";
-import { iDadosUsuario, iDataSelect, iProdutos } from '../../@types';
+import { iDadosUsuario, iDataSelect, iProdutos,iProdutoConcorrente } from '../../@types';
 import Select from 'react-select';
 
 
@@ -40,14 +40,23 @@ export default function CadastroProdutosConcorrentes() {
 
 
 
-  const [idProduto, setIdProduto] = useState(0);
+  const [id, setId] = useState(0);
+  const [codProduto, setCodProduto] = useState('');
+  const [nomeProduto, setNomeProduto] = useState('');
+  const [codConcorrente, setCodConcorrente] = useState('');
+  const [nomeConcorrente, setNomeConcorrente] = useState('');
+  const [codProdutoConcorrente, setCodProdutoConcorrente] = useState('');
+  const [nomeProdutoSimilar, setNomeProdutoSimilar] = useState('');
+  
+  
+  
   const [codigo, setCodigo] = useState('');
   const [nome, setNome] = useState('');
   const [idGrupo, setIdGrupo] = useState('');
   const [nomeGrupo, setNomeGrupo] = useState('');
   const [grupoSelecionado, setGrupoSelecionado] = useState('');
 
-  let [produtos, setProdutos] = useState<iProdutos[]>([]);
+  let [produtosConcorrentes, setProdutosConcorrentes] = useState<iProdutoConcorrente[]>([]);
   const [limpando, setLimpando] = useState(false);
 
   const [error, setError] = useState("");
@@ -75,16 +84,22 @@ export default function CadastroProdutosConcorrentes() {
    const [search, setSearch] = useState('');
    const [searchStatus, setSearchStatus] = useState('');
    const [filter, setFilter] = useState(false);
+   let [concorrentefilter, setConcorrentefilter] = useState(false);
+
    
 
    const [pagina, setPagina] = useState(1);
    const [qtdePagina, setQtdePagina] = useState(10);
 
-   const [grupoPesquisa, setGrupoPesquisa] = useState<iDataSelect[]>([]);
+   const [produtoPesquisa, setProdutoPesquisa] = useState<iDataSelect[]>([]);
+   const [concorrentePesquisa, setConcorrentePesquisa] = useState<iDataSelect[]>([]);
+   const [concorrentePesq, setConcorrentePesq] = useState<iDataSelect[]>([]);
+   const [produtoCadastro, setProdutoCadastro] = useState<iDataSelect[]>([]);
 
-   const [pesquisaNome, setPesquisaNome] = useState(true);
-   const [pesquisaCod, setPesquisaCod] = useState(false);
-   const [pesquisaGrupo, setPesquisaGrupo] = useState(false);
+
+   const [pesquisaProduto, setPesquisaProduto] = useState(true);
+   const [pesquisaSimilar, setPesquisaSimilar] = useState(false);
+   const [pesquisaConcorrente, setPesquisaConcorrente] = useState(false);
 
    let [selectGrupoBanco, setSelectGrupoBanco] = useState<iDataSelect>();
 
@@ -118,11 +133,13 @@ export default function CadastroProdutosConcorrentes() {
  
   useEffect(() => {
     window.scrollTo(0, 0);
-    GetGrupos() 
+    GetProdutos();
+    GetConcorrentes(); 
+    GetProdutoSimiliar();
     if(!filter){
-      GetProdutos();
+      GetProdutosConcorrentes();
     }else{
-      GetProdutosFilter();
+      GetProdutosConcorrentesFilter();
     }
     
   },[pagina]);
@@ -137,47 +154,111 @@ export default function CadastroProdutosConcorrentes() {
   }
 
  
-  function LimpaerroSenhaConfirm(){
-    setAlertErroRegister(false);
-     let senha: any;
-       senha = document.getElementById("senha");
-     senha.style.backgroundColor = "#ffff";
-    let senhaconf: any;
-      senhaconf = document.getElementById("confirma");
-    senhaconf.style.backgroundColor = "#ffff";
-    senhaconf.style.backgroundColor = "#ffff";
-  }
+  
  function LimparTodos(){
   setAlertErroRegister(false);
  }
   function handleShow(){
-    setIdGrupo('');
-    setNome('');
-    setCodigo('');
-    setNomeGrupo('');
-    setIdProduto(0);
+    setId(0);
+    setCodProduto('');
+    setNomeProduto('');
+    setCodConcorrente('');
+    setCodProdutoConcorrente('');
+    setNomeConcorrente('');
+    setNomeProdutoSimilar('');
     setShow(true);
   }
  
-  async function GetGrupos() {
+  //========get select produtos====================================
+  async function GetProdutos() {
     setFilter(false);
     
     await api
     
-      .get(`/api/Grupos?pagina=1&totalpagina=999`)
+      .get(`/api/Produtos?pagina=1&totalpagina=999`)
       .then((response) => {
-        console.log("grupo",response.data.data)
+      //  console.log("grupo",response.data.data)
+        
+        if (response.data.data.length > 0) {
+         let options:Array<iDataSelect>=new Array<iDataSelect>();
+         response.data.data.map((produtos:any) => {
+           let rowProd: iDataSelect = {};
+           rowProd.value = String(produtos.id);
+           rowProd.label = produtos.nome;
+         
+            options.push(rowProd);
+           setProdutoCadastro(options);
+        //  console.log("teste",produtoPesquisa)
+         })
+       }
+    
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+     
+  }
+  //========get select produtos concorrentes====================================
+  async function GetProdutoSimiliar() {
+    setFilter(false);
+    
+    await api
+    
+      .get(`/api/Produtos_Concorrentes?pagina=1&totalpagina=999`)
+      .then((response) => {
+       // console.log("grupo",response.data.data)
+       if (response.data.data.length > 0) {
+        let optionsprod:Array<iDataSelect>=new Array<iDataSelect>();
+        response.data.data.map((produtos:any) => {
+          let rowProd: iDataSelect = {};
+          rowProd.value = String(produtos.codProduto);
+          rowProd.label = produtos.nomeProduto;
+         
+           optionsprod.push(rowProd);
+          setProdutoPesquisa(optionsprod);
+       //  console.log("teste",produtoPesquisa)
+        })
+      }
+       if (response.data.data.length > 0) {
+        let options:Array<iDataSelect>=new Array<iDataSelect>();
+        response.data.data.map((concorrentes:any) => {
+          let rowConcorrente: iDataSelect = {};
+          rowConcorrente.value = String(concorrentes.id);
+          rowConcorrente.label = concorrentes.nomeProdutoSimilar;
+         
+           options.push(rowConcorrente);
+          setConcorrentePesquisa(options);
+       //  console.log("teste",concorrentePesquisa)
+        })
+      }
+
+    
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+     
+  }
+  //===========get concorrente =================================================//
+  async function GetConcorrentes() {
+    setFilter(false);
+    
+    await api
+    
+      .get(`/api/Concorrentes?pagina=1&totalpagina=999`)
+      .then((response) => {
+      //  console.log("grupo",response.data.data)
         
        if (response.data.data.length > 0) {
         let options:Array<iDataSelect>=new Array<iDataSelect>();
-        response.data.data.map((grupos:any) => {
-          let rowGrupo: iDataSelect = {};
-          rowGrupo.value = String(grupos.id);
-          rowGrupo.label = grupos.nameGrupo;
+        response.data.data.map((produtos:any) => {
+          let rowProd: iDataSelect = {};
+          rowProd.value = String(produtos.id);
+          rowProd.label = produtos.nome;
          
-           options.push(rowGrupo);
-          setGrupoPesquisa(options);
-         console.log("teste",grupoPesquisa)
+           options.push(rowProd);
+          setConcorrentePesq(options);
+       //  console.log("teste",produtoPesquisa)
         })
       }
     
@@ -187,16 +268,17 @@ export default function CadastroProdutosConcorrentes() {
       });
      
   }
+  //============================================================================
 
-  async function GetProdutos() {
+  async function GetProdutosConcorrentes() {
     setFilter(false);
     await api
     
-      .get(`/api/Produtos?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Produtos_Concorrentes?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
-        setProdutos(response.data.data);
-        console.log('dados',response.data);
-        produtos=response.data.data;
+        setProdutosConcorrentes(response.data.data);
+        produtosConcorrentes=response.data.data;
+        console.log('get',response.data.data)
         setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
         // setTotalPaginas(response.data.total / qtdePagina);
      //  console.log('total de paginas',totalPaginas);
@@ -207,20 +289,43 @@ export default function CadastroProdutosConcorrentes() {
      
   }
 
-  async function GetProdutosFilter() {
+  async function GetProdutosConcorrentesFilter() {
     setFilter(true);
+    console.log('entrou produto')
     await api
-      .get(`/api/Produtos/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Produtos_Concorrentes/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
-        setProdutos(response.data.data);
-        produtos=response.data.data;
+        setProdutosConcorrentes(response.data.data);
+        produtosConcorrentes=response.data.data;
        // setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
       //  setUsuariosFilter(response.data);
       //  usuariosFilter=response.data;
-       console.log('usuarios pesquisa',response.data);
+      // console.log('usuarios pesquisa',response.data);
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
+      });
+     
+  }
+
+  async function GetProdutosConcorrentesConcorrente() {
+    console.log('entrou')
+    await api
+      .get(`/api/Produtos_Concorrentes/concorrente?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .then((response) => {
+        setProdutosConcorrentes(response.data.data);
+        produtosConcorrentes=response.data.data;
+       // setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
+      //  setUsuariosFilter(response.data);
+      //  usuariosFilter=response.data;
+       console.log('conc pesquisa',produtosConcorrentes);
+      setConcorrentefilter(false);
+      concorrentefilter=false;
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+        setConcorrentefilter(false);
+        concorrentefilter=false;
       });
      
   }
@@ -228,27 +333,31 @@ export default function CadastroProdutosConcorrentes() {
   
     //=========== get produto por ID ==================================//
   async function GetProdutoId(id:any) {
-    setIdGrupo('');
-    setNome('');
-    setCodigo('');
-    setNomeGrupo('');
-    setIdProduto(0);
+    setId(0);
+    setCodProduto('');
+    setNomeProduto('');
+    setCodConcorrente('');
+    setCodProdutoConcorrente('');
+    setNomeConcorrente('');
+    setNomeProdutoSimilar('');
    
     setEdit(true);
     setShowEdit(true);
     
     await api
-      .get(`/api/Produtos/${id}`)
+      .get(`/api/Produtos_Concorrentes/${id}`)
       .then((response) => {
           //setUsuariosget(response.data)
           setGrupoSelecionado(response.data.nomeGrupo)
           let banco: iDataSelect = { value: response.data.idGrupo, label: response.data.nomeGrupo}
-        setSelectGrupoBanco(banco)
-          setIdProduto(response.data.id);
-          setCodigo(response.data.codigo);
-          setNome(response.data.nome);
-          setIdGrupo(response.data.idGrupo);
-          setNomeGrupo(response.data.nomeGrupo);
+          setSelectGrupoBanco(banco)
+          setId(response.data.id);
+          setCodProduto(response.data.codProduto);
+          setCodConcorrente(response.data.codConcorrente);
+          setNomeConcorrente(response.data.nomeConcorrente);
+          setNomeProduto(response.data.nomeProduto);
+          setCodProdutoConcorrente(response.data.codProdutoConcorrente);
+          setNomeProdutoSimilar(response.data.nomeProdutoSimilar);
 
       })
       .catch((error) => {
@@ -258,22 +367,25 @@ export default function CadastroProdutosConcorrentes() {
   //============ Editar produto ===============================//
   async function EditeProduto(){
     setLoadingUpdate(true)
-  await api.put(`/api/Produtos/${idProduto}`, {
-  id: idProduto,
-  codigo:codigo,
-  nome: nome,
-  idGrupo: idGrupo,
-  nomeGrupo: nomeGrupo,
+  await api.put(`/api/Produtos_Concorrentes/${id}`, {
+  id: id,
+  codProduto:codProduto,
+  nomeProduto: nomeProduto,
+  codConcorrente: codConcorrente,
+  nomeConcorrente: nomeConcorrente,
+  codProdutoConcorrente: codProdutoConcorrente,
+  nomeProdutoSimilar: nomeProdutoSimilar
   })
     .then(response => {
       handleCloseEdit()
      // GetProdutosAcount();
-      GetProdutos();
+      GetProdutosConcorrentes();
+      GetProdutoSimiliar();
       setLoadingUpdate(false)
      // console.log('resposta', response)
       handleShowMensage()
       setAlertErroMensage(true);
-      setMsgErro("Dados do usuário atualizados com sucesso.");
+      setMsgErro("Produto similar atualizado com sucesso.");
       setLimpando(false)
     })
     .catch((error) => {
@@ -285,8 +397,8 @@ export default function CadastroProdutosConcorrentes() {
       handleShowMensage()
       setAlertErroMensage(true);
     const { data } = error.response;
-    setMsgErro(data.message);
-    
+   // setMsgErro(data.message);
+   setMsgErro(error.response.data);
      
       return;
     });
@@ -294,40 +406,51 @@ export default function CadastroProdutosConcorrentes() {
     //============ Criar produto ===============================//
     async function CreateProduto(){
 
-      if(nome==''){
+      if(nomeProdutoSimilar==''){
         let senhaconf: any;
         senhaconf = document.getElementById("prinome");
         document.getElementById("prinome")?.focus();
         setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar a descrição do produto.");
+        setMsgErro("É obrigatório informar a descrição do produto similar.");
       return
       }
 
-      if(nomeGrupo==''){
+      if(nomeConcorrente==''){
         let senhaconf: any;
         senhaconf = document.getElementById("email");
         document.getElementById("email")?.focus();
         setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o grupo do produto");
+        setMsgErro("É obrigatório informar a empresa concorrente");
+      return
+      }
+      if(nomeProduto==''){
+        let senhaconf: any;
+        senhaconf = document.getElementById("email");
+        document.getElementById("email")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("É obrigatório informar o nosso produto");
       return
       }
     
   setLoadingCreate(true)
-  await api.post("/api/Produtos",{
-    codigo:codigo,
-    nome: nome,
-    idGrupo: idGrupo,
-    nomeGrupo: nomeGrupo,
+  await api.post("/api/Produtos_Concorrentes",{
+   // codProduto:codProduto ,
+    nomeProduto: nomeProduto,
+    codProduto:codProduto,
+    nomeConcorrente: nomeConcorrente,
+    codConcorrente: codConcorrente,
+    nomeProdutoSimilar: nomeProdutoSimilar
        })
        
         .then(response => {
           setLoadingCreate(false)
          // GetProdutosAcount();
-          GetProdutos();
+          GetProdutosConcorrentes();
+          GetProdutoSimiliar();
           handleClose ();
           handleShowMensage();
           setAlertErroMensage(true);
-          setMsgErro("Produto cadastrado com sucesso.");
+          setMsgErro("Produto similar cadastrado com sucesso.");
         })
         .catch((error) => {
           setAlertErroMensage(true);
@@ -337,7 +460,8 @@ export default function CadastroProdutosConcorrentes() {
           handleShowMensage()
           setAlertErroMensage(true);
           const  data  = error.response.data;
-         setMsgErro(data);
+         //setMsgErro(data);
+         setMsgErro(error.response.data);
         //  setIdGrupo('');
         //  setNome('');
         //  setCodigo('');
@@ -347,16 +471,17 @@ export default function CadastroProdutosConcorrentes() {
         });
       }
       //==== EXCLUIR PRODUTO ======================================
-      async function DeleteProduto(id: any){
+      async function DeleteProdutoConcorrente(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Produtos/${id}`)
+      await api.delete(`/api/Produtos_Concorrentes/${id}`)
         .then(response => {
           handleCloseEdit()
-          GetProdutos();
+          GetProdutosConcorrentes();
+          GetProdutoSimiliar();
           setLoadingUpdate(false)
           handleShowMensage()
           setAlertErroMensage(true);
-          setMsgErro("Produto excluído com sucesso.");
+          setMsgErro("Registro excluído com sucesso.");
         })
         .catch((error) => {
           setLoadingUpdate(false)
@@ -366,7 +491,7 @@ export default function CadastroProdutosConcorrentes() {
           setAlertErroMensage(true);
          
         const { data } = error.response;
-        setMsgErro(data.message);
+        setMsgErro(error.response.data);
          
          
           return;
@@ -378,44 +503,59 @@ export default function CadastroProdutosConcorrentes() {
     }
 function LimparPesquisa(){
   setSearch('');
+  setConcorrentefilter(false);
+  concorrentefilter=false;
   setSearchStatus('');
   setPagina(1);
-  PesquisaNome();
+  PesquisaProduto();
   setFilter(false);
+  GetProdutosConcorrentes();
   GetProdutos();
+  GetConcorrentes(); 
+  GetProdutoSimiliar();
 }
 
-function PesquisaNome(){
+function PesquisaProduto(){
   setSearch('');
-  GetProdutos();
-  setPesquisaNome(true);
-  setPesquisaGrupo(false);
-  setPesquisaCod(false);
+  setConcorrentefilter(false);
+  concorrentefilter=false;
+  GetProdutosConcorrentes();
+  setPesquisaProduto(true);
+  setPesquisaConcorrente(false);
+  setPesquisaSimilar(false);
   let pesquisar: any;
   pesquisar = document.getElementById("nomePesquisa");
   document.getElementById("nomePesquisa")?.focus();
+
 }
  
-function PesquisaGrupo(){
+function PesquisaConcorrente(){
   setSearch('');
-  GetProdutos();
-  setPesquisaNome(false);
-  setPesquisaCod(false);
-  setPesquisaGrupo(true);
+ 
+  setConcorrentefilter(true);
+  concorrentefilter=true;
+  GetProdutosConcorrentes();
+  setPesquisaProduto(false);
+  setPesquisaConcorrente(true);
+  setPesquisaSimilar(false);
+  let pesquisa: any;
+  pesquisa = document.getElementById("grupoPesquisa");
+  document.getElementById("grupoPesquisa")?.focus();
+  console.log('filtrar por',concorrentefilter)
+}
+function PesquisaSimilar(){
+  setSearch('');
+  setConcorrentefilter(false);
+  concorrentefilter=false;
+  GetProdutosConcorrentes();
+  setPesquisaProduto(false);
+  setPesquisaConcorrente(false);
+  setPesquisaSimilar(true);
   let pesquisa: any;
   pesquisa = document.getElementById("grupoPesquisa");
   document.getElementById("grupoPesquisa")?.focus();
 }
-function PesquisaCod(){
-  setSearch('');
-  GetProdutos();
-  setPesquisaNome(false);
-  setPesquisaGrupo(false);
-  setPesquisaCod(true);
-  let pesquisa: any;
-  pesquisa = document.getElementById("codPesquisa");
-  document.getElementById("codPesquisa")?.focus();
-}
+
 
   return (
     <>
@@ -453,15 +593,15 @@ function PesquisaCod(){
                 <span style={{fontSize:14}}>Pesquisar por:</span>
                 </div>
                 <div className='d-flex'>
-                  <input  name='pesquisa' type="radio" checked={pesquisaNome}  onChange={PesquisaNome} /><p style={{fontSize:13,marginLeft:8}} >Descrição</p>
-                  {/* <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaCod}  onChange={PesquisaCod} /><p style={{fontSize:13,marginLeft:8}} >Código</p> */}
-                  <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaGrupo}  onChange={PesquisaGrupo} /><p style={{fontSize:13,marginLeft:8}} >Grupo</p>
+                  <input  name='pesquisa' type="radio" checked={pesquisaProduto}  onChange={PesquisaProduto} /><p style={{fontSize:13,marginLeft:8}} >Produto</p>
+                   <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaConcorrente}  onChange={PesquisaConcorrente} /><p style={{fontSize:13,marginLeft:8}} >Concorrente</p>
+                  <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaSimilar}  onChange={PesquisaSimilar} /><p style={{fontSize:13,marginLeft:8}} >Produto Similar</p>
                   </div>
               </div>
           <OverlayTrigger
           placement={"top"}
           delay={{ show: 100, hide: 250 }}
-          overlay={<Tooltip>Novo Usuário</Tooltip>}
+          overlay={<Tooltip>Novo Produto</Tooltip>}
         >
       <button className='btn btn-dark btn-direito'  onClick={handleShow}>
         Novo <TfiNewWindow style={{marginLeft: 8,marginBottom:5}}/>
@@ -470,49 +610,56 @@ function PesquisaCod(){
       </div>
             <div style={{marginTop:10, width:"100%"}} className='conteudo-botoes'>
               <div className='bloco-pesquisa-input'>
-             {pesquisaNome?(<>
+             {pesquisaProduto?(<>
               <div>
-              <p className="title-input"  >Pesquisar por Descrição: </p>
-            <input  id="nomePesquisa"  
-            type="text" 
-            className='form-coontrol inputlogin' 
-             name=""
-             value={search}
-             onChange={(e)=>{ 
-              setSearch(e.target.value);
-              
-            }}
-              />
-            </div>
-             </>):(<></>)}
-             {pesquisaCod?(<>
-              <div>
-              <p className="title-input"  >Pesquisar por código: </p>
-            <input  id="codPesquisa"  
-            type="text" 
-            className='form-control inputcod' 
-             name=""
-             value={search}
-             onChange={(e)=>{ 
-              setSearch(e.target.value);
-              
-            }}
-              />
-            </div>
-             </>):(<></>)}
-              {pesquisaGrupo?(<>
-                <div className='div-pesquisa-status'>
-            <p className="title-input"  >Pesquisar por grupo: </p>
+              <p className="title-input"  >Pesquisar por produto: </p>
          
                      <Select 
                      id="grupoPesquisa"  
                      className="select-comp" 
                      placeholder="Digite ou selecione"
-                  noOptionsMessage={() => "Nenhum status encontrado"}
+                  noOptionsMessage={() => "Nenhum produto encontrado"}
                    //  value={search} 
-                     options={grupoPesquisa}  
+                     options={produtoPesquisa}  
                       onChange={(value: any)=>{ 
-                        setSearch(value.value); 
+                        setSearch(value.label); 
+                        console.log('Select',value)          
+                      }} 
+                    />
+            </div>
+             </>):(<></>)}
+             {pesquisaConcorrente?(<>
+              <div>
+              <p className="title-input"  >Pesquisar por concorrente: </p>
+              <Select 
+                     id="grupoPesquisa"  
+                     className="select-comp" 
+                     placeholder="Digite ou selecione"
+                  noOptionsMessage={() => "Nenhum concorrente encontrado"}
+                   //  value={search} 
+                     options={concorrentePesq}  
+                      onChange={(value: any)=>{ 
+                        setSearch(value.label);
+                        setConcorrentefilter(true) 
+                        concorrentefilter=true
+                        console.log('Select',value)          
+                      }} 
+                    />
+            </div>
+             </>):(<></>)}
+              {pesquisaSimilar?(<>
+                <div className=''>
+            <p className="title-input"  >Pesquisar por produto similar: </p>
+         
+                     <Select 
+                     id="grupoPesquisa"  
+                     className="select-comp" 
+                     placeholder="Digite ou selecione"
+                  noOptionsMessage={() => "Nenhum concorrente encontrado"}
+                   //  value={search} 
+                     options={concorrentePesquisa}  
+                      onChange={(value: any)=>{ 
+                        setSearch(value.label); 
                         console.log('Select',value)          
                       }} 
                     />
@@ -520,7 +667,14 @@ function PesquisaCod(){
               </>):(<></>)}
               </div>
 
-                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetProdutosFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
+                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);
+                      if(concorrentefilter){
+                        GetProdutosConcorrentesConcorrente();
+                      }else{
+                        GetProdutosConcorrentesFilter();
+                      }
+                      
+                      }}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas' onClick={LimparPesquisa}>Limpar<AiOutlineClear style={{marginLeft: 6}} fontSize={20}/></button>
                    
                     </div>
@@ -530,25 +684,29 @@ function PesquisaCod(){
       <Table responsive className='table-global table  main-table'>
       <thead>
       <tr className="tituloTab">
-        <th style={{textAlign:'center'}} className="th1 div-cod-prod">Código</th>
-          <th className="th1 Nome-completo">Descrição</th>
-          <th style={{textAlign:'center'}} className="th2 div-cod-prod">Id Grupo</th>
-          <th className="th3">Desc. Grupo</th>
+        <th style={{textAlign:'center'}} className="th1 div-cod-prod">Cód </th>
+          <th className="th1 Nome-complet">Produto Similar</th>
+          <th style={{textAlign:'center'}} className="th2 div-cod-prod">Cód Conc</th>
+          <th className="th3">Concorrente</th>
+          <th style={{textAlign:'center'}} className="th2 div-cod-prod">Cód Prod</th>
+          <th className="th3">Produto</th>
          
           <th  className="th4">.</th>
           <th style={{textAlign:'center'}} className="th4 fixed-table">Ações</th>
       </tr>
       </thead>
       <tbody>
-      {produtos.length > 0 ? (
+      {produtosConcorrentes.length > 0 ? (
                         <>
-      {produtos.map((produtos,index)=> (
+      {produtosConcorrentes.map((produtos,index)=> (
         <tr key={index}>
           {/* <td className='div-cod-prod' style={produtos.codigo== null || produtos.codigo==""?{color:"red",textAlign:'center'}:{textAlign:'center'}} >{produtos.codigo==null || produtos.codigo==""?"0000":produtos.codigo }</td> */}
           <td className='div-cod-prod'  style={{textAlign:'center'}}>{produtos.id}</td>
-         <td className='Nome-complet'>{produtos.nome}</td> 
-          <td className='div-cod-prod'  style={{textAlign:'center'}}>{produtos.idGrupo}</td>
-          <td className='Nome-complet'>{produtos.nomeGrupo}</td> 
+         <td className='Nome-complet'>{produtos.nomeProdutoSimilar}</td> 
+          <td className='div-cod-prod'  style={{textAlign:'center'}}>{produtos.codConcorrente}</td>
+          <td className='Nome-complet'>{produtos.nomeConcorrente}</td> 
+          <td className='div-cod-prod'  style={{textAlign:'center'}}>{produtos.codProduto}</td>
+          <td className='Nome-complet'>{produtos.nomeProduto}</td> 
            
             <td style={{color: "transparent"}} >.............</td>
             <td style={{color: "transparent"}} >.............</td>
@@ -577,7 +735,7 @@ function PesquisaCod(){
               overlay={<Tooltip>Deletar</Tooltip>}
             >
               <button onClick={()=>{
-                DeleteProduto(produtos.id);}}
+                DeleteProdutoConcorrente(produtos.id);}}
               className='btn btn-table btn-delete'>
                 <RiDeleteBin5Line/>
               </button>
@@ -589,7 +747,7 @@ function PesquisaCod(){
         ): (
                         
           <div style={{margin:"auto"}} className="alert alert-warning alerta-prod" role="alert">
-            Nenhum produto encontrado.
+            Nenhum registro encontrado.
           </div>
         
         
@@ -615,7 +773,7 @@ function PesquisaCod(){
 
       <Modal className='modal-cadastro-prod' show={show} onHide={handleClose}>
         <Modal.Header  closeButton>
-          <h1>Cadastro de Produto</h1>
+          <h1>Cadastro de Produto Similar</h1>
         </Modal.Header>
         <Modal.Body>
         {loadingCreate ? (
@@ -636,30 +794,17 @@ function PesquisaCod(){
 					)}
         <div  className='form-cadastro-user' >
             <div className='coluna-dupla'>
-            {/* <div id='codProd' className='bloco-input'>
-            <p className="title-input"  >Código:</p>
-              <input className='form-coontrol inputlogin' 
-              id='cod'
-              type="text"
-              //name='user' 
-              value={codigo}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setCodigo(e.target.value);
-                LimparTodos();
-              }}
-              />
-            </div> */}
+            
             <div  className='bloco-input bloco-prod'>
-            <p className="title-input"  >Descrição:<span style={{color:'red'}}>*</span></p>
+            <p className="title-input"  >Produto Similar:<span style={{color:'red'}}>*</span></p>
               <input className='form-coontrol inputlogin' 
               id='descricao'
               type="text"
               //name='user' 
-              value={nome}
+              value={nomeProdutoSimilar}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setNome(e.target.value.toUpperCase());
+                setNomeProdutoSimilar(e.target.value.toUpperCase());
                 LimparTodos();
               }}
               />
@@ -667,9 +812,28 @@ function PesquisaCod(){
           
             </div>
 
-            <div className='coluna-dupla'>
+            <div style={{flexDirection:"column"}} className='coluna-dupla'>
             <div  className='bloco-input'>
-            <p id="grupos" className=" title-input"  >Grupo: <span style={{color:'red'}}>*</span></p>
+            <p id="grupos" className=" title-input"  >Concorrente: <span style={{color:'red'}}>*</span></p>
+
+                     <Select 
+                     id='grupo-create'
+                     className=" select-comp" 
+                     placeholder="Digite ou selecione"
+                  noOptionsMessage={() => "Nenhum concorrente encontrado"}
+                   //  value={search} 
+                     options={concorrentePesq}  
+                      onChange={(value: any)=>{ 
+                        setCodConcorrente(value.value); 
+                        setNomeConcorrente(value.label); 
+                      //  LimparTodos();
+                        console.log('Select',value)          
+                      }} 
+                    /> 
+                  
+            </div>
+            <div  className='bloco-input'>
+            <p id="grupos" className=" title-input"  >Nosso Produto: <span style={{color:'red'}}>*</span></p>
 
                      <Select 
                      id='grupo-create'
@@ -677,20 +841,21 @@ function PesquisaCod(){
                      placeholder="Digite ou selecione"
                   noOptionsMessage={() => "Nenhum status encontrado"}
                    //  value={search} 
-                     options={grupoPesquisa}  
+                     options={produtoCadastro}  
                       onChange={(value: any)=>{ 
-                        setIdGrupo(value.value); 
-                        setNomeGrupo(value.label); 
-                        LimparTodos();
+                        setCodProduto(value.value); 
+                        setNomeProduto(value.label); 
+                       // LimparTodos();
                         console.log('Select',value)          
                       }} 
-                    />
+                    /> 
                   
             
                     <button disabled={loadingCreate} id='btn-cad-prod' className='btn btn-cadastrar'onClick={CreateProduto}>Cadastrar</button>
             </div>
                     
                     </div> 
+            
                   
             </div>
             </>    )}
@@ -701,7 +866,7 @@ function PesquisaCod(){
 
       <Modal className='modal-cadastro-prod' show={showEdit} onHide={handleCloseEdit}>
         <Modal.Header  closeButton>
-          <h1>Dados do Produto</h1>
+          <h1>Dados do Produto Similar</h1>
         </Modal.Header>
         <Modal.Body>
         {loadingUpdate ? (
@@ -717,31 +882,19 @@ function PesquisaCod(){
                           ) : (<>
           
         <div  className='form-cadastro-user' >
+        
         <div className='coluna-dupla'>
-            {/* <div id='codProd' className='bloco-input'>
-            <p className="title-input"  >Código:</p>
-              <input className='form-coontrol inputlogin' 
-              id='cod'
-              type="text"
-              //name='user' 
-              value={codigo}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setCodigo(e.target.value);
-                LimparTodos();
-              }}
-              />
-            </div> */}
+            
             <div  className='bloco-input bloco-prod'>
-            <p className="title-input"  >Descrição:<span style={{color:'red'}}>*</span></p>
+            <p className="title-input"  >Produto Similar:<span style={{color:'red'}}>*</span></p>
               <input className='form-coontrol inputlogin' 
               id='descricao'
               type="text"
               //name='user' 
-              value={nome}
+              value={nomeProdutoSimilar}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setNome(e.target.value.toUpperCase());
+                setNomeProdutoSimilar(e.target.value.toUpperCase());
                 LimparTodos();
               }}
               />
@@ -749,29 +902,50 @@ function PesquisaCod(){
           
             </div>
 
-            <div className='coluna-dupla'>
+            <div style={{flexDirection:"column"}} className='coluna-dupla'>
             <div  className='bloco-input'>
-            <p id="grupos" className=" title-input"  >Grupo: <span style={{color:'red'}}>*</span></p>
+            <p id="grupos" className=" title-input"  >Concorrente: <span style={{color:'red'}}>*</span></p>
 
                      <Select 
                      id='grupo-create'
                      className=" select-comp" 
-                     placeholder={grupoSelecionado}
-                  noOptionsMessage={() => "Nenhum status encontrado"}
-                     //value={selectGrupoBanco} 
-                     options={grupoPesquisa}  
+                     placeholder={nomeConcorrente}
+                  noOptionsMessage={() => "Nenhum concorrente encontrado"}
+                   //  value={search} 
+                     options={concorrentePesq}  
                       onChange={(value: any)=>{ 
-                        setLimpando(true);
-                        setIdGrupo(value.value); 
-                        setNomeGrupo(value.label); 
-                        LimparTodos();
+                        setCodConcorrente(value.value); 
+                        setNomeConcorrente(value.label); 
+                      //  LimparTodos();
                         console.log('Select',value)          
                       }} 
-                    />
-         
-                    </div>
-              
-                    </div>
+                    /> 
+                  
+            </div>
+            <div  className='bloco-input'>
+            <p id="grupos" className=" title-input"  >Nosso Produto: <span style={{color:'red'}}>*</span></p>
+
+                     <Select 
+                     id='grupo-create'
+                     className=" select-comp" 
+                     placeholder={nomeProduto}
+                  noOptionsMessage={() => "Nenhum status encontrado"}
+                   //  value={search} 
+                     options={produtoCadastro}  
+                      onChange={(value: any)=>{ 
+                        setCodProduto(value.value); 
+                        setNomeProduto(value.label); 
+                       // LimparTodos();
+                        console.log('Select',value)          
+                      }} 
+                    /> 
+                  
+            
+                   
+            </div>
+            </div>
+           
+            
                     <div className='coluna-dupla'>
             <div  className='bloco-input boco-botoes-grupo'>
             <button disabled={loadingUpdate} id='btn-desc' className='btn btn-cadastrar 'onClick={EditeProduto}>Editar</button>

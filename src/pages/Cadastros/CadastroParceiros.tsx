@@ -28,8 +28,8 @@ import Paginacao from "../../components/Paginacao";
 import { phoneMask } from '../../Masks/Masks';
 import { FaSearchPlus } from "react-icons/fa";
 import { AiOutlineClear } from "react-icons/ai";
-import { iDadosUsuario } from '../../@types';
-
+import { iDadosUsuario,iDataSelect } from '../../@types';
+import Select from 'react-select';
 
 
 export default function CadastroParceiros() {
@@ -86,6 +86,46 @@ export default function CadastroParceiros() {
 
    const [pagina, setPagina] = useState(1);
    const [qtdePagina, setQtdePagina] = useState(10);
+
+  
+
+   const [pesquisaNome, setPesquisaNome] = useState(true);
+   const [pesquisaStatus, setPesquisaStatus] = useState(false);
+
+   let [selectGrupo, setSelectGrupo] = useState<iDataSelect>();
+
+   //======options dos selects ===================//
+   const status = [
+    { value: '1', label: 'Ativo' },
+    { value: '2', label: 'Inativo' }
+  ];
+   const grupos = [
+     { value: '1', label: 'ADMINISTRATIVO' },
+     { value: '2', label: 'COMERCIAL' },
+     { value: '3', label: 'REPRESENTANTE' },
+     { value: '4', label: 'USUÁRIO' }
+    
+   ];
+
+   const grupoCreate:iDataSelect[] = [
+     { value: '2', label: 'COMERCIAL' },
+     { value: '3', label: 'REPRESENTANTE' },
+     { value: '4', label: 'USUÁRIO' }
+    
+   ];
+  // const [grupoCreate, setGrupoCreate] = useState<iDataSelect[]>([
+  //    { value: '2', label: 'COMERCIAL' },
+  //    { value: '3', label: 'REPRESENTANTE' },
+  //    { value: '4', label: 'USUÁRIO' }
+  // ]);
+  //  const [grupos, setGrupos] = useState<iDataSelect[]>([
+  //    { value: '1', label: 'ADMINISTRATIVO' },
+  //    { value: '2', label: 'COMERCIAL' },
+  //    { value: '3', label: 'REPRESENTANTE' },
+  //    { value: '4', label: 'USUÁRIO' }
+  //  ]);
+
+  //================================================//
 
    const usuariolog: iDadosUsuario = JSON.parse(
     localStorage.getItem("@Portal/usuario") || "{}"
@@ -205,13 +245,14 @@ export default function CadastroParceiros() {
   async function GetUsuariosFilter() {
     setFilter(true);
     await api
-      .get(`/api/Usuarios/filter?pagina=${pagina}&totalpagina=${qtdePagina}&filter=${search || searchStatus}`)
+      .get(`/api/Usuarios/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setUsuarios(response.data.data);
         usuarios=response.data.data;
+       // setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
       //  setUsuariosFilter(response.data);
       //  usuariosFilter=response.data;
-       console.log('usuarios pesquisa',usuarios);
+       console.log('usuarios pesquisa',response.data);
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
@@ -256,12 +297,13 @@ export default function CadastroParceiros() {
           setAtivo(response.data.status);
           setFuncao(response.data.funcao);
           setGrupo(response.data.grupo);
+    
           setAdmin(response.data.admin);
           setComercial(response.data.comercial);
           setRepresentante(response.data.representante);
           setTipoUsuario(response.data.usuario);
 
-        console.log('usuario Id',usuariosget);
+
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
@@ -361,8 +403,8 @@ export default function CadastroParceiros() {
       }
       if(grupo==''){
         let senhaconf: any;
-        senhaconf = document.getElementById("grupos");
-        document.getElementById("grupos")?.focus();
+        senhaconf = document.getElementById("grupo-create");
+        document.getElementById("grupo-create")?.focus();
         setAlertErroRegister(true);
         setMsgErro("É obrigatório informar o grupo que o usuário pertence.");
       return
@@ -417,10 +459,30 @@ function LimparPesquisa(){
   setSearch('');
   setSearchStatus('');
   setPagina(1);
+  PesquisaNome();
   setFilter(false);
   GetUsuarios();
 }
 
+function PesquisaNome(){
+  setSearch('');
+  GetUsuarios();
+  setPesquisaNome(true);
+  setPesquisaStatus(false);
+  let pesquisar: any;
+  pesquisar = document.getElementById("nomePesquisa");
+  document.getElementById("nomePesquisa")?.focus();
+}
+ 
+function PesquisaStatus(){
+  setSearch('');
+  GetUsuarios();
+  setPesquisaNome(false);
+  setPesquisaStatus(true);
+  let pesquisa: any;
+  pesquisa = document.getElementById("statusPesquisa");
+  document.getElementById("statusPesquisa")?.focus();
+}
 
   return (
     <>
@@ -436,7 +498,7 @@ function LimparPesquisa(){
          <div>
          <NavbarDashHeader/>
          <div className='titulo-page'>
-            <h1>Parceiros</h1>
+            <h1>Cadastro de Parceiros</h1>
             </div>
             {loading ? (
           <div className="d-flex justify-content-center total-loading">
@@ -450,8 +512,18 @@ function LimparPesquisa(){
                  
                           ) : (
             <div style={{justifyContent:'center'}} className="contain d-flex">
-              <div className='logo-cadastro'></div>
+              <div className='logo-cadastro-parceiro'></div>
           <div className='conteudo'>
+            <div className='div-button-top'>
+              <div className='pesBloco'>
+                <div className='title-pesBloco'>
+                <span style={{fontSize:14}}>Pesquisar por:</span>
+                </div>
+                <div className='d-flex'>
+                  <input  name='pesquisa' type="radio" checked={pesquisaNome}  onChange={PesquisaNome} /><p style={{fontSize:13,marginLeft:8}} >Nome</p>
+                  <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaStatus}  onChange={PesquisaStatus} /><p style={{fontSize:13,marginLeft:8}} >Status</p>
+                  </div>
+              </div>
           <OverlayTrigger
           placement={"top"}
           delay={{ show: 100, hide: 250 }}
@@ -461,7 +533,10 @@ function LimparPesquisa(){
         Novo <TfiNewWindow style={{marginLeft: 8,marginBottom:5}}/>
       </button>
       </OverlayTrigger>
-            <div style={{marginTop:40, width:"100%"}} className='conteudo-botoes'>
+      </div>
+            <div style={{marginTop:10, width:"100%"}} className='conteudo-botoes'>
+              <div className='bloco-pesquisa-input'>
+             {pesquisaNome?(<>
               <div>
               <p className="title-input"  >Pesquisar por nome: </p>
             <input  id="nomePesquisa"  
@@ -471,35 +546,47 @@ function LimparPesquisa(){
              value={search}
              onChange={(e)=>{ 
               setSearch(e.target.value);
-               if(search !=""){
-                 setSearchStatus('');
-               }
+              
             }}
               />
             </div>
-            <div className='div-pesquisa-status'>
+             </>):(<></>)}
+              {pesquisaStatus?(<>
+                <div className='div-pesquisa-status'>
             <p className="title-input"  >Pesquisar por status: </p>
-            <select  
+            {/* <select  
             id="statusPesquisa" 
              placeholder='Status' 
              className="form-select select campo-select" 
              aria-label="Escolha o número de quartos" 
-             value={searchStatus}
-                           onChange={(e)=>{ 
-                            setSearchStatus(e.target.value);
-                            console.log("status",searchStatus)
-                            if(searchStatus !="0"){
-                              setSearch('');
-                            }
-                          }}
+             value={search}
+             onChange={(e)=>{ 
+              setSearch(e.target.value);           
+             }}
                         >
                         <option value=""></option>
                         <option value="1">Ativo</option>
                         <option value="2">Inativo</option>
-                    </select> 
+                    </select>  */}
+                     <Select 
+                     id="statusPesquisa"  
+                     className="select-comp" 
+                     placeholder="Digite ou selecione"
+                  noOptionsMessage={() => "Nenhum status encontrado"}
+                   //  value={search} 
+                     options={status}  
+                      onChange={(value: any)=>{ 
+                        setSearch(value.value); 
+                        console.log('Select',value)          
+                      }} 
+                    />
                     </div>
+              </>):(<></>)}
+              </div>
+
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetUsuariosFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas' onClick={LimparPesquisa}>Limpar<AiOutlineClear style={{marginLeft: 6}} fontSize={20}/></button>
+                   
                     </div>
           
           <div className="table-responsive table-scroll tabela-responsiva">
@@ -507,13 +594,14 @@ function LimparPesquisa(){
       <Table responsive className='table-global table  main-table'>
       <thead>
       <tr className="tituloTab">
-        
+      <th style={{textAlign:'center'}} className="th4">Código</th>
           <th className="th1 Nome-completo">Nome</th>
-          <th style={{textAlign:'center'}} className="th2">Grupo</th>
-          <th style={{textAlign:'center'}} className="th3">Função</th>
+          <th style={{textAlign:'center'}} className="th2">CNPJ / CPF</th>
           <th style={{textAlign:'center'}} className="th4">Status</th>
-          <th  className="th4">E-mail</th>
-          <th  className="th4">Telefone</th>
+          <th  className="th3">Endereço</th>
+          <th  className="th3">Bairro</th>
+          <th  className="th3">Município</th>
+          <th style={{textAlign:'center'}} className="th4">UF</th>
           <th  className="th4">.</th>
           <th style={{textAlign:'center'}} className="th4 fixed-table">Ações</th>
       </tr>
@@ -720,15 +808,30 @@ function LimparPesquisa(){
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <p id="grupos" className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
-            <select className="form-select select campo-select" aria-label="Escolha o número de quartos" value={grupo}
+
+
+            {/* <select className="form-select select campo-select" aria-label="Escolha o número de quartos" value={grupo}
                           onChange={(e) => {setGrupo(e.target.value); LimparTodos();}}
                         >
                         <option value="">---</option>
-                        {/* <option value="1">ADMINISTRATIVO</option> */}
+                        {/* <option value="1">ADMINISTRATIVO</option> 
                         <option value="2">COMERCIAL</option>
                         <option value="3">REPRESENTANTE</option>
                         <option value="4">USUÁRIO</option>
-                    </select>   
+                    </select>    */}
+                     <Select 
+                     id='grupo-create'
+                     className=" select-comp" 
+                     placeholder="Digite ou selecione"
+                  noOptionsMessage={() => "Nenhum status encontrado"}
+                   //  value={search} 
+                     options={grupoCreate}  
+                      onChange={(value: any)=>{ 
+                        setGrupo(value.value); 
+                        LimparTodos();
+                        console.log('Select',value)          
+                      }} 
+                    />
                   
             <p style={{marginTop:15}} className="title-input"  >Função: </p>
               <input className='form-coontrol inputlogin' 
@@ -918,6 +1021,21 @@ function LimparPesquisa(){
             <div className='bloco-input'>
             <p className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
             {grupo=="1"?(<>
+
+              {/* <Select 
+                     id='grupo-create'
+                     className=" select campo-select" 
+                     placeholder="Digite ou selecione"
+                  noOptionsMessage={() => "Nenhum status encontrado"}
+                   //  value={search} 
+                     options={grupos}
+                     isDisabled={grupo=='1'}  
+                      onChange={(value: any)=>{ 
+                        setGrupo(value.value); 
+                        LimparTodos();
+                        console.log('Select',value)          
+                      }} 
+                    /> */}
               <select className="form-select select campo-select" 
             aria-label="Escolha o número de quartos" 
             value={grupo}
@@ -930,9 +1048,22 @@ function LimparPesquisa(){
                         <option value="2">COMERCIAL</option>
                         <option value="3">REPRESENTANTE</option>
                         <option value="4">USUÁRIO</option>
-                    </select> 
+                    </select>  
             </>):(<>
-              <select className="form-select select campo-select" 
+              {/* <Select 
+                     id='grupo-create'
+                     className=" select campo-select" 
+                     placeholder="Digite ou selecione"
+                  noOptionsMessage={() => "Nenhum status encontrado"}
+                     options={grupoCreate}
+                     value={selectGrupo}
+                      onChange={(value: any)=>{ 
+                        setGrupo(value.value); 
+                        LimparTodos();
+                        console.log('Select',value)          
+                      }} 
+                    /> */}
+               <select className="form-select select campo-select" 
             aria-label="Escolha o número de quartos" 
             value={grupo}
             disabled={grupo=='1'}

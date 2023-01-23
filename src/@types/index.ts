@@ -36,6 +36,52 @@ export interface iGrupos {
   id: number,
   nameGrupo: string,
   }
+
+  export interface iConcorrentes {
+    id: number,
+    nome: string,
+    }
+    export interface iProdutoConcorrente{
+      id: number,
+      codProduto: string,
+      nomeProduto: string,
+      codConcorrente: string,
+      nomeConcorrente: string,
+      codProdutoConcorrente: string,
+      nomeProdutoSimilar: string
+    }
+    export interface iParceiros {
+      id: number,
+      nome: string,
+      tipoPessoa: string,
+      nomeFantasia: string,
+      cnpj_Cpf: string,
+      email: string,
+      fone: string,
+      canal: string,
+      classificacao: string,
+      tamanhoLoja: string,
+      promotor: string,
+      endereco: string,
+      bairro: string,
+      muncipio: string,
+      uf: string,
+      lat: string,
+      long: string,
+      status: string,
+      semVisita: boolean,
+      primeiraSem: boolean,
+      segundaSem: boolean,
+      terceiraSem: boolean,
+      quartaSem: boolean,
+      quintaSem: boolean,
+      segunda: boolean,
+      terca: boolean,
+      quarta: boolean,
+      quinta: boolean,
+      sexta: boolean,
+      sabado: boolean
+    }
   export interface iVendedores {
      id:number,
      codVendedor:number,

@@ -21,7 +21,7 @@ import { TfiNewWindow } from "react-icons/tfi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Table from 'react-bootstrap/Table';
-import { iGrupos } from '../../@types';
+import { iConcorrentes, iGrupos } from '../../@types';
 import OverlayTrigger from 'react-bootstrap/esm/OverlayTrigger';
 import { Tooltip } from 'react-bootstrap';
 import Paginacao from "../../components/Paginacao";
@@ -38,8 +38,8 @@ export default function CadastroConcorrentes() {
   const [primeiroNome, setPrimeiroNome] = useState('');
   const [ultimoNome, setUltimoNome] = useState('');
   const [usuario, setUsuario] = useState('');
-  const [idGrupo, setIdGrupo] = useState(0);
-  const [nameGrupo, setNameGrupo] = useState('');
+  const [id, setId] = useState(0);
+  const [nome, setNome] = useState('');
 
 
   // const [senhaConfirm, setSenhaConfirm] = useState('');
@@ -67,7 +67,7 @@ export default function CadastroConcorrentes() {
 
   const [edit, setEdit] = useState(false);
   const [ativostatus, setAtivostatus] = useState(false);
-  let [grupos, setGrupos] = useState<iGrupos[]>([]);
+  let [concorrentes, setConcorrentes] = useState<iConcorrentes[]>([]);
   // const [usuariosget, setUsuariosget] = useState<iUsuarios[]>([]);
   // let [usuariosCount, setUsuariosCount] = useState<iUsuarios[]>([]);
   // let [usuariosFilter, setUsuariosFilter] = useState<iUsuarios[]>([]);
@@ -117,9 +117,9 @@ export default function CadastroConcorrentes() {
   useEffect(() => {
     window.scrollTo(0, 0);
     if(!filter){
-      GetGrupos();
+      GetConcorrentes();
     }else{
-      GetGruposFilter();
+      GetConcorrentesFilter();
     }
     
   },[pagina]);
@@ -151,7 +151,7 @@ export default function CadastroConcorrentes() {
   setAlertErroRegister(false);
  }
   function handleShow(){
-    setNameGrupo('');
+    setNome('');
 
    // setIdGrupo(0)
     
@@ -159,16 +159,16 @@ export default function CadastroConcorrentes() {
   }
  
 
-  async function GetGrupos() {
+  async function GetConcorrentes() {
     setFilter(false);
     
     await api
     
-      .get(`/api/Grupos?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Concorrentes?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
-        setGrupos(response.data.data);
-        console.log("grupo",grupos)
-        grupos=response.data.data;
+        setConcorrentes(response.data.data);
+        console.log("grupo",concorrentes)
+        concorrentes=response.data.data;
         setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
     
       })
@@ -178,15 +178,15 @@ export default function CadastroConcorrentes() {
      
   }
 
-  async function GetGruposFilter() {
+  async function GetConcorrentesFilter() {
     setFilter(true);
     await api
-      .get(`/api/Grupos/filter?pagina=${pagina}&totalpagina=999&Nome_Grupo=${search}`)
+      .get(`/api/Concorrentes/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
-        setGrupos(response.data.data);
-        grupos=response.data.data;
+        setConcorrentes(response.data.data);
+        concorrentes=response.data.data;
      
-       console.log('usuarios pesquisa',grupos);
+       console.log('usuarios pesquisa',concorrentes);
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
@@ -203,11 +203,11 @@ export default function CadastroConcorrentes() {
  
     
     await api
-      .get(`/api/Grupos/${id}`)
+      .get(`/api/Concorrentes/${id}`)
       .then((response) => {
          // setUsuariosget(response.data)
-          setIdGrupo(response.data.id);
-          setNameGrupo(response.data.nameGrupo);
+          setId(response.data.id);
+          setNome(response.data.nome);
          
 
       //  console.log('usuario Id',usuariosget);
@@ -217,65 +217,66 @@ export default function CadastroConcorrentes() {
       });
   }
   //============ Editar Usuario ===============================//
-  async function EditGrupos(){
+  async function EditConcorrentes(){
     setLoadingUpdate(true)
-  await api.put(`/api/Grupos/${idGrupo}`, {
-  id: idGrupo,
-  NameGrupo:nameGrupo
+  await api.put(`/api/Concorrentes/${id}`, {
+  id: id,
+  nome:nome
  
   })
     .then(response => {
       handleCloseEdit();
       setSearch('');
-      GetGrupos();
+      GetConcorrentes();
       setLoadingUpdate(false)
       handleShowMensage()
       setAlertErroMensage(true);
-      setMsgErro("Dados do grupo atualizados com sucesso.");
+      setMsgErro("Dados do concorrente atualizados com sucesso.");
     })
     .catch((error) => {
       setSearch('');
+      console.log(error.response.data)
       setLoadingUpdate(false)
       handleCloseEdit()
       window.scrollTo(0, 0);
       handleShowMensage()
       setAlertErroMensage(true);
      
-    const { data } = error.response;
-    setMsgErro(data.message);
+    const { data } = error.response.data;
+    setMsgErro(error.response.data);
      
      
       return;
     });
  
   }
-    //============ Criar Grupo ===============================//
-    async function CreateGrupo(){
+    //============ Criar Concorrente ===============================//
+    async function CreateConcorrente(){
 
       if(search==''){
         let senhaconf: any;
         senhaconf = document.getElementById("nomegrupoPesquisa");
         document.getElementById("nomegrupoPesquisa")?.focus();
         setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o nome du grupo de produto.");
+        setMsgErro("É obrigatório informar o nome do concorrente.");
       return
       }
 
       
   setLoading(true)
-  await api.post("/api/Grupos",{
-        nameGrupo: search,
+  await api.post("/api/Concorrentes",{
+        nome: search,
         
        })
        
         .then(response => {
           setLoading(false)
           setSearch('');
-          GetGrupos();
+          GetConcorrentes();
         
           handleShowMensage();
           setAlertErroMensage(true);
-          setMsgErro("Grupo criado com sucesso.");
+          setMsgErro("Concorrente criado com sucesso.");
         })
         .catch((error) => {
           setSearch('');
@@ -293,16 +294,16 @@ export default function CadastroConcorrentes() {
         setInInsert(false)
       }
       //==== EXCLUIR GRUPO ======================================
-      async function DeleteGrupo(id: any){
+      async function DeleteConcorrente(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Grupos/${id}`)
+      await api.delete(`/api/Concorrentes/${id}`)
         .then(response => {
           handleCloseEdit()
-          GetGrupos();
+          GetConcorrentes();
           setLoadingUpdate(false)
           handleShowMensage()
           setAlertErroMensage(true);
-          setMsgErro("Grupo excluído com sucesso.");
+          setMsgErro("Concorrente excluído com sucesso.");
         })
         .catch((error) => {
           setLoadingUpdate(false)
@@ -323,7 +324,7 @@ function LimparPesquisa(){
   setSearch('');
   setPagina(1);
   setFilter(false);
-  GetGrupos();
+  GetConcorrentes();
 }
 
 
@@ -375,7 +376,7 @@ function HandleInsert(){
         >
       <button  className='btn btn-dark btn-direito' 
        onClick={()=>{
-        {inInsert?CreateGrupo():HandleInsert();}
+        {inInsert?CreateConcorrente():HandleInsert();}
         }}>
       {loadingCreate ? "Carregando " :(<>{inInsert?"Salvar":"Novo"}<TfiNewWindow style={{marginLeft: 8,marginBottom:5}}/></>) }
             {loading && (
@@ -391,7 +392,7 @@ function HandleInsert(){
       </div>
             <div style={{marginTop:10, width:"100%"}} className={inInsert?'conteudo-input':'conteudo-botoes'}>
               <div className='div-input-grupo'>
-              <p className="title-input"  >{inInsert?"Insira o nome do grupo":"Pesquisar por nome:"} </p>
+              <p className="title-input"  >{inInsert?"Insira o nome do concorrente":"Pesquisar por nome:"} </p>
             <input  id="nomegrupoPesquisa"  
             type="text" 
             className='form-coontrol inputlogin input-grupo-prod' 
@@ -404,7 +405,7 @@ function HandleInsert(){
               />
             </div>
             {inInsert?(<></>):(<>
-                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetGruposFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
+                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetConcorrentesFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas' onClick={LimparPesquisa}>Limpar<AiOutlineClear style={{marginLeft: 6}} fontSize={20}/></button>
                     </>)}
                     </div>
@@ -421,12 +422,12 @@ function HandleInsert(){
       </tr>
       </thead>
       <tbody>
-      {grupos.length > 0 ? (
+      {concorrentes.length > 0 ? (
                         <>
-      {grupos.map((grupos,index)=> (
+      {concorrentes.map((concorrentes,index)=> (
         <tr key={index}>
-         <td style={{textAlign:'center'}}  className='id-grupo'>{grupos.id}</td> 
-         <td className='nome-grupo'>{grupos.nameGrupo}</td> 
+         <td style={{textAlign:'center'}}  className='id-grupo'>{concorrentes.id}</td> 
+         <td className='nome-grupo'>{concorrentes.nome}</td> 
           
             
             <td style={{textAlign:'center'}} className="fixed-table td-fixo">
@@ -441,7 +442,7 @@ function HandleInsert(){
               style={{marginRight:15,marginLeft:15}}
               onClick={()=>{
 
-                GetGrupoId(grupos.id);
+                GetGrupoId(concorrentes.id);
                 ShowModalEdit();
                 }}>
                 <HiOutlinePencilSquare/>
@@ -456,7 +457,7 @@ function HandleInsert(){
             >
               <button onClick={()=>{
                // GetGrupoId(grupos.id);
-                DeleteGrupo(grupos.id);}}
+                DeleteConcorrente(concorrentes.id);}}
               className='btn btn-table btn-delete'>
                 <RiDeleteBin5Line/>
               </button>
@@ -468,7 +469,7 @@ function HandleInsert(){
         ): (
                         
           <div style={{margin:"auto"}} className="alert alert-warning alerta-grupo" role="alert">
-            Nenhum grupo encontrado.
+            Nenhum concorrente encontrado.
           </div>
         
         
@@ -495,7 +496,7 @@ function HandleInsert(){
 
       <Modal className='modal-confirm' show={showEdit} onHide={handleCloseEdit}>
         <Modal.Header  closeButton>
-          <h1>Alterar Grupo</h1>
+          <h1>Alterar Concorrente</h1>
         </Modal.Header>
         <Modal.Body>
         {loadingUpdate ? (
@@ -519,9 +520,9 @@ function HandleInsert(){
               <input className='form-control inputlogin' 
               id=''
               type="text"
-              value={nameGrupo}
+              value={nome}
               onChange={(e)=>{ 
-                setNameGrupo(e.target.value.toUpperCase());
+                setNome(e.target.value.toUpperCase());
               }}
               />
               </div>
@@ -536,7 +537,7 @@ function HandleInsert(){
             </div>
             <div className='coluna-dupla'>
             <div  className='bloco-input boco-botoes-grupo'>
-            <button disabled={loadingUpdate} id='btn-desc' className='btn btn-cadastrar 'onClick={EditGrupos}>Editar</button>
+            <button disabled={loadingUpdate} id='btn-desc' className='btn btn-cadastrar 'onClick={EditConcorrentes}>Editar</button>
             <button disabled={loadingUpdate}  id='btn-desc' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
             </div>
                     

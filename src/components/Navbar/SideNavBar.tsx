@@ -180,14 +180,14 @@ export default function SideNavBar() {
              </>):(<></>)}
              <div  className={openTrade?"submenu-cad menu-cadastros":"submenu-cad menu-no-cadastros"}>
               <ul>
-                {/* <li> 
+                <li> 
                 <Link style={{display:"flex"}} onClick={Trade} to="/cadastro-parceiros">
                 < span>
                   <FiUsers id="" fontSize={28} />
                 </span>
                 <span style={{marginLeft:8,marginTop:6}}>Parceiros</span>
               </Link>
-              </li> */}
+              </li> 
                 <li>
                 <Link style={{display:"flex"}} onClick={Trade} to="/cadastro-vendedores">
                 <span>

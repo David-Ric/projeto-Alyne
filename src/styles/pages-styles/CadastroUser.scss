@@ -114,6 +114,19 @@ margin-top: 85px !important;
      display: none;
     }
 }
+.logo-cadastro-parceiro{
+    margin-top: 30px;
+    width: 280px;
+  // height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/parceiros.png");
+    background-size: 90%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
 .logo-cadastro{
     margin-top: 30px;
     width: 280px;

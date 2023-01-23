@@ -75,12 +75,14 @@ export default function CadastroProdutos() {
    const [search, setSearch] = useState('');
    const [searchStatus, setSearchStatus] = useState('');
    const [filter, setFilter] = useState(false);
+   let [filterGrupo, setFiltergrupo] = useState(false);
    
 
    const [pagina, setPagina] = useState(1);
    const [qtdePagina, setQtdePagina] = useState(10);
 
    const [grupoPesquisa, setGrupoPesquisa] = useState<iDataSelect[]>([]);
+   const [grupoPesq, setGrupoPesq] = useState<iDataSelect[]>([]);
 
    const [pesquisaNome, setPesquisaNome] = useState(true);
    const [pesquisaCod, setPesquisaCod] = useState(false);
@@ -118,6 +120,7 @@ export default function CadastroProdutos() {
  
   useEffect(() => {
     window.scrollTo(0, 0);
+    GetGrupoPesquisa();
     GetGrupos() 
     if(!filter){
       GetProdutos();
@@ -159,12 +162,42 @@ export default function CadastroProdutos() {
     setShow(true);
   }
  
+  async function GetGrupoPesquisa() {
+    setFilter(false);
+    
+    await api
+    
+      .get(`/api/Produtos?pagina=1&totalpagina=999`)
+      .then((response) => {
+        console.log("grupo",response.data.data)
+        
+       if (response.data.data.length > 0) {
+        let options:Array<iDataSelect>=new Array<iDataSelect>();
+        response.data.data.map((grupos:any) => {
+          let rowGrupo: iDataSelect = {};
+          rowGrupo.value = String(grupos.idGrupo);
+          rowGrupo.label = grupos.nomeGrupo;
+         
+           options.push(rowGrupo);
+          setGrupoPesq(options);
+         console.log("teste",grupoPesquisa)
+        })
+      }
+    
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+     
+  }
+
+
   async function GetGrupos() {
     setFilter(false);
     
     await api
     
-      .get(`/api/Grupos?pagina=1&totalpagina=999`)
+      .get(`/api/Grupo_Produtos?pagina=1&totalpagina=999`)
       .then((response) => {
         console.log("grupo",response.data.data)
         
@@ -224,7 +257,23 @@ export default function CadastroProdutos() {
       });
      
   }
- 
+  async function GetProdutosFilterGrupo() {
+    setFilter(true);
+    await api
+      .get(`/api/Produtos/filter/grupo?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .then((response) => {
+        setProdutos(response.data.data);
+        produtos=response.data.data;
+       // setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
+      //  setUsuariosFilter(response.data);
+      //  usuariosFilter=response.data;
+       console.log('usuarios pesquisa',response.data);
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+     
+  }
   
     //=========== get produto por ID ==================================//
   async function GetProdutoId(id:any) {
@@ -269,6 +318,7 @@ export default function CadastroProdutos() {
       handleCloseEdit()
      // GetProdutosAcount();
       GetProdutos();
+      GetGrupoPesquisa();
       setLoadingUpdate(false)
      // console.log('resposta', response)
       handleShowMensage()
@@ -285,8 +335,8 @@ export default function CadastroProdutos() {
       handleShowMensage()
       setAlertErroMensage(true);
     const { data } = error.response;
-    setMsgErro(data.message);
-    
+   // setMsgErro(data.message);
+   setMsgErro(error.response.data);
      
       return;
     });
@@ -324,6 +374,7 @@ export default function CadastroProdutos() {
           setLoadingCreate(false)
          // GetProdutosAcount();
           GetProdutos();
+          GetGrupoPesquisa();
           handleClose ();
           handleShowMensage();
           setAlertErroMensage(true);
@@ -353,6 +404,7 @@ export default function CadastroProdutos() {
         .then(response => {
           handleCloseEdit()
           GetProdutos();
+          GetGrupoPesquisa();
           setLoadingUpdate(false)
           handleShowMensage()
           setAlertErroMensage(true);
@@ -377,6 +429,8 @@ export default function CadastroProdutos() {
       setShowEdit(true);
     }
 function LimparPesquisa(){
+  setFiltergrupo(false);
+  filterGrupo=false; 
   setSearch('');
   setSearchStatus('');
   setPagina(1);
@@ -461,7 +515,7 @@ function PesquisaCod(){
           <OverlayTrigger
           placement={"top"}
           delay={{ show: 100, hide: 250 }}
-          overlay={<Tooltip>Novo Usuário</Tooltip>}
+          overlay={<Tooltip>Novo Produto</Tooltip>}
         >
       <button className='btn btn-dark btn-direito'  onClick={handleShow}>
         Novo <TfiNewWindow style={{marginLeft: 8,marginBottom:5}}/>
@@ -493,7 +547,9 @@ function PesquisaCod(){
             className='form-control inputcod' 
              name=""
              value={search}
-             onChange={(e)=>{ 
+             onChange={(e)=>{
+              setFiltergrupo(false);
+              filterGrupo=false; 
               setSearch(e.target.value);
               
             }}
@@ -512,7 +568,9 @@ function PesquisaCod(){
                    //  value={search} 
                      options={grupoPesquisa}  
                       onChange={(value: any)=>{ 
-                        setSearch(value.value); 
+                        setFiltergrupo(true);
+                        filterGrupo=true;
+                        setSearch(value.label); 
                         console.log('Select',value)          
                       }} 
                     />
@@ -520,7 +578,14 @@ function PesquisaCod(){
               </>):(<></>)}
               </div>
 
-                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetProdutosFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
+                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);
+                      if(filterGrupo){
+                        GetProdutosFilterGrupo()
+                      }else{
+                        GetProdutosFilter()
+                      }
+                      
+                      }}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas' onClick={LimparPesquisa}>Limpar<AiOutlineClear style={{marginLeft: 6}} fontSize={20}/></button>
                    
                     </div>
