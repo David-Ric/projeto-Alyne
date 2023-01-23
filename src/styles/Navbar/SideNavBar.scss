@@ -2,7 +2,7 @@
 
 .side-nav-container {
 	background-color: var(--dark);
-	width: 300px;
+	width: 330px;
 	min-height:1017px;
 	position: absolute !important;
     z-index: 1000;
@@ -120,6 +120,7 @@
 
 .side-nav-container-NX {
 	width: 85px;
+  //width: 110px;
 }
 
 .nav-upper,
@@ -293,6 +294,7 @@
     
   }
   .sidebar-menu{
+   
     padding: 1rem 0;
     ul{
       text-decoration: none;
@@ -317,6 +319,9 @@
           }
         }
       }
+    }
+    @media(max-width:768px){
+      width: 80px !important;
     }
   }
 }
@@ -544,21 +549,74 @@
   #logo2{
     margin-right: 20px;
     @media (max-width:768px){
-      margin-left: 24px !important;
+      margin-left: 36px !important;
+      margin-right: 30px;
   
     }
   }
   #logo3{
     margin-right: 20px;
     @media (max-width:768px){
-      margin-left: 24px !important;
+      margin-left: 36px !important;
+      margin-right: 30px;
   
     }
   }
   #logo4{
     margin-right: 13px;
     @media (max-width:768px){
-      margin-left: 24px !important;
+      margin-left: 36px !important;
+      margin-right: 30px;
   
     }
   }
+   .submenu-cad{
+    
+     width: 295px;
+     margin-top: 0px!important;
+     background-color: #3c3c3c;
+     padding-left: 30px;
+     span{
+       letter-spacing: 1px;
+       font-size: 14px!important;
+       display: block !important;
+     }
+     li{
+       display: flex !important;
+       cursor:pointer;
+     }
+     @media (max-width:768px){
+     position: absolute;
+     padding-left: 20px;
+     margin-left: 120px;
+     top: 0;
+     z-index: 1000 !important;
+     ul{
+      padding-top: 15px;
+      width: 280px;
+     }
+     }
+   }
+   .menu-no-cadastros{
+     ul{
+       display: none;
+     }
+     transition: 0.5s;
+     height: 0px;
+   }
+   .accordion-button{
+    background-color: #2e2e2e!important;
+    color: #e0dede;
+   }
+   .accordion-button:hover{
+   
+    color: #4BB7F1;
+   }
+   .accordion-body{
+    color: #e0dede;
+    background-color: #555454!important;
+   }
+   .accordion-body:hover{
+    color: #4BB7F1;
+  
+   }

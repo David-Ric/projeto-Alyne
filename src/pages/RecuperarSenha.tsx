@@ -26,6 +26,7 @@ export default function RecuperarSenha() {
   const [alertErro, setAlertErro] = useState(false);
   const [alertErroMensage, setAlertErroMensage] = useState(false);
   const [showMensage, setShowMensage] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
 
@@ -67,6 +68,7 @@ function handleCloseMensage(){
 
   //=========== fução login ==================================//
   async function EnviarEmail() {
+    setLoading(true);
      if(email ==''){
       let usuario: any;
       usuario = document.getElementById("email");
@@ -77,7 +79,7 @@ function handleCloseMensage(){
       return;
      }
      
-     api.post(`/api/Auth/forgot-password?email=${email}`)
+     await api.post(`/api/Auth/forgot-password?email=${email}`)
      .then((response) => {
      // console.log(response.data);
     
@@ -85,6 +87,7 @@ function handleCloseMensage(){
         "@Portal/token-reset",
         JSON.stringify(response.data)
       );
+      setLoading(false);
       Redefinir();
       setShowMensage(true)
       setAlertErroMensage(true);
@@ -93,6 +96,7 @@ function handleCloseMensage(){
      
     })
     .catch((error) => {
+      setLoading(false);
       //console.log('resposta', error.response.data)
     //  console.log("Ocorreu um erro ");
       if (error.response?.status === 400) {
@@ -112,8 +116,8 @@ function handleCloseMensage(){
  
     //========envio de email==================================================//
     async function Redefinir() {
-      
-        api.post("/api/Email",{
+      setLoading(true);
+      await api.post("/api/Email",{
           emails: [
             email
           ],
@@ -127,18 +131,16 @@ function handleCloseMensage(){
         "@Portal/token-reset-now",
         JSON.stringify(response.data)
       );
-        
+      setLoading(false);
       })
        .catch((error) => {
-     
+        setLoading(false);
          setAlertErro(true);
        const  data  = error.response.data;
       setMsgErro(data);
        return;
    
        });
-       
-  
       }
     //==========================================================
   return (
@@ -184,7 +186,14 @@ function handleCloseMensage(){
       </div>
       
       
-      <button style={{marginTop:0, marginBottom:10}} className='btn btn-enviar'onClick={EnviarEmail}>Enviar</button>
+      <button style={{marginTop:0, marginBottom:10}} className='btn btn-enviar'onClick={EnviarEmail}>{loading ? "Carregando " : "Enviar"}
+            {loading && (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              />
+            )}</button>
       <p className="center register-link">
             <a href="/">Voltar ao login <BsBackspaceFill/> </a>
           </p>

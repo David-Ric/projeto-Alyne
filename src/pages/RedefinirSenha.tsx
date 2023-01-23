@@ -27,6 +27,7 @@ export default function RedefinirSenha() {
   const [alertErroMensage, setAlertErroMensage] = useState(false);
   const [showMensage, setShowMensage] = useState(false);
   let [username, setUsername] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const usuario: iDadosUsuario = JSON.parse(
     localStorage.getItem("@Portal/usuario") || "{}"
@@ -85,7 +86,7 @@ function handleCloseMensage(){
         return
       }
      
-      api.post("/api/Auth/reset-password",{
+      await api.post("/api/Auth/reset-password",{
        token: token,
        password: senha,
        confirmPassword: confirmaSenha
@@ -115,7 +116,7 @@ function handleCloseMensage(){
     async function Login() {
       localStorage.getItem("@Portal/token-reset-now")
       localStorage.removeItem("@Portal/token-reset") 
-      api.post("/api/Auth/login",{
+      await api.post("/api/Auth/login",{
        username: username,
        password: senha
       })

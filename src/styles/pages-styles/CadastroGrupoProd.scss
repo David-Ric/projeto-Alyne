@@ -114,19 +114,63 @@ margin-top: 85px !important;
      display: none;
     }
 }
-.logo-cadastro{
+.logo-cadastro-grupo{
     margin-top: 30px;
-    width: 280px;
+    margin-right: 40px;
+    width:300px;
   // height:355px;
    bottom: 20px !important;
-    background-image: url("../../assets/cadastro-user.png");
-    background-size: 90%;
+    background-image: url("../../assets/grupoProd.png");
+    background-size: 100%;
     background-repeat: no-repeat, repeat;
     margin-bottom: 180px;
     @media(max-width:790px) {
         display: none;
      }
 }
+.logo-cadastro-prod{
+    margin-top: 30px;
+    margin-right: 40px;
+    width:300px;
+   
+   bottom: 20px !important;
+    background-image: url("../../assets/PRODUTOS.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+.logo-cadastro-concorrentes{
+    margin-top: 30px;
+    margin-right: 40px;
+    width:300px;
+   
+   bottom: 20px !important;
+    background-image: url("../../assets/CONCORRENTES.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+.logo-cadastro-prodconc{
+    margin-top: 30px;
+    margin-right: 40px;
+    width:300px;
+   
+   bottom: 20px !important;
+    background-image: url("../../assets/PRODCONCORRENTES.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+
 .modal-cadastro-user{
     font-family: 'Unbounded', cursive;
     .modal-content{
@@ -202,6 +246,22 @@ margin-top: 85px !important;
     }
    
 }
+.alerta-grupo{
+    width:486%;
+    margin:auto !important;
+    text-align: center;
+    @media(max-width:790px) {
+        text-align: left;
+      }
+}
+.alerta-prod{
+    width:485%;
+    margin:auto !important;
+    text-align: center;
+    @media(max-width:790px) {
+        text-align: left;
+      }
+}
 .alerta-user{
     width:270%;
     margin:auto !important;
@@ -212,18 +272,20 @@ margin-top: 85px !important;
 }
 
 
-#nomePesquisa{
-    width: 100% !important;
-   
+// #nomePesquisa{
+//     width: 300px !important;
+//     @media(max-width:790px) {
+//         width: 100% !important;
+//        }
     
-}
-#statusPesquisa{
-    width: 300px !important;
-    @media(max-width:790px) {
-        width: 100% !important;
-       }
+// }
+// #statusPesquisa{
+//     width: 200px !important;
+//     @media(max-width:790px) {
+//         width: 100% !important;
+//        }
     
-}
+// }
 .btn-pesquisas{
     font-size: 13px;
 }
@@ -238,4 +300,86 @@ margin-top: 85px !important;
     @media(max-width:790px) {
        flex-direction: column;
       }
+}
+
+.conteudo-input{
+
+}
+.id-grupo{
+    width: 50px!important;
+}
+.nome-grupo{
+  //  width: 200px!important;
+}
+.div-input-grupo{
+    width: 60%;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+}
+.input-grupo-prod{
+    width: 100% !important;
+}
+.div-button-top{
+    width: 100% !important;
+    padding:5px;
+   // height: 50px;
+background-color: #ebebec;
+}
+.boco-botoes-grupo{
+    justify-content: space-between;
+    display: flex !important;
+    .btn{
+        width: 45%;
+    }
+    @media(max-width:790px) {
+        flex-direction: column;
+        display: block !important;
+        .btn{
+            width: 100%;
+            display: block!important;
+        }
+       }
+}
+
+#codProd{
+    width: 150px;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+}
+#descricao{
+
+}
+.modal-cadastro-prod{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    width: 550px;
+    height: auto;
+   // top: -30px;
+    left: -5%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: 0%;
+     //   top:0px;
+      }
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
+#btn-cad-prod{
+    width: 200px;
+    margin-left: 30%;
+    @media(max-width:790px) {
+        width: 100%;
+       margin-left: 0px;
+      }
+}
+.div-cod-prod{
+    width: 150px !important;
 }

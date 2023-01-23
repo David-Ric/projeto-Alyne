@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react';
-import { MdOutlineAccountCircle } from "react-icons/md";
+import { ImExit } from "react-icons/im";
+import { BiUserCheck } from "react-icons/bi";
 import "../../styles/Navbar/navbarDashHeader.scss";
 import { HiArrowCircleDown,HiArrowCircleUp } from "react-icons/hi";
 import { Link, } from "react-router-dom";
@@ -54,6 +55,11 @@ function AtivaDropFalse(){
  // setDropActive(false)
 }
 
+function MeuPerfil(){
+  setDropActive(false)
+  history('/meu-perfil');
+}
+
 
   return (
     <header id="navbar-header-dashboard" >
@@ -90,8 +96,8 @@ function AtivaDropFalse(){
         </OverlayTrigger>
         <div className={dropActive?'dropdow':'no-dropdow'}>
         <ul>
-          <li>Perfil</li>
-          <li onClick={Deslog}>Sair</li>
+          <li onClick={MeuPerfil}>Perfil<BiUserCheck fontSize={22} style={{marginLeft:6}}/></li>
+          <li onClick={Deslog}>Sair<ImExit style={{marginLeft:6}}/></li>
         </ul>
       </div>
       </div>

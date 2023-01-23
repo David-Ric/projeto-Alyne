@@ -238,6 +238,7 @@ p {
 	display: flex;
 	.bloco-input{
 		padding: 10px;
+		padding-top: 0px !important;
 		width: 100%;
 		.inputlogin{
 			width: 100%;
@@ -425,3 +426,72 @@ thead{
 	margin-left: 30px;
 }
 }
+.title-pesBloco{
+	background-color: #f1eeee;
+	padding: 3px;
+	padding-bottom: 5px !important;
+	
+}
+.pesBloco{
+	width: auto !important;;
+}
+.btn-direito{
+	position: absolute;
+	float: right !important;
+	right:15px;
+	margin-right: 12px;
+	top:25px;
+	@media(max-width:790px) {
+		top:20px;
+	}
+   }
+   .bloco-pesquisa-input{
+	width: 60%;
+	@media(max-width:790px) {
+	width: 100%;
+	}
+   }
+   .select-comp{
+	width: 100% !important;
+	font-size: .8rem;
+	padding: 0.3rem 0.5rem 0.3rem 0.5rem !important;
+	
+	line-height: 1.5;
+	
+	color: #212121;
+	margin-top: 2px;
+	box-shadow: 0 4px 8px 1px #d7d7d7 !important;
+	letter-spacing: 2px !important;
+	option{
+		letter-spacing: 2px !important;
+		height: 40px !important;
+	}
+  }
+  .select-comp:active, .select-comp:focus{
+    border: 1px solid #3e92e5;
+	background-color: #c8e2fd;
+  }
+
+  .inputcod{
+    width: 200px;
+    height: auto;
+      border-radius: 0.1rem;
+      outline: initial!important;
+      -webkit-box-shadow: initial!important;
+     // box-shadow: none!important;
+      font-size: .8rem;
+      padding: 0.7rem 0.75rem 0.65rem 0.75rem;
+      line-height: 1.5;
+      border: 1px solid #d7d7d7;
+      background: #fff;
+      color: #212121;
+      margin-top: 2px;
+      box-shadow: 0 4px 8px 1px #d7d7d7 !important;
+	  @media(max-width:790px) {
+		width: 100% ;
+		}
+  }
+  .inputcod:active, .inputcod:focus{
+    border: 1px solid #3e92e5;
+    background-color: #c8e2fd;
+  }

@@ -82,7 +82,7 @@ export default function Home() {
       setMsgErro("Senha não informada.");
       return;
      }
-     api.post("/api/Auth/login",{
+     await api.post("/api/Auth/login",{
       username: user,
       password: senha
      })

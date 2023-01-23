@@ -1,0 +1,366 @@
+
+.conteudo{
+    position: relative;
+    justify-content: flex-end !important;
+        width: 800px;
+    min-height: auto;
+    box-shadow: 0 4px 8px 1px #121213;
+    padding: 15px;
+   background-color: #fff;
+   top: 20px !important;
+   @media (max-width:768px){
+       width: 100%;
+       padding: 8px;
+     }
+    //  .btn-direito{
+    //   position: absolute;
+    //   float: right !important;
+    //   right:0;
+    //   margin-right: 12px;
+    //  }
+}
+
+.form-cadastro-user{
+  //  width: 800px;
+   // min-height: 560px;
+   // box-shadow: 0 4px 8px 1px #121213;
+   // padding: 15px;
+    background-color: #fff;
+    top: 20px !important;
+    @media (max-width:768px){
+		width: 100%;
+        padding: 8px;
+	  }
+}
+.acesso-personalizado-edit{
+    width: 100%;
+    margin-top: 5px;
+    height: 195px;
+    background-color: #f9f5f5;
+    box-shadow: 0 4px 8px 1px #c6c6ca;
+    flex: 0 0 auto;
+    padding: 15px;
+}
+.acesso-personalizado{
+    width: 100%;
+    margin-top: 5px;
+    height: 208px;
+    background-color: #f9f5f5;
+    box-shadow: 0 4px 8px 1px #c6c6ca;
+    flex: 0 0 auto;
+    padding: 15px;
+}
+.check-grupo{
+    display: flex;
+    text-align: center;
+    margin-right: 15px;
+    height: 25px;
+    margin-bottom: 20px;
+    }
+    #grupo{
+        width: 20px;
+        height: 20px;
+        margin-right: 15px;
+        margin-top: 5px;
+        
+   
+}
+.text{
+    font-size: 15px;
+    color: #6b6868 !important;
+}
+.btn-editar{
+margin-top: 85px !important;
+}
+.btn-cancelar{
+    margin-top: 25px !important;
+    width:100%;
+    padding: 15px;
+   // border-radius: 50px;
+    background: linear-gradient(0deg, #711e1e 0%, #e56e6e 100%);
+    color: aliceblue;
+    @media(max-width:290px) {
+        width: 170px;
+    }
+}
+.btn-cancelar:hover{
+    background:  linear-gradient(0deg, #8e1c1c 0%, #b54444 100%);
+    color: aliceblue;
+}
+
+
+
+.btn-cadastrar{
+    margin-top: 25px;
+    width:100%;
+    padding: 15px;
+   // border-radius: 50px;
+    background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+    color: aliceblue;
+    @media(max-width:290px) {
+        width: 170px;
+    }
+}
+.btn-cadastrar:hover{
+    background:  linear-gradient(0deg, #033049 0%, #2f7aa2 100%);
+    color: aliceblue;
+}
+#btn-mob{
+    display: none;
+    @media(max-width:790px) {
+     display: block;
+    }
+}
+#btn-desck{
+    display: block;
+    @media(max-width:790px) {
+     display: none;
+    }
+}
+.logo-cadastro-vendas{
+    margin-top: 60px;
+    width: 280px;
+  // height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/VENDEDOR.png");
+    background-size: 90%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+.modal-cadastro-vendedor{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    width: 800px;
+    height: auto;
+    //top: -10px;
+    left: -28%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: 0%;
+        top:0px;
+      }
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
+.modal-edit-vendedor{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    width: 800px;
+    height: auto;
+    //top: -10px;
+    left: -28%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: 0%;
+        top:0px;
+      }
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+    
+ .bloco-button-edit{
+    display: flex;
+    justify-content: space-between;
+    @media(max-width:790px) {
+       flex-direction: column;
+      }
+ }
+   
+}
+.alerta-vendedor{
+    width:171%;
+    margin:auto !important;
+    text-align: center;
+    @media(max-width:790px) {
+        text-align: left;
+      }
+}
+
+.btn-edit-vend{
+    width: 45% !important;
+    @media(max-width:790px) {
+       width: 100% !important;
+      }
+}
+// #nomePesquisa{
+//     width: 300px !important;
+//     @media(max-width:790px) {
+//         width: 100% !important;
+//        }
+    
+// }
+// #statusPesquisa{
+//     width: 200px !important;
+//     @media(max-width:790px) {
+//         width: 100% !important;
+//        }
+    
+// }
+.btn-pesquisas{
+    font-size: 13px;
+}
+.div-pesquisa-status{
+    @media(max-width:790px) {
+        margin-top: 20px;
+       }
+}
+.conteudo-botoes{
+    display: flex;
+    justify-content: space-around;
+    @media(max-width:790px) {
+       flex-direction: column;
+      }
+}
+.alerta-Vendedor{
+    text-align: center !important;
+    width: 486%;
+}
+.codPesquisa{
+   width: 200px;
+   @media(max-width:790px) {
+    width: 100%;
+   } 
+}
+
+.input-cod-Pesquisa{
+    width: 100%;
+    height: auto;
+      border-radius: 0.1rem;
+      outline: initial!important;
+      -webkit-box-shadow: initial!important;
+     // box-shadow: none!important;
+      font-size: .8rem;
+      padding: 0.7rem 0.75rem 0.65rem 0.75rem;
+      line-height: 1.5;
+      border: 1px solid #d7d7d7;
+      background: #fff;
+      color: #212121;
+      margin-top: 2px;
+      box-shadow: 0 4px 8px 1px #d7d7d7 !important;
+  }
+  .input-cod-Pesquisa:active, .input-cod-Pesquisa:focus{
+    border: 1px solid #3e92e5;
+    background-color: #c8e2fd;
+  }
+  #btn-novo-vend{
+    top: 20px !important;
+    margin-right: 20px !important;
+    @media(max-width:790px) {
+        top: 15px !important;
+       }
+  }
+  .bloco-codigo{
+    width: 25% !important;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+  }
+  .bloco-regiao{
+    width: 55% !important;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+  }
+  .bloco-tipo{
+    width: 50% !important;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+  }
+  .bloco-email{
+    width: 50% !important;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+  }
+  .bloco-status-vend{
+    width: 40% !important;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+
+  }
+  .atua-comprador{
+    margin-top: 39px;
+   // margin-left: 60px;
+    width: 45%;
+    @media(max-width:790px) {
+        margin-top: 20px;
+        width: 100%;
+       }
+  }
+  .input-id-par{
+    width: 100% !important;
+  }
+  .coluna-parceiro{
+    display: flex !important;
+    @media(max-width:790px) {
+        display: flex !important;
+       }
+  }
+  .coluna-pesquisa-inp{
+    width: 49% ;
+   // padding: 5px;
+    margin-top: 10px;
+    padding-bottom: 2px!important;
+   // background-color: #ebebec;
+    @media(max-width:790px) {
+        width: 100%;
+        margin-bottom: 20px;
+        flex-direction: column;
+       }
+  }
+  .bloco-cod-par{
+    width: 100%;
+    display: flex;
+    @media(max-width:790px) {
+        flex-direction: column;
+       }
+  }
+  .coluna-pesquisaPar-Ger{
+    padding-left: 10px;
+    padding-right: 10px;
+    justify-content: space-between;
+  }
+  .bloco-cod-pesq-vendedor{
+    width: 30% !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       }
+  }
+  .btn-cadastrar-vendedor{
+ margin-left: 30%;
+    width:40%;
+    padding: 15px;
+   // border-radius: 50px;
+    background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+    color: aliceblue;
+    @media(max-width:290px) {
+        width: 100%;
+    }
+}
+.pesquisa-vend-top{
+    margin-top: 0px !important;
+    @media(max-width:290px) {
+        margin-top: 10px !important;
+    }
+}
+.bloco-buttom-vendedor{
+    margin-top: 10px !important;
+    width: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
