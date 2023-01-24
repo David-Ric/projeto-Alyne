@@ -151,10 +151,10 @@ export default function SideNavBar() {
             
 
              {usuario.grupo=="1"||usuario.admin==true?(<>
-              <li>
+              {/* <li>
               <Link to="/cadastro-usuarios">
                 <span>
-                {/* <FontAwesomeIcon icon={icon} /> */}
+                {/* <FontAwesomeIcon icon={icon} /> 
                <AiOutlineUsergroupAdd id="logo1" fontSize={35}  /> 
                 </span>
                 {espand && (
@@ -162,7 +162,7 @@ export default function SideNavBar() {
                 )}
                 <span className="textmobile">Usuários</span>
               </Link>
-            </li>
+            </li> */}
             </>):(<></>)}
            
             {usuario.grupo=="1" ||usuario.grupo=="2" ||usuario.comercial==true?(<>
@@ -180,6 +180,15 @@ export default function SideNavBar() {
              </>):(<></>)}
              <div  className={openTrade?"submenu-cad menu-cadastros":"submenu-cad menu-no-cadastros"}>
               <ul>
+              <li>
+              <Link style={{display:"flex"}} onClick={Trade}  to="/cadastro-usuarios">
+                <span>
+                {/* <FontAwesomeIcon icon={icon} /> */}
+               <AiOutlineUsergroupAdd id="logo1" fontSize={35}  /> 
+                </span>
+                <span className="textmobile">Usuários</span>
+              </Link>
+            </li>
                 <li> 
                 <Link style={{display:"flex"}} onClick={Trade} to="/cadastro-parceiros">
                 < span>

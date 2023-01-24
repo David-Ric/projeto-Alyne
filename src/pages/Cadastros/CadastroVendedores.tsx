@@ -404,7 +404,7 @@ export default function CadastroVendedores() {
           handleShowMensage();
           setAlertErroMensage(true);
           window.scrollTo(0, 0);
-          setMsgErro(`${tipo=='1'?'Vendedor':tipo=='2'?'Comprador':tipo=='3'?'Assessor':tipo=='4'?'Gerente':tipo=='5'?'Representante':tipo=='6'?'Supervisor':'Técnico'} criado com sucesso.`);
+          setMsgErro(`${tipo=='1'?'Vendedor':tipo=='2'?'Comprador':tipo=='3'?'Assessor':tipo=='4'?'Gerente':tipo=='5'?'Representante':tipo=='6'?'Supervisor':tipo=='8'?'Promotor':'Técnico'} criado com sucesso.`);
         })
         .catch((error) => {
          // handleClose()
@@ -677,7 +677,7 @@ function PesquisaFuncionarioCod(){
           <td style={{textAlign:"center"}} className=''>{vendedores.codVendedor}</td> 
          <td className='Nome-completo'>{vendedores.nome}</td> 
          <td style={vendedores.status =='true'?{color:'#008000', textAlign:"center"}:{color:'red', textAlign:"center"}}>{vendedores.status =="true"?"Ativo":"Inativo"}</td>
-         <td style={{textAlign:"center"}} >{vendedores.tipo =="1"?"Vendedor":vendedores.tipo =="2"?"Comprador":vendedores.tipo =="3"?"Acessor":vendedores.tipo =="4"?"Gerente":vendedores.tipo =="5"?"Representante":vendedores.tipo =="6"?"Supervisor":"Técnico"}</td>
+         <td style={{textAlign:"center"}} >{vendedores.tipo =="1"?"Vendedor":vendedores.tipo =="2"?"Comprador":vendedores.tipo =="3"?"Acessor":vendedores.tipo =="4"?"Gerente":vendedores.tipo =="5"?"Representante":vendedores.tipo =="6"?"Supervisor":vendedores.tipo =="8"?"Promotor":"Técnico"}</td>
          <td style={vendedores.email ==null ||vendedores.email ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{vendedores.email?vendedores.email:"Não informado"}</td>
          <td style={vendedores.parceiroNome ==null ||vendedores.parceiroNome ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{vendedores.parceiroNome?vendedores.parceiroNome:"Não informado"}</td>
          
@@ -821,6 +821,7 @@ function PesquisaFuncionarioCod(){
                         <option value="5">REPRESENTANTE</option>
                         <option value="6">SUPERVISOR</option>
                         <option value="7">TÉCNICO</option>
+                        <option value="8">PROMOTOR</option>
                     </select> 
                </div>
            
@@ -1226,6 +1227,7 @@ function PesquisaFuncionarioCod(){
                         <option value="5">REPRESENTANTE</option>
                         <option value="6">SUPERVISOR</option>
                         <option value="7">TÉCNICO</option>
+                        <option value="8">PROMOTOR</option>
                     </select> 
                </div>
            

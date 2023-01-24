@@ -495,3 +495,86 @@ thead{
     border: 1px solid #3e92e5;
     background-color: #c8e2fd;
   }
+.inputparceiro{
+	box-shadow: 0 4px 8px 1px #d7d7d7 !important;
+}
+  
+  .inputparceiro:active, .inputparceiro:focus{
+    border: 1px solid #3e92e5;
+    background-color: #c8e2fd;
+  }
+
+  .bloco-endereco{
+	width: 70% !important;
+	@media(max-width:790px) {
+		width: 100% !important ;
+		}
+  }
+  .bloco-bairro{
+	width: 30% !important;
+	@media(max-width:790px) {
+		width: 100% !important;
+		}
+  }
+  .bloco-municio{
+	width: 40% !important;
+	@media(max-width:790px) {
+		width: 100% !important;
+		}
+  }
+  .bloco-uf{
+	width: 27% !important;
+	@media(max-width:790px) {
+		width: 100% !important;
+		}
+  }
+  .boco-lat-log{
+	width: 50% !important;
+	@media(max-width:790px) {
+		width: 100% !important;
+		}
+  }
+  .bloco-visitas{
+	margin-top: 20px;
+	width: 100%;
+	height: auto !important;
+	padding: 20PX;
+	padding-bottom: 0px!important;
+  }
+  .divisao{
+	width: 100%;
+	border-bottom: 4px solid #cbc7c7;
+  }
+  .divisa{
+	width: 100%;
+	border-bottom: 2px solid #e3dddd;
+  }
+  .bloco-interno{
+	//padding-top: 20px;
+	padding-bottom: 20px;
+	margin-right: 20px;
+	width: 50% !important;
+	h2{
+		margin-bottom: 20px;
+	}
+	@media(max-width:790px) {
+		margin-right: 0px;
+		width: 100% !important;
+		}
+  }
+  .bloco-visita-geral{
+	box-shadow: 0 4px 8px 1px #d7d7d7 !important;
+  }
+  .divbotoes-edit{
+	justify-content: space-between;
+	display: flex;
+	@media(max-width:790px) {
+		flex-direction: column;
+		}
+  }
+  #btn-edit-par{
+	width: 40%;
+	@media(max-width:790px) {
+		width: 100%;
+		}
+  }

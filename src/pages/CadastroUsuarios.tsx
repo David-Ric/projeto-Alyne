@@ -1151,7 +1151,7 @@ function PesquisaStatus(){
                     </div>
                     </div>
                     </div> 
-                    <button disabled={loadingUpdate ||grupo=='1'} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={handleCloseEdit}>Editar</button>                  
+                    <button disabled={loadingUpdate ||grupo=='1'} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={editUser}>Editar</button>                  
                     <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-mob' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
             </div>
            </>)}

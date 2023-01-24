@@ -64,7 +64,7 @@ export interface iGrupos {
       promotor: string,
       endereco: string,
       bairro: string,
-      muncipio: string,
+      municipio: string,
       uf: string,
       lat: string,
       long: string,

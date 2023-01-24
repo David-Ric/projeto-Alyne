@@ -223,6 +223,14 @@ margin-top: 85px !important;
         text-align: left;
       }
 }
+.alerta-parceiro{
+    width:485%;
+    margin:auto !important;
+    text-align: center;
+    @media(max-width:790px) {
+        text-align: left;
+      }
+}
 
 
 #nomePesquisa{
@@ -251,4 +259,29 @@ margin-top: 85px !important;
     @media(max-width:790px) {
        flex-direction: column;
       }
+}
+.blocoTipo{
+    width: 200px !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       }
+}
+.conteudo-cadastro-parceiro{
+    letter-spacing: 2px;
+    width: 60%;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+}
+.div-visitas{
+    width: 40%;
+    @media(max-width:790px) {
+        width: 100%;
+       }
+}
+.div-conteudo-geral{
+display: flex;
+@media(max-width:790px) {
+    flex-direction: column;
+   }
 }

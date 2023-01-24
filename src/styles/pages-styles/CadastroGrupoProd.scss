@@ -192,6 +192,27 @@ margin-top: 85px !important;
     }
    
 }
+.modal-cadastro-parceiro{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    width: 1200px;
+    height: auto;
+    top: -30px;
+    left: -70%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: 0%;
+        top:0px;
+      }
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
 .modal-edit-user{
     font-family: 'Unbounded', cursive;
     .modal-content{
@@ -382,4 +403,16 @@ background-color: #ebebec;
 }
 .div-cod-prod{
     width: 150px !important;
+}
+.tamanho-loja{
+    width: 450px !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+      }
+}
+.classifica{
+    width: 450px !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+      }
 }

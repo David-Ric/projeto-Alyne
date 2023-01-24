@@ -25,33 +25,48 @@ import { iUsuarios } from '../../@types';
 import OverlayTrigger from 'react-bootstrap/esm/OverlayTrigger';
 import { Tooltip } from 'react-bootstrap';
 import Paginacao from "../../components/Paginacao";
-import { phoneMask } from '../../Masks/Masks';
+import { phoneMask, cpfMask, cnpjMask,revertMask } from '../../Masks/Masks';
 import { FaSearchPlus } from "react-icons/fa";
 import { AiOutlineClear } from "react-icons/ai";
-import { iDadosUsuario,iDataSelect } from '../../@types';
+import { iDadosUsuario,iDataSelect, iParceiros } from '../../@types';
 import Select from 'react-select';
 
 
 export default function CadastroParceiros() {
   const history = useNavigate();
 
-  const [primeiroNome, setPrimeiroNome] = useState('');
-  const [ultimoNome, setUltimoNome] = useState('');
-  const [usuario, setUsuario] = useState('');
-  const [nomeUsuario, setNomeUsuario] = useState('');
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [idUser, setIdUser] = useState(0);
-  const [senhaConfirm, setSenhaConfirm] = useState('');
-  const [urlPerfil, setUrlPerfil] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [ativo, setAtivo] = useState('1');
-  const [funcao, setFuncao] = useState('');
-  const [grupo, setGrupo] = useState('');
-  const [admin, setAdmin] = useState(false);
-  const [comercial, setComercial] = useState(false);
-  const [representante, setRepresentante] = useState(false);
-  const [tipoUsuario, setTipoUsuario] = useState(false);
+  
+  const [id, setId] = useState(0);
+  const [nome, setNome] = useState('');
+  const [tipoPessoa, setTipoPessoa] = useState('F');
+  const [nomeFantasia, setNomeFantasia] = useState('');
+  const [cnpjCpf, setCnpjCpf] = useState('');
+  const [email, setemail] = useState('');
+  const [fone, setFone] = useState('');
+  const [canal, setCanal] = useState('');
+  const [classificacao, setClassificacao] = useState('');
+  const [tamanhoLoja, setTamanhoLoja] = useState('');
+  const [promotor, setPromotor] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [municipio, setMunicipio] = useState('');
+  const [uf, setUf] = useState('');
+  const [lat, setLat] = useState('');
+  const [long, setLong] = useState('');
+  const [status, setStatus] = useState('');
+  const [semVisita, setSemVisita] = useState(false);
+  const [primeiraSem, setPrimeiraSem] = useState(false);
+  const [segundaSem, setSegundaSem] = useState(false);
+  const [terceiraSem, setTerceiraSem] = useState(false);
+  const [quartaSem, setQuartaSem] = useState(false);
+  const [quintaSem, setQuintaSem] = useState(false);
+  const [segunda, setSegunda] = useState(false);
+  const [terca, setTerca] = useState(false);
+  const [quarta, setQuarta] = useState(false);
+  const [quinta, setQuinta] = useState(false);
+  const [sexta, setSexta] = useState(false);
+  const [sabado, setSabado] = useState(false);
+
 
 
   const [error, setError] = useState("");
@@ -67,10 +82,10 @@ export default function CadastroParceiros() {
 
   const [edit, setEdit] = useState(false);
   const [ativostatus, setAtivostatus] = useState(false);
-  let [usuarios, setUsuarios] = useState<iUsuarios[]>([]);
+  let [parceiros, setParceiros] = useState<iParceiros[]>([]);
   const [usuariosget, setUsuariosget] = useState<iUsuarios[]>([]);
-  let [usuariosCount, setUsuariosCount] = useState<iUsuarios[]>([]);
-  let [usuariosFilter, setUsuariosFilter] = useState<iUsuarios[]>([]);
+  // let [usuariosCount, setUsuariosCount] = useState<iUsuarios[]>([]);
+  // let [usuariosFilter, setUsuariosFilter] = useState<iUsuarios[]>([]);
   let [totalPaginas, setTotalPaginas] = useState(0);
 
    const handleClose = () => setShow(false);
@@ -91,13 +106,70 @@ export default function CadastroParceiros() {
 
    const [pesquisaNome, setPesquisaNome] = useState(true);
    const [pesquisaStatus, setPesquisaStatus] = useState(false);
+   const [pesquisaCPF, setPesquisaCPF] = useState(false);
 
    let [selectGrupo, setSelectGrupo] = useState<iDataSelect>();
+   const [promotorPesquisa, setPromotorPesquisa] = useState<iDataSelect[]>([]);
 
    //======options dos selects ===================//
-   const status = [
-    { value: '1', label: 'Ativo' },
-    { value: '2', label: 'Inativo' }
+   const canalpesq = [
+    { value: '1', label: 'Atacarejo' },
+    { value: '2', label: 'Especializada' },
+    { value: '3', label: 'Farma' },
+    { value: '4', label: 'Varejo' }
+
+  ];
+  const classificacaopesq = [
+    { value: '1', label: 'Diamante' },
+    { value: '2', label: 'Oruro' },
+    { value: '3', label: 'Prata' },
+    { value: '4', label: 'Bronze' }
+
+  ];
+  const tamanhopesq = [
+    { value: '1', label: 'G G' },
+    { value: '2', label: 'G' },
+    { value: '3', label: 'M' },
+    { value: '4', label: 'P' }
+
+  ];
+  const ufpesq = [
+    { value: 'AC', label: 'AC' },
+    { value: 'AL', label: 'AL' },
+    { value: 'AP', label: 'AP' },
+    { value: 'AM', label: 'AM' },
+    { value: 'BA', label: 'BA' },
+    { value: 'CE', label: 'CE' },
+    { value: 'DF', label: 'DF' },
+    { value: 'ES', label: 'ES' },
+    { value: 'GO', label: 'GO' },
+    { value: 'MA', label: 'MA' },
+    { value: 'MT', label: 'MT' },
+    { value: 'MS', label: 'MS' },
+    { value: 'MG', label: 'MG' },
+    { value: 'PA', label: 'PA' },
+    { value: 'PB', label: 'PB' },
+    { value: 'PR', label: 'PR' },
+    { value: 'PE', label: 'PE' },
+    { value: 'PI', label: 'PI' },
+    { value: 'RJ', label: 'RJ' },
+    { value: 'RN', label: 'RN' },
+    { value: 'RS', label: 'RS' },
+    { value: 'RO', label: 'RO' },
+    { value: 'RR', label: 'RR' },
+    { value: 'SC', label: 'SC' },
+    { value: 'SP', label: 'SP' },
+    { value: 'SE', label: 'SE' },
+    { value: 'TO', label: 'TO' }
+
+  ];
+
+
+
+
+   const statuspesq = [
+    { value: 'true', label: 'Ativo' },
+    { value: 'false', label: 'Inativo' }
   ];
    const grupos = [
      { value: '1', label: 'ADMINISTRATIVO' },
@@ -124,6 +196,35 @@ export default function CadastroParceiros() {
   //    { value: '3', label: 'REPRESENTANTE' },
   //    { value: '4', label: 'USUÁRIO' }
   //  ]);
+
+
+  async function GetPromotor() {
+    setFilter(true);
+    await api
+      .get(`/api/Vendedores/promotor?pagina=${pagina}&totalpagina=999&filter=8`)
+      .then((response) => {
+       
+        if (response.data.data.length > 0) {
+          let options:Array<iDataSelect>=new Array<iDataSelect>();
+          response.data.data.map((promotor:any) => {
+            let rowGrupo: iDataSelect = {};
+            rowGrupo.value = String(promotor.codVendedor);
+            rowGrupo.label = promotor.nome;
+           
+             options.push(rowGrupo);
+            setPromotorPesquisa(options);
+           console.log("teste",promotorPesquisa)
+          })
+        }
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+     
+  }
+  function ShowModalEdit(){
+    setShowEdit(true);
+  }
 
   //================================================//
 
@@ -155,10 +256,11 @@ export default function CadastroParceiros() {
  
   useEffect(() => {
     window.scrollTo(0, 0);
+    GetPromotor();
     if(!filter){
-      GetUsuarios();
+      GetParceiros();
     }else{
-      GetUsuariosFilter();
+      GetParceirosFilter();
     }
     
   },[pagina]);
@@ -172,20 +274,7 @@ export default function CadastroParceiros() {
      }, 1200);
   }
 
-  function SenhanaoCofere(){
-    if(senha != senhaConfirm){
-    setAlertErroRegister(true);
-    setMsgErro(
-      "As senhas não conferem."
-      );
-       let senha: any;
-       senha = document.getElementById("senha");
-     senha.style.backgroundColor = "#ff6961";
-    let senhaconf: any;
-      senhaconf = document.getElementById("confirma");
-    senhaconf.style.backgroundColor = "#ff6961";
-    }
-  }
+  
   function LimpaerroSenhaConfirm(){
     setAlertErroRegister(false);
      let senha: any;
@@ -200,38 +289,49 @@ export default function CadastroParceiros() {
   setAlertErroRegister(false);
  }
   function handleShow(){
-    setPrimeiroNome('');
-    setUltimoNome('');
-    setNomeUsuario('');
-    setUsuario('');
-    setEmail('');
-    setSenha('');
-    setSenhaConfirm('');
-    setUrlPerfil('');
-    setTelefone('');
-     setAtivo('1');
-     setFuncao('');
-     setGrupo('');
-     setIdUser(0);
-     setAdmin(false);
-    setComercial(false);
-    setRepresentante(false);
-    setTipoUsuario(false);
-    setSenha('');
-    setSenhaConfirm('');
-    setShow(true);
+  setId(0);
+  setNome('');
+  setTipoPessoa('F');
+  setNomeFantasia('');
+  setCnpjCpf('');
+  setemail('');
+  setFone('');
+  setCanal('');
+  setClassificacao('');
+  setTamanhoLoja('');
+  setPromotor('');
+  setEndereco('');
+  setBairro('');
+  setMunicipio('');
+  setUf('');
+  setLat('');
+  setLong('');
+  setStatus('');
+  setSemVisita(false);
+  setPrimeiraSem(false);
+  setSegundaSem(false);
+  setTerceiraSem(false);
+  setQuartaSem(false);
+  setQuintaSem(false);
+  setSegunda(false);
+  setTerca(false);
+  setQuarta(false);
+  setQuinta(false);
+  setSexta(false);
+  setSabado(false);
+  setShow(true);
   }
  
 
-  async function GetUsuarios() {
+  async function GetParceiros() {
     setFilter(false);
     await api
     
-      .get(`/api/Usuarios?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Parceiros?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
-        setUsuarios(response.data.data);
+        setParceiros(response.data.data);
      //   console.log('dados',response.data);
-        usuarios=response.data.data;
+        parceiros=response.data.data;
         setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
         // setTotalPaginas(response.data.total / qtdePagina);
      //  console.log('total de paginas',totalPaginas);
@@ -242,17 +342,17 @@ export default function CadastroParceiros() {
      
   }
 
-  async function GetUsuariosFilter() {
+  async function GetParceirosFilter() {
     setFilter(true);
     await api
-      .get(`/api/Usuarios/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Parceiros/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
-        setUsuarios(response.data.data);
-        usuarios=response.data.data;
+        setParceiros(response.data.data);
+        parceiros=response.data.data;
        // setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
-      //  setUsuariosFilter(response.data);
-      //  usuariosFilter=response.data;
-       console.log('usuarios pesquisa',response.data);
+      //  setParceirosFilter(response.data);
+      //  ParceirosFilter=response.data;
+       console.log('Parceiros pesquisa',response.data);
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
@@ -261,47 +361,75 @@ export default function CadastroParceiros() {
   }
  
   
-    //=========== get usuarios por ID ==================================//
-  async function GetUsuarioId(id:any) {
-    setPrimeiroNome('');
-    setUltimoNome('');
-    setNomeUsuario('');
-    setUsuario('');
-    setEmail('');
-    setSenha('');
-    setSenhaConfirm('');
-    setUrlPerfil('');
-    setTelefone('');
-     setAtivo('Ativo');
-     setFuncao('');
-     setGrupo('');
-     setIdUser(0);
-     setAdmin(false);
-    setComercial(false);
-    setRepresentante(false);
-    setTipoUsuario(false);
+    //=========== get Parceiros por ID ==================================//
+  async function GetParceiroId(id:any) {
+    setId(0);
+  setNome('');
+  setTipoPessoa('F');
+  setNomeFantasia('');
+  setCnpjCpf('');
+  setemail('');
+  setFone('');
+  setCanal('');
+  setClassificacao('');
+  setTamanhoLoja('');
+  setPromotor('');
+  setEndereco('');
+  setBairro('');
+  setMunicipio('');
+  setUf('');
+  setLat('');
+  setLong('');
+  setStatus('');
+  setSemVisita(false);
+  setPrimeiraSem(false);
+  setSegundaSem(false);
+  setTerceiraSem(false);
+  setQuartaSem(false);
+  setQuintaSem(false);
+  setSegunda(false);
+  setTerca(false);
+  setQuarta(false);
+  setQuinta(false);
+  setSexta(false);
+  setSabado(false);;
     setEdit(true);
     setShowEdit(true);
     
     await api
-      .get(`/api/Usuarios/${id}`)
+      .get(`/api/Parceiros/${id}`)
       .then((response) => {
-          setUsuariosget(response.data)
-          setIdUser(response.data.id);
-          setPrimeiroNome(response.data.nomeCompleto);
-          setEmail(response.data.email);
-          setNomeUsuario(response.data.username);
-          setUsuario(response.data.username);
-          setUrlPerfil(response.data.imagemURL);
-          setTelefone(response.data.telefone);
-          setAtivo(response.data.status);
-          setFuncao(response.data.funcao);
-          setGrupo(response.data.grupo);
-    
-          setAdmin(response.data.admin);
-          setComercial(response.data.comercial);
-          setRepresentante(response.data.representante);
-          setTipoUsuario(response.data.usuario);
+        //  setParceirosget(response.data)
+        setId(response.data.id);
+        setNome(response.data.nome);
+        setTipoPessoa(response.data.tipoPessoa);
+        setNomeFantasia(response.data.nomeFantasia);
+        setCnpjCpf(response.data.cnpj_Cpf);
+        setemail(response.data.email);
+        setFone(response.data.fone);
+        setCanal(response.data.canal);
+        setClassificacao(response.data.classificacao);
+        setTamanhoLoja(response.data.tamanhoLoja);
+        setPromotor(response.data.promotor);
+        setEndereco(response.data.endereco);
+        setBairro(response.data.bairro);
+        setMunicipio(response.data.municipio);
+        setUf(response.data.uf);
+        setLat(response.data.lat);
+        setLong(response.data.long);
+        setStatus(response.data.status);
+        setSemVisita(response.data.semVisita);
+        setPrimeiraSem(response.data.primeiraSem);
+        setSegundaSem(response.data.segundaSem);
+        setTerceiraSem(response.data.terceiraSem);
+        setQuartaSem(response.data.quartaSem);
+        setQuintaSem(response.data.quintaSem);
+        setSegunda(response.data.segunda);
+        setTerca(response.data.terca);
+        setQuarta(response.data.quarta);
+        setQuinta(response.data.quinta);
+        setSexta(response.data.sexta);
+        setSabado(response.data.sabado);
 
 
       })
@@ -310,33 +438,49 @@ export default function CadastroParceiros() {
       });
   }
   //============ Editar Usuario ===============================//
-  async function editUser(){
+  async function editParceiro(){
     setLoadingUpdate(true)
-  await api.put(`/api/Usuarios/${idUser}`, {
-  id: idUser,
-  username:usuario,
-  password: senha,
-  nomeCompleto:primeiroNome ,
-  email: email,
-  telefone:telefone,
-  grupo: grupo,
-  status: ativo,
-  funcao: funcao,
-  admin: admin,
-  usuario: tipoUsuario,
-  comercial: comercial,
-  representante: representante,
-  imagemURL: urlPerfil
+  await api.put(`/api/Parceiros/${id}`, {
+    id: id,
+    nome: nome,
+    tipoPessoa: tipoPessoa,
+    nomeFantasia: nomeFantasia,
+    cnpj_Cpf: cnpjCpf,
+    email: email,
+    fone: fone,
+    canal: canal,
+    classificacao: classificacao,
+    tamanhoLoja: tamanhoLoja,
+    promotor: promotor,
+    endereco: endereco,
+    bairro: bairro,
+    municipio: municipio,
+    uf: uf,
+    lat: lat,
+    long: long,
+    status: status,
+    semVisita: semVisita,
+    primeiraSem: primeiraSem,
+    segundaSem:segundaSem,
+    terceiraSem: terceiraSem,
+    quartaSem: quartaSem,
+    quintaSem: quintaSem,
+    segunda: segunda,
+    terca: terca,
+    quarta: quarta,
+    quinta: quinta,
+    sexta: sexta,
+    sabado: sabado
   })
     .then(response => {
       handleCloseEdit()
-     // GetUsuariosAcount();
-      GetUsuarios();
+     // GetParceirosAcount();
+      GetParceiros();
       setLoadingUpdate(false)
      // console.log('resposta', response)
       handleShowMensage()
       setAlertErroMensage(true);
-      setMsgErro("Dados do usuário atualizados com sucesso.");
+      setMsgErro("Dados do parceiro atualizados com sucesso.");
     })
     .catch((error) => {
       setLoadingUpdate(false)
@@ -347,7 +491,8 @@ export default function CadastroParceiros() {
       //console.log('resposta', error.response.data)
       //setAuthenticated(false);
     const { data } = error.response;
-    setMsgErro(data.message);
+    setMsgErro(error.response.data);
+   // setMsgErro(data.message);
       //setMsgErro(
         // error.response.data.message
         //   ? error.response.data.message
@@ -358,80 +503,110 @@ export default function CadastroParceiros() {
     });
   }
     //============ Criar Usuario ===============================//
-    async function CreateUsuario(){
+    async function CreateParceiro(){
 
-      if(primeiroNome==''){
+      if(nome==''){
         let senhaconf: any;
-        senhaconf = document.getElementById("prinome");
-        document.getElementById("prinome")?.focus();
+        senhaconf = document.getElementById("nome");
+        document.getElementById("nome")?.focus();
         setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o primeiro nome.");
+        setMsgErro("É obrigatório informar o nome do parceiro.");
+      return
+      }
+      if(cnpjCpf==''){
+        if(tipoPessoa=="J"){
+          let cpf: any;
+          cpf = document.getElementById("cnpj");
+          document.getElementById("cnpj")?.focus();
+          setAlertErroRegister(true);
+          setMsgErro(`É obrigatório informar o CNPJ.`);
+        return
+        }else{
+          let cpf: any;
+          cpf = document.getElementById("cpf");
+          document.getElementById("cpf")?.focus();
+          setAlertErroRegister(true);
+          setMsgErro(`É obrigatório informar o CPF.`);
+        return
+
+        }
+       
+      }
+      if(canal==''){
+        let senhaconf: any;
+        senhaconf = document.getElementById("canal");
+        document.getElementById("canal")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("É obrigatório informar o canal.");
+      return
+      }
+      if(classificacao==''){
+        let senhaconf: any;
+        senhaconf = document.getElementById("classificacao");
+        document.getElementById("classificacao")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("É obrigatório informar a classificação.");
+      return
+      }
+      if(tamanhoLoja==''){
+        let senhaconf: any;
+        senhaconf = document.getElementById("tamanhoLoja");
+        document.getElementById("tamanhoLoja")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("É obrigatório informar o tamanho da loja.");
+      return
+      }
+      if(promotor==''){
+        let senhaconf: any;
+        senhaconf = document.getElementById("promotor");
+        document.getElementById("promotor")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("É obrigatório informar o promotor.");
       return
       }
 
-      if(email==''){
-        let senhaconf: any;
-        senhaconf = document.getElementById("email");
-        document.getElementById("email")?.focus();
-        setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o E-mail.");
-      return
-      }
-      if(usuario==''){
-        let senhaconf: any;
-        senhaconf = document.getElementById("usuario");
-        document.getElementById("usuario")?.focus();
-        setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o usuário.");
-      return
-      }
-      if(senha==''){
-        let senhaconf: any;
-        senhaconf = document.getElementById("senha");
-        document.getElementById("senha")?.focus();
-        setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar a senha.");
-      return
-      }
-      if(senhaConfirm==''){
-        let senhaconf: any;
-        senhaconf = document.getElementById("confirma");
-        document.getElementById("confirma")?.focus();
-        setAlertErroRegister(true);
-        setMsgErro("É obrigatório confirmar a senha.");
-      return
-      }
-      if(grupo==''){
-        let senhaconf: any;
-        senhaconf = document.getElementById("grupo-create");
-        document.getElementById("grupo-create")?.focus();
-        setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o grupo que o usuário pertence.");
-      return
-      }
+     
   setLoadingCreate(true)
-  await api.post("/api/Auth/register",{
-        username: usuario,
-        email: email,
-        grupo: grupo,
-        status: ativo,
-        funcao: funcao,
-        admin: admin,
-        usuario: tipoUsuario,
-        comercial: comercial,
-        representante: representante,
-        password: senha,
-        nomeCompleto: primeiroNome,
+  await api.post("/api/Parceiros",{
+  nome: nome,
+  tipoPessoa: tipoPessoa,
+  nomeFantasia: nomeFantasia,
+  cnpj_Cpf: cnpjCpf,
+  email: email,
+  fone: fone,
+  canal: canal,
+  classificacao: classificacao,
+  tamanhoLoja: tamanhoLoja,
+  promotor: promotor,
+  endereco: endereco,
+  bairro: bairro,
+  municipio: municipio,
+  uf: uf,
+  lat: lat,
+  long: long,
+  status: 'true',
+  semVisita: semVisita,
+  primeiraSem: primeiraSem,
+  segundaSem: segundaSem,
+  terceiraSem: terceiraSem,
+  quartaSem: quartaSem,
+  quintaSem: quintaSem,
+  segunda: segunda,
+  terca: terca,
+  quarta: quarta,
+  quinta: quinta,
+  sexta: sexta,
+  sabado: sabado,
        })
        
         .then(response => {
           setLoadingCreate(false)
-         // GetUsuariosAcount();
-          GetUsuarios();
+         // GetParceirosAcount();
+          GetParceiros();
           handleClose ();
           handleShowMensage();
           setAlertErroMensage(true);
-          setMsgErro("Usuário criado com sucesso.");
+          setMsgErro("Parceiro criado com sucesso.");
         })
         .catch((error) => {
          // handleClose()
@@ -461,14 +636,16 @@ function LimparPesquisa(){
   setPagina(1);
   PesquisaNome();
   setFilter(false);
-  GetUsuarios();
+  GetParceiros();
 }
 
 function PesquisaNome(){
   setSearch('');
-  GetUsuarios();
+  GetParceiros();
   setPesquisaNome(true);
   setPesquisaStatus(false);
+  setPesquisaCPF(false);
+  let pesquisa: any;
   let pesquisar: any;
   pesquisar = document.getElementById("nomePesquisa");
   document.getElementById("nomePesquisa")?.focus();
@@ -476,12 +653,75 @@ function PesquisaNome(){
  
 function PesquisaStatus(){
   setSearch('');
-  GetUsuarios();
+  GetParceiros();
   setPesquisaNome(false);
   setPesquisaStatus(true);
+  setPesquisaCPF(false);
   let pesquisa: any;
   pesquisa = document.getElementById("statusPesquisa");
   document.getElementById("statusPesquisa")?.focus();
+}
+
+ 
+function PesquisaCPF(){
+  setSearch('');
+  GetParceiros();
+  setPesquisaNome(false);
+  setPesquisaStatus(false);
+  setPesquisaCPF(true);
+  let pesquisa: any;
+  pesquisa = document.getElementById("cpfPesquisa");
+  document.getElementById("cpfPesquisa")?.focus();
+}
+
+function ChecaFone(){
+  console.log("caiu no telefone")
+  if(fone.length<14){
+    let senhaconf: any;
+        senhaconf = document.getElementById("fone");
+        document.getElementById("fone")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("O telefone está incompleto");
+      
+      return
+  }
+}
+function ChecaCPF(){
+
+  if(cnpjCpf.length<11){
+    let senhaconf: any;
+        senhaconf = document.getElementById("cpf");
+        document.getElementById("cpf")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("O CPF está incompleto");
+      
+      return
+  }
+}
+function ChecaCNPJ(){
+
+  if(cnpjCpf.length<14){
+    let senhaconf: any;
+        senhaconf = document.getElementById("cnpj");
+        document.getElementById("cnpj")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("O CNPJ está incompleto");
+      
+      return
+  }
+}
+function SemVisitar(){
+  setPrimeiraSem(false);
+  setSegundaSem(false);
+  setTerceiraSem(false);
+  setQuartaSem(false);
+  setQuintaSem(false);
+  setSegunda(false);
+  setTerca(false);
+  setQuarta(false);
+  setQuinta(false);
+  setSexta(false);
+  setSabado(false);
 }
 
   return (
@@ -521,13 +761,14 @@ function PesquisaStatus(){
                 </div>
                 <div className='d-flex'>
                   <input  name='pesquisa' type="radio" checked={pesquisaNome}  onChange={PesquisaNome} /><p style={{fontSize:13,marginLeft:8}} >Nome</p>
+                  <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaCPF}  onChange={PesquisaCPF} /><p style={{fontSize:13,marginLeft:8}} >CPF / CNPJ</p>
                   <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaStatus}  onChange={PesquisaStatus} /><p style={{fontSize:13,marginLeft:8}} >Status</p>
                   </div>
               </div>
           <OverlayTrigger
           placement={"top"}
           delay={{ show: 100, hide: 250 }}
-          overlay={<Tooltip>Novo Usuário</Tooltip>}
+          overlay={<Tooltip>Novo Parceiro</Tooltip>}
         >
       <button className='btn btn-dark btn-direito'  onClick={handleShow}>
         Novo <TfiNewWindow style={{marginLeft: 8,marginBottom:5}}/>
@@ -546,6 +787,21 @@ function PesquisaStatus(){
              value={search}
              onChange={(e)=>{ 
               setSearch(e.target.value);
+              
+            }}
+              />
+            </div>
+             </>):(<></>)}
+             {pesquisaCPF?(<>
+              <div>
+              <p className="title-input"  >Pesquisar por CPF / CNPJ: </p>
+            <input  id="cpfPesquisa"  
+            type="text" 
+            className='form-coontrol inputlogin' 
+             name=""
+             value={search}
+             onChange={(e)=>{ 
+              setSearch(revertMask(e.target.value));
               
             }}
               />
@@ -574,7 +830,7 @@ function PesquisaStatus(){
                      placeholder="Digite ou selecione"
                   noOptionsMessage={() => "Nenhum status encontrado"}
                    //  value={search} 
-                     options={status}  
+                     options={statuspesq}  
                       onChange={(value: any)=>{ 
                         setSearch(value.value); 
                         console.log('Select',value)          
@@ -584,7 +840,7 @@ function PesquisaStatus(){
               </>):(<></>)}
               </div>
 
-                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetUsuariosFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
+                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetParceirosFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas' onClick={LimparPesquisa}>Limpar<AiOutlineClear style={{marginLeft: 6}} fontSize={20}/></button>
                    
                     </div>
@@ -594,8 +850,8 @@ function PesquisaStatus(){
       <Table responsive className='table-global table  main-table'>
       <thead>
       <tr className="tituloTab">
-      <th style={{textAlign:'center'}} className="th4">Código</th>
-          <th className="th1 Nome-completo">Nome</th>
+      <th style={{textAlign:'center'}} className="th4 codpar">Código</th>
+          <th className="th1 Nome-complet">Nome</th>
           <th style={{textAlign:'center'}} className="th2">CNPJ / CPF</th>
           <th style={{textAlign:'center'}} className="th4">Status</th>
           <th  className="th3">Endereço</th>
@@ -607,23 +863,19 @@ function PesquisaStatus(){
       </tr>
       </thead>
       <tbody>
-      {usuarios.length > 0 ? (
+      {parceiros.length > 0 ? (
                         <>
-      {usuarios.map((usuarios,index)=> (
+      {parceiros.map((parceiros,index)=> (
         <tr key={index}>
-         <td className='Nome-completo'>{usuarios.nomeCompleto}</td> 
-          <td style={{textAlign:'center'}}>
-            {usuarios.grupo =="1"?'Administrativo'
-            :usuarios.grupo =="2"?"Comercial"
-            :usuarios.grupo =="3"?"Representante":"Usuario"}
-            </td>
-            <td style={usuarios.funcao ==null ||usuarios.funcao ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{usuarios.funcao?usuarios.funcao:"Não informado"}</td>
-            <td style={usuarios.status =='1'?{color:'#008000', textAlign:"center"}:{color:'red', textAlign:"center"}}>{usuarios.status =="1"?"Ativo":"Inativo"}</td>
-            <td >{usuarios.email}</td>
-            <td style={usuarios.telefone ==null?{color:'red'}:{color:'#000'}} >
-            {usuarios.telefone
-                            ? phoneMask(usuarios.telefone)
-                            : "Não informado"}</td>
+          <td style={{textAlign:'center'}}  className='codpar'>{parceiros.id}</td> 
+         <td className='Nome-complet'>{parceiros.nome}</td> 
+         <td style={{textAlign:'center'}}>{parceiros.tipoPessoa =="F"?cpfMask(parceiros.cnpj_Cpf):cnpjMask(parceiros.cnpj_Cpf)}</td>
+           <td style={parceiros.status =='true'?{color:'#008000', textAlign:"center"}:{color:'red', textAlign:"center"}}>{parceiros.status =="true"?"Ativo":"Inativo"}</td>
+           <td >{parceiros.endereco}</td>
+           <td >{parceiros.bairro}</td>
+           <td >{parceiros.municipio}</td>
+           <td style={{textAlign:'center'}} >{parceiros.uf}</td>
+            
             <td style={{color: "transparent"}} >.............</td>
             <td style={{textAlign:'center'}} className="fixed-table td-fixo">
             
@@ -636,7 +888,7 @@ function PesquisaStatus(){
               className='btn btn-table btn-edit' 
               style={{marginRight:15,marginLeft:15}}
               onClick={()=>{
-                GetUsuarioId(usuarios.id);
+                GetParceiroId(parceiros.id);
                 }}>
                 <HiOutlinePencilSquare/>
               </button>
@@ -659,8 +911,8 @@ function PesquisaStatus(){
         </> 
         ): (
                         
-          <div style={{margin:"auto"}} className="alert alert-warning alerta-user" role="alert">
-            Nenhum usuário encontrado.
+          <div style={{margin:"auto"}} className="alert alert-warning alerta-parceiro" role="alert">
+            Nenhum parceiro encontrado.
           </div>
         
         
@@ -684,9 +936,9 @@ function PesquisaStatus(){
 
       {/* ================Modal Register ============================================== */}
 
-      <Modal className='modal-cadastro-user' show={show} onHide={handleClose}>
+      <Modal className='modal-cadastro-parceiro' show={show} onHide={handleClose}>
         <Modal.Header  closeButton>
-          <h1>Cadastro de Usuário</h1>
+          <h1>Cadastro de Parceiro</h1>
         </Modal.Header>
         <Modal.Body>
         {loadingCreate ? (
@@ -706,210 +958,523 @@ function PesquisaStatus(){
 					</div>
 					)}
         <div  className='form-cadastro-user' >
+          <div className='div-conteudo-geral'>
+            <div className='conteudo-cadastro-parceiro'>
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
-            <p className="title-input"  >Nome Completo: <span style={{color:'red'}}>*</span></p>
-              <input className='form-coontrol inputlogin' 
-              id='prinome'
+            <p className="title-input"  >Nome: <span style={{color:'red'}}>*</span></p>
+              <input className='form-control inputparceiro' 
+              id='nome'
               type="text"
               //name='user' 
-              value={primeiroNome}
+              value={nome}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setPrimeiroNome(e.target.value);
+                setNome(e.target.value);
                 LimparTodos();
               }}
               />
             </div>
-            {/* <div  className='bloco-input'>
-            <p className="title-input" >Último Nome: <span style={{color:'red'}}>*</span> </p>
-              <input className='form-control inputlogin' 
-              id='ultnome'
-              type="text"
-              //name='user' 
-              value={nomeUsuario}
-              //onKeyDown={LimparErro} 
+            <div  className='bloco-input blocoTipo '>
+            <p className="title-input" >Pessoa: </p>
+              <select name="" id="tipo"className="form-select inputparceiro campo-select"
+              value={tipoPessoa}
               onChange={(e)=>{ 
-                setNomeUsuario(e.target.value);
-                LimparTodos();
-              }}
-              />
-            </div> */}
+                setTipoPessoa(e.target.value); 
+                setCnpjCpf("");          
+               }}
+              >
+                <option value="F">Física</option>
+                <option value="J">Jurídica</option>
+
+              </select>
+            </div> 
             </div>
 
 
             <div className='coluna-dupla'>
+              {tipoPessoa=='J'?(<>
+                <div  className='bloco-input'>
+            <p className="title-input" >Nome Fantasia: </p>
+              <input className='form-control inputparceiro' 
+              id='nomeFantasia'
+              type="text"
+              //name='user' 
+              value={nomeFantasia}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setNomeFantasia(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div>
+              </>):(<></>)}
+            
+
+            
+            
+            </div>
+            <div className='coluna-dupla'>
             <div  className='bloco-input'>
-            <p className="title-input" >Email:<span style={{color:'red'}}>*</span> </p>
-              <input className='form-control inputlogin' 
+            {tipoPessoa=='J'?(<>
+              <p className="title-input"  >CNPJ: <span style={{color:'red'}}>*</span></p>
+              <input className='form-control inputparceiro' 
+              id='cnpj'
+              type="text"
+              //name='user'
+              onBlur={ChecaCNPJ}
+              maxLength={18} 
+              value={cnpjCpf?cnpjMask(cnpjCpf):cnpjCpf}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setCnpjCpf(revertMask(e.target.value));
+                LimparTodos();
+              }}
+              />
+            </>):(<>
+              <p className="title-input"  >CPF: <span style={{color:'red'}}>*</span></p>
+              <input className='form-control inputparceiro' 
+              id='cpf'
+              type="text"
+              //name='user' 
+             // value={cnpjCpf}
+              value={cnpjCpf?cpfMask(cnpjCpf):cnpjCpf}
+              //onKeyDown={LimparErro} 
+              onBlur={ChecaCPF}
+              onChange={(e)=>{ 
+                setCnpjCpf(revertMask(e.target.value));
+                LimparTodos();
+              }}
+              />
+            </>)}
+            
+            </div>
+            <div  className='bloco-input '>
+            <p className="title-input"  >E-mail: </p>
+              <input className='form-control inputparceiro' 
               id='email'
               type="text"
               //name='user' 
               value={email}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setEmail(e.target.value.toLowerCase());
+                setemail(e.target.value.toLowerCase());
                 LimparTodos();
               }}
               />
-            </div>
-
-            <div className='bloco-input'>
-            <p className="title-input"  >Usuário: <span style={{color:'red'}}>*</span></p>
-              <input className='form-coontrol inputlogin' 
-              id='usuario'
-              type="text"
-             // name='user' 
-              value={usuario}
-             // onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setUsuario(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-            </div>
-            
+            </div> 
             </div>
             <div className='coluna-dupla'>
-            
             <div  className='bloco-input'>
-            <p className="title-input" >Senha:<span style={{color:'red'}}>*</span> </p>
-              <input className='form-control inputlogin' 
-              id='senha'
-              type="password"
+            <p className="title-input"  >Telefone: </p>
+              <input className='form-control inputparceiro' 
+              id='fone'
+              type="text"
               //name='user' 
-              value={senha}
+              onBlur={ChecaFone}
+              maxLength={15}
+              value={fone?phoneMask(fone):fone}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setSenha(e.target.value);
-                LimpaerroSenhaConfirm();
+                setFone(e.target.value);
                 LimparTodos();
               }}
               />
             </div>
-            <div className='bloco-input'>
-            <p className=" title-input"  >Confirma Senha: <span style={{color:'red'}}>*</span></p>
-              <input className='form-control inputlogin' 
-              id='confirma'
-              type="password"
-             // name='user' 
-              value={senhaConfirm}
-              onBlur={SenhanaoCofere}
-             // onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setSenhaConfirm(e.target.value);
-                LimpaerroSenhaConfirm();
-                LimparTodos();
-              }}
-              />
-              
-               </div>
-            </div>
-            <div className='coluna-dupla'>
-            <div  className='bloco-input'>
-            <p id="grupos" className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
+            <div  className='bloco-input '>
+            <p className="title-input"  >Canal: <span style={{color:'red'}}>*</span></p>
 
-
-            {/* <select className="form-select select campo-select" aria-label="Escolha o número de quartos" value={grupo}
-                          onChange={(e) => {setGrupo(e.target.value); LimparTodos();}}
-                        >
-                        <option value="">---</option>
-                        {/* <option value="1">ADMINISTRATIVO</option> 
-                        <option value="2">COMERCIAL</option>
-                        <option value="3">REPRESENTANTE</option>
-                        <option value="4">USUÁRIO</option>
-                    </select>    */}
-                     <Select 
-                     id='grupo-create'
-                     className=" select-comp" 
-                     placeholder="Digite ou selecione"
-                  noOptionsMessage={() => "Nenhum status encontrado"}
+            <Select 
+                     id="canal"  
+                     className="inputparceiro" 
+                     placeholder={canal}
+                  noOptionsMessage={() => "Nenhum canal encontrado"}
                    //  value={search} 
-                     options={grupoCreate}  
+                     options={canalpesq}  
                       onChange={(value: any)=>{ 
-                        setGrupo(value.value); 
-                        LimparTodos();
-                        console.log('Select',value)          
+                        setCanal(value.label); 
+                        LimparTodos();        
                       }} 
                     />
-                  
-            <p style={{marginTop:15}} className="title-input"  >Função: </p>
-              <input className='form-coontrol inputlogin' 
-              id='funcao'
+{/* 
+              <input className='form-control inputparceiro' 
+              id='canal'
               type="text"
               //name='user' 
-              value={funcao}
+              value={canal}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setFuncao(e.target.value);
+                setCanal(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div> 
+            </div>
+            <div className='coluna-dupla'>
+            <div  className='bloco-input classifica'>
+            <p className="title-input"  >Classificação: <span style={{color:'red'}}>*</span></p>
+            <Select 
+                     id="classificacao"  
+                     className="inputparceiro" 
+                     placeholder={classificacao}
+                  noOptionsMessage={() => "Nenhuma classificação encontrada"}
+                   //  value={search} 
+                     options={classificacaopesq}  
+                      onChange={(value: any)=>{ 
+                        setClassificacao(value.label); 
+                        LimparTodos();       
+                      }} 
+                    />
+              {/* <input className='form-control inputparceiro' 
+              id='classificacao'
+              type="text"
+              //name='user' 
+              value={classificacao}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setClassificacao(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div>
+            <div  className='bloco-input tamanho-loja '>
+            <p className="title-input"  >Tamanho loja: <span style={{color:'red'}}>*</span></p>
+            <Select 
+                     id="tamanhoLoja"  
+                     className="inputparceiro" 
+                     placeholder={tamanhoLoja}
+                  noOptionsMessage={() => "Nenhuma tamanho encontrada"}
+                   //  value={search} 
+                     options={tamanhopesq}  
+                      onChange={(value: any)=>{ 
+                        setTamanhoLoja(value.label); 
+                        LimparTodos();         
+                      }} 
+                    />
+              {/* <input className='form-control inputparceiro' 
+              id='tamanhoLoja'
+              type="text"
+              //name='user' 
+              value={tamanhoLoja}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setTamanhoLoja(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div>
+            <div  className='bloco-input'>
+            <p className="title-input"  >Promotor: <span style={{color:'red'}}>*</span></p>
+            <Select 
+                     id="promotor"  
+                     className="inputparceiro" 
+                     placeholder={promotor}
+                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
+                   //  value={search} 
+                     options={promotorPesquisa}  
+                      onChange={(value: any)=>{ 
+                        setTamanhoLoja(value.label); 
+                        LimparTodos();         
+                      }} 
+                    />
+              {/* <input className='form-control inputparceiro' 
+              id='promotor'
+              type="text"
+              //name='user' 
+              value={promotor}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setPromotor(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div> 
+            </div>
+            <div className='coluna-dupla'>
+            
+            <div  className='bloco-input bloco-endereco '>
+            <p className="title-input"  >Endereço: </p>
+              <input className='form-control inputparceiro' 
+              id='endereco'
+              type="text"
+              //name='user' 
+              value={endereco}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setEndereco(e.target.value);
+                LimparTodos();
               }}
               />
-            
-                    <button disabled={loadingCreate} id='btn-desck' className='btn btn-cadastrar'onClick={CreateUsuario}>Cadastrar</button>
+            </div> 
+            <div  className='bloco-input bloco-bairro '>
+            <p className="title-input"  >Bairro: </p>
+              <input className='form-control inputparceiro' 
+              id='bairro'
+              type="text"
+              //name='user' 
+              value={bairro}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setBairro(e.target.value);
+                LimparTodos();
+              }}
+              />
             </div>
-                    <div  className='bloco-input'>
-                    <p className=" title-input"  >Acesso Personalizado: </p>
-                    <div className='acesso-personalizado'>
+            </div>
+            <div className='coluna-dupla'>
+            
+            <div  className='bloco-input  bloco-municipio '>
+            <p className="title-input"  >Município: </p>
+              <input className='form-control inputparceiro' 
+              id='municipio'
+              type="text"
+              //name='user' 
+              value={municipio}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setMunicipio(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div> 
+            <div  className='bloco-input bloco-uf '>
+            <p className="title-input"  >UF: </p>
+            <Select 
+                     id="uf"  
+                     className="inputparceiro" 
+                     placeholder={uf}
+                  noOptionsMessage={() => "Nenhuma tamanho encontrada"}
+                   //  value={search} 
+                     options={ufpesq}  
+                      onChange={(value: any)=>{ 
+                        setUf(value.value); 
+                        console.log('Select',value)  
+                        LimparTodos();        
+                      }} 
+                    />
+              {/* <input className='form-control inputparceiro' 
+              id='uf'
+              type="text"
+              //name='user' 
+              value={bairro}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setBairro(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div>
+            <div className='d-flex boco-lat-log'>
+            <div  className='bloco-input bloco-lat '>
+            <p className="title-input"  >Lat: </p>
+              <input className='form-control inputparceiro' 
+              id='lat'
+              type="text"
+              //name='user' 
+              value={lat}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setLat(e.target.value);
+                LimparTodos();
+              }}
+              />
+              </div>
+              <div  className='bloco-input bloco-lat '>
+            <p className="title-input"  >Log: </p>
+              <input className='form-control inputparceiro' 
+              id='llo'
+              type="text"
+              //name='user' 
+              value={long}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setLong(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div>
+            </div>
+            </div>
+                    </div>
+                    <div className='div-visitas'>
+                      <div className='bloco-visita-geral bloco-visitas'>
+                        <h2>VISITAS</h2>
+                        <div className='divisao'></div>
+                        <div style={{marginTop:7}} className='check-grupo'>
+                        <p style={{marginRight:10}} className='text'>SEM VISITA</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      checked={semVisita}  
+                      onChange={({ target }) => {
+                      setSemVisita(target.checked);
+                      SemVisitar();
+                      }}  
+                      />
+                      </div>
+                      {/* <div className='divisa'></div> */}
+                        <div className='d-flex '>
+                          <div className='bloco-interno'>
+                            <h2>Semana da visita</h2>
+                        <div className='check-grupo'>
+                        <p style={{marginRight:16}} className='text'>Primeira</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={primeiraSem}  
+                      onChange={({ target }) => {
+                      setPrimeiraSem(target.checked);
+                      }}  
+                      />
+                      
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:10}} className='text'>Segunda</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={segundaSem}  
+                      onChange={({ target }) => {
+                      setSegundaSem(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:17}} className='text'>Terceira</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={terceiraSem}  
+                      onChange={({ target }) => {
+                      setTerceiraSem(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:24}} className='text'>Quarta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quartaSem}  
+                      onChange={({ target }) => {
+                      setQuartaSem(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:28}} className='text'>Quinta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quintaSem}  
+                      onChange={({ target }) => {
+                      setQuintaSem(target.checked);
+                      }}  
+                      />
+                      </div>
+                      </div>
+                      <div className='bloco-interno'>
+                            <h2>Dia da visita</h2>
+                        <div className='check-grupo'>
+                        <p style={{marginRight:16}} className='text'>Segunda</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={segunda}  
+                      onChange={({ target }) => {
+                      setSegunda(target.checked);
+                      }}  
+                      />
+                      
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:47}} className='text'>Terça</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={terca}  
+                      onChange={({ target }) => {
+                      setTerca(target.checked);
+                      }}  
+                      />
+                      </div>
+                      
+                      <div className='check-grupo'>
+                        <p style={{marginRight:31}} className='text'>Quarta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quarta}  
+                      onChange={({ target }) => {
+                      setQuarta(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:35}} className='text'>Quinta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quinta}  
+                      onChange={({ target }) => {
+                      setQuinta(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:45}} className='text'>Sexta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={sexta}  
+                      onChange={({ target }) => {
+                      setSexta(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:26}} className='text'>Sábado</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={sabado}  
+                      onChange={({ target }) => {
+                      setSabado(target.checked);
+                      }}  
+                      />
+                      </div>
+                      </div>
+                        </div>
+
+                      </div>
+                    <button disabled={loadingCreate} type='button' id='btn' className='btn btn-cadastrar' onClick={CreateParceiro}>Cadastrar</button>                  
+                    </div>
                     
-                    {grupo !="1"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" name="grupo" 
-                      id="grupo" 
-                      checked={admin}  
-                      onChange={({ target }) => {
-                      setAdmin(target.checked);
-                      }} 
-                      />
-                      <p className='text'>Administrativo</p>
-                      </div>
-                      </>):(<></>)}
-                      {grupo !="2"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo"
-                      checked={comercial}  
-                      onChange={({ target }) => {
-                      setComercial(target.checked);
-                      }}  
-                      />
-                      <p className='text'>Comercial</p>
-                      </div>
-                      </>):(<></>)} 
-                      {grupo !="3"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo"
-                      checked={representante}  
-                      onChange={({ target }) => {
-                      setRepresentante(target.checked);
-                      }}  
-                      />
-                      <p className='text'>Representante</p>
-                      </div>
-                      </>):(<></>)} 
-                      {grupo !="4"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo" 
-                      checked={tipoUsuario}  
-                      onChange={({ target }) => {
-                      setTipoUsuario(target.checked);
-                      }} 
-                      />
-                      <p className='text'>Usuário</p>
-                      </div>
-                      </>):(<></>)} 
-                    </div>
-                    </div>
-                    </div> 
-                    <button disabled={loadingCreate} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={CreateUsuario}>Cadastrar</button>                  
+            </div>
+            
             </div>
             </>    )}
         </Modal.Body>
@@ -917,9 +1482,9 @@ function PesquisaStatus(){
       </Modal>
       {/* ================Modal Edit ============================================== */}
 
-      <Modal className='modal-edit-user' show={showEdit} onHide={handleCloseEdit}>
+      <Modal className='modal-cadastro-parceiro' show={showEdit} onHide={handleCloseEdit}>
         <Modal.Header  closeButton>
-          <h1>Dados do Usuário</h1>
+          <h1>Dados do Parceiro</h1>
         </Modal.Header>
         <Modal.Body>
         {loadingUpdate ? (
@@ -933,227 +1498,517 @@ function PesquisaStatus(){
         </div>
                  
                           ) : (<>
-          <div className='conteudo-user'>
-            <img src={PhotoUser} alt="" width={150} />
-            <h2>{usuario}</h2>
-            <h2>{email}</h2>
-          </div>
+          
         <div  className='form-cadastro-user' >
+        <div className='div-conteudo-geral'>
+            <div className='conteudo-cadastro-parceiro'>
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
-            <p className="title-input"  >Nome Completo: </p>
-              <input className='form-control inputlogin' 
-              id=''
+            <p className="title-input"  >Nome: <span style={{color:'red'}}>*</span></p>
+              <input className='form-control inputparceiro' 
+              id='nome'
               type="text"
               //name='user' 
-              value={primeiroNome}
+              value={nome}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setPrimeiroNome(e.target.value);
+                setNome(e.target.value);
+                LimparTodos();
               }}
-              disabled
               />
             </div>
-            <div  className='bloco-input'>
-            <p className="title-input" >Nome de Usuário: </p>
-              <input className='form-control inputlogin' 
-              id=''
-              type="text"
-              //name='user' 
-              value={nomeUsuario}
-              //onKeyDown={LimparErro} 
+            <div  className='bloco-input blocoTipo '>
+            <p className="title-input" >Status: </p>
+              <select name="" id="tipo"className="form-select inputparceiro campo-select"
+              value={status}
               onChange={(e)=>{ 
-                setNomeUsuario(e.target.value);
-              }}
-              disabled
-              />
-            </div>
+                setStatus(e.target.value); 
+                         
+               }}
+              >
+                <option value="true">Ativo</option>
+                <option value="false">Inativo</option>
+
+              </select>
+            </div> 
             </div>
 
 
             <div className='coluna-dupla'>
-            <div  className='bloco-input'>
-            <p className="title-input" >Função: </p>
-              <input className='form-control inputlogin' 
-              id=''
+              {tipoPessoa=='J'?(<>
+                <div  className='bloco-input'>
+            <p className="title-input" >Nome Fantasia: </p>
+              <input className='form-control inputparceiro' 
+              id='nomeFantasia'
               type="text"
               //name='user' 
-              value={funcao}
+              value={nomeFantasia}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setFuncao(e.target.value.toLowerCase());
+                setNomeFantasia(e.target.value);
+                LimparTodos();
               }}
-              disabled
               />
             </div>
+              </>):(<></>)}
+            
 
-            <div className='bloco-input'>
-            <p className="title-input"  >Telefone: </p>
-              <input className='form-control inputlogin' 
-              id=''
-              type="text"
-             // name='user' 
-              value={telefone}
-             // onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setTelefone(e.target.value.toLowerCase());
-              }}
-              disabled
-              />
-            </div>
+            
             
             </div>
             <div className='coluna-dupla'>
-            
             <div  className='bloco-input'>
-            <p className="title-input" >Status </p>
-              
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
-            value={ativo}
-            disabled={grupo=='1'}
-                         onChange={(e) => {setAtivo(e.target.value);}}
-                        >
-                        <option value="1">Ativo</option>
-                        <option value="2">Inativo</option>
-                    </select>   
-            </div>
-            <div className='bloco-input'>
-            <p className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
-            {grupo=="1"?(<>
-
-              {/* <Select 
-                     id='grupo-create'
-                     className=" select campo-select" 
-                     placeholder="Digite ou selecione"
-                  noOptionsMessage={() => "Nenhum status encontrado"}
-                   //  value={search} 
-                     options={grupos}
-                     isDisabled={grupo=='1'}  
-                      onChange={(value: any)=>{ 
-                        setGrupo(value.value); 
-                        LimparTodos();
-                        console.log('Select',value)          
-                      }} 
-                    /> */}
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
-            value={grupo}
-            disabled={grupo=='1'}
-                         onChange={(e) => {setGrupo(e.target.value);
-                        }}
-                        >
-                        <option value="">---</option>
-                        <option value="1">ADMINISTRATIVO</option>
-                        <option value="2">COMERCIAL</option>
-                        <option value="3">REPRESENTANTE</option>
-                        <option value="4">USUÁRIO</option>
-                    </select>  
+            {tipoPessoa=='J'?(<>
+              <p className="title-input"  >CNPJ: <span style={{color:'red'}}>*</span></p>
+              <input className='form-control inputparceiro' 
+              id='cnpj'
+              type="text"
+              //name='user'
+              onBlur={ChecaCNPJ}
+              maxLength={18} 
+              value={cnpjCpf?cnpjMask(cnpjCpf):cnpjCpf}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setCnpjCpf(revertMask(e.target.value));
+                LimparTodos();
+              }}
+              />
             </>):(<>
-              {/* <Select 
-                     id='grupo-create'
-                     className=" select campo-select" 
-                     placeholder="Digite ou selecione"
-                  noOptionsMessage={() => "Nenhum status encontrado"}
-                     options={grupoCreate}
-                     value={selectGrupo}
-                      onChange={(value: any)=>{ 
-                        setGrupo(value.value); 
-                        LimparTodos();
-                        console.log('Select',value)          
-                      }} 
-                    /> */}
-               <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
-            value={grupo}
-            disabled={grupo=='1'}
-                         onChange={(e) => {setGrupo(e.target.value);
-                        }}
-                        >
-                        <option value="">---</option>
-                        {/* <option value="1">ADMINISTRATIVO</option> */}
-                        <option value="2">COMERCIAL</option>
-                        <option value="3">REPRESENTANTE</option>
-                        <option value="4">USUÁRIO</option>
-                    </select> 
+              <p className="title-input"  >CPF: <span style={{color:'red'}}>*</span></p>
+              <input className='form-control inputparceiro' 
+              id='cpf'
+              type="text"
+              //name='user' 
+             // value={cnpjCpf}
+              value={cnpjCpf?cpfMask(cnpjCpf):cnpjCpf}
+              //onKeyDown={LimparErro} 
+              onBlur={ChecaCPF}
+              onChange={(e)=>{ 
+                setCnpjCpf(revertMask(e.target.value));
+                LimparTodos();
+              }}
+              />
             </>)}
-              
-              
-               </div>
+            
+            </div>
+            <div  className='bloco-input '>
+            <p className="title-input"  >E-mail: </p>
+              <input className='form-control inputparceiro' 
+              id='email'
+              type="text"
+              //name='user' 
+              value={email}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setemail(e.target.value.toLowerCase());
+                LimparTodos();
+              }}
+              />
+            </div> 
             </div>
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
-            <button disabled={loadingUpdate||grupo=='1'} style={{marginTop: 135}} id='btn-desck' className='btn btn-cadastrar btn-editar'onClick={editUser}>Editar</button>
-            <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-desck' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
+            <p className="title-input"  >Telefone: </p>
+              <input className='form-control inputparceiro' 
+              id='fone'
+              type="text"
+              //name='user' 
+              onBlur={ChecaFone}
+              maxLength={15}
+              value={fone?phoneMask(fone):fone}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setFone(e.target.value);
+                LimparTodos();
+              }}
+              />
             </div>
-                    <div  className='bloco-input'>
-                    <p className=" title-input"  >Acesso Personalizado: </p>
-                    <div className='acesso-personalizado-edit'>
+            <div  className='bloco-input '>
+            <p className="title-input"  >Canal: <span style={{color:'red'}}>*</span></p>
+
+            <Select 
+                     id="canal"  
+                     className="inputparceiro" 
+                     placeholder={canal}
+                  noOptionsMessage={() => "Nenhum canal encontrado"}
+                   //  value={search} 
+                     options={canalpesq}  
+                      onChange={(value: any)=>{ 
+                        setCanal(value.value); 
+                        LimparTodos();        
+                      }} 
+                    />
+{/* 
+              <input className='form-control inputparceiro' 
+              id='canal'
+              type="text"
+              //name='user' 
+              value={canal}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setCanal(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div> 
+            </div>
+            <div className='coluna-dupla'>
+            <div  className='bloco-input classifica'>
+            <p className="title-input"  >Classificação: <span style={{color:'red'}}>*</span></p>
+            <Select 
+                     id="classificacao"  
+                     className="inputparceiro" 
+                     placeholder={classificacao}
+                  noOptionsMessage={() => "Nenhuma classificação encontrada"}
+                   //  value={search} 
+                     options={classificacaopesq}  
+                      onChange={(value: any)=>{ 
+                        setClassificacao(value.value); 
+                        LimparTodos();       
+                      }} 
+                    />
+              {/* <input className='form-control inputparceiro' 
+              id='classificacao'
+              type="text"
+              //name='user' 
+              value={classificacao}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setClassificacao(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div>
+            <div  className='bloco-input tamanho-loja '>
+            <p className="title-input"  >Tamanho loja: <span style={{color:'red'}}>*</span></p>
+            <Select 
+                     id="tamanhoLoja"  
+                     className="inputparceiro" 
+                     placeholder={tamanhoLoja}
+                  noOptionsMessage={() => "Nenhuma tamanho encontrada"}
+                   //  value={search} 
+                     options={tamanhopesq}  
+                      onChange={(value: any)=>{ 
+                        setTamanhoLoja(value.value); 
+                        LimparTodos();         
+                      }} 
+                    />
+              {/* <input className='form-control inputparceiro' 
+              id='tamanhoLoja'
+              type="text"
+              //name='user' 
+              value={tamanhoLoja}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setTamanhoLoja(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div>
+            <div  className='bloco-input'>
+            <p className="title-input"  >Promotor: <span style={{color:'red'}}>*</span></p>
+              <input className='form-control inputparceiro' 
+              id='promotor'
+              type="text"
+              //name='user' 
+              value={promotor}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setPromotor(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div> 
+            </div>
+            <div className='coluna-dupla'>
+            
+            <div  className='bloco-input bloco-endereco '>
+            <p className="title-input"  >Endereço: </p>
+              <input className='form-control inputparceiro' 
+              id='endereco'
+              type="text"
+              //name='user' 
+              value={endereco}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setEndereco(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div> 
+            <div  className='bloco-input bloco-bairro '>
+            <p className="title-input"  >Bairro: </p>
+              <input className='form-control inputparceiro' 
+              id='bairro'
+              type="text"
+              //name='user' 
+              value={bairro}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setBairro(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div>
+            </div>
+            <div className='coluna-dupla'>
+            
+            <div  className='bloco-input  bloco-municipio '>
+            <p className="title-input"  >Município: </p>
+              <input className='form-control inputparceiro' 
+              id='municipio'
+              type="text"
+              //name='user' 
+              value={municipio}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setMunicipio(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div> 
+            <div  className='bloco-input bloco-uf '>
+            <p className="title-input"  >UF: </p>
+            <Select 
+                     id="uf"  
+                     className="inputparceiro" 
+                     placeholder={uf}
+                  noOptionsMessage={() => "Nenhuma tamanho encontrada"}
+                   //  value={search} 
+                     options={ufpesq}  
+                      onChange={(value: any)=>{ 
+                        setUf(value.value); 
+                        console.log('Select',value)  
+                        LimparTodos();        
+                      }} 
+                    />
+              {/* <input className='form-control inputparceiro' 
+              id='uf'
+              type="text"
+              //name='user' 
+              value={bairro}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setBairro(e.target.value);
+                LimparTodos();
+              }}
+              /> */}
+            </div>
+            <div className='d-flex boco-lat-log'>
+            <div  className='bloco-input bloco-lat '>
+            <p className="title-input"  >Lat: </p>
+              <input className='form-control inputparceiro' 
+              id='lat'
+              type="text"
+              //name='user' 
+              value={lat}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setLat(e.target.value);
+                LimparTodos();
+              }}
+              />
+              </div>
+              <div  className='bloco-input bloco-lat '>
+            <p className="title-input"  >Log: </p>
+              <input className='form-control inputparceiro' 
+              id='llo'
+              type="text"
+              //name='user' 
+              value={long}
+              //onKeyDown={LimparErro} 
+              onChange={(e)=>{ 
+                setLong(e.target.value);
+                LimparTodos();
+              }}
+              />
+            </div>
+            </div>
+            </div>
+                    </div>
+                    <div className='div-visitas'>
+                      <div className='bloco-visita-geral bloco-visitas'>
+                        <h2>VISITAS</h2>
+                        <div className='divisao'></div>
+                        <div style={{marginTop:7}} className='check-grupo'>
+                        <p style={{marginRight:10}} className='text'>SEM VISITA</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      checked={semVisita}  
+                      onChange={({ target }) => {
+                      setSemVisita(target.checked);
+                      SemVisitar();
+                      }}  
+                      />
+                      </div>
+                      {/* <div className='divisa'></div> */}
+                        <div className='d-flex '>
+                          <div className='bloco-interno'>
+                            <h2>Semana da visita</h2>
+                        <div className='check-grupo'>
+                        <p style={{marginRight:16}} className='text'>Primeira</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={primeiraSem}  
+                      onChange={({ target }) => {
+                      setPrimeiraSem(target.checked);
+                      }}  
+                      />
                       
-                    {grupo !="1"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" name="grupo" 
-                      id="grupo" 
-                      disabled={grupo=='1'}
-                      checked={admin}  
-                      onChange={({ target }) => {
-                      setAdmin(target.checked);
-                      }} 
-                      />
-                      <p className='text'>Administrativo</p>
                       </div>
-                      </>):(<></>)}
-                      {grupo !="2"?(<>
                       <div className='check-grupo'>
+                        <p style={{marginRight:10}} className='text'>Segunda</p>
                       <input 
                       type="checkbox" 
                       name="grupo" 
                       id="grupo"
-                      disabled={grupo=='1'}
-                      checked={comercial}  
+                      disabled={semVisita}
+                      checked={segundaSem}  
                       onChange={({ target }) => {
-                      setComercial(target.checked);
+                      setSegundaSem(target.checked);
                       }}  
                       />
-                      <p className='text'>Comercial</p>
                       </div>
-                      </>):(<></>)} 
-                      {grupo !="3"?(<>
                       <div className='check-grupo'>
+                        <p style={{marginRight:17}} className='text'>Terceira</p>
                       <input 
                       type="checkbox" 
                       name="grupo" 
                       id="grupo"
-                      disabled={grupo=='1'}
-                      checked={representante}  
+                      disabled={semVisita}
+                      checked={terceiraSem}  
                       onChange={({ target }) => {
-                      setRepresentante(target.checked);
+                      setTerceiraSem(target.checked);
                       }}  
                       />
-                      <p className='text'>Representante</p>
                       </div>
-                      </>):(<></>)} 
-                      {grupo !="4"?(<>
                       <div className='check-grupo'>
+                        <p style={{marginRight:24}} className='text'>Quarta</p>
                       <input 
                       type="checkbox" 
                       name="grupo" 
-                      id="grupo" 
-                      disabled={grupo=='1'}
-                      checked={tipoUsuario}  
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quartaSem}  
                       onChange={({ target }) => {
-                      setTipoUsuario(target.checked);
-                      }} 
+                      setQuartaSem(target.checked);
+                      }}  
                       />
-                      <p className='text'>Usuário</p>
                       </div>
-                      </>):(<></>)} 
+                      <div className='check-grupo'>
+                        <p style={{marginRight:28}} className='text'>Quinta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quintaSem}  
+                      onChange={({ target }) => {
+                      setQuintaSem(target.checked);
+                      }}  
+                      />
+                      </div>
+                      </div>
+                      <div className='bloco-interno'>
+                            <h2>Dia da visita</h2>
+                        <div className='check-grupo'>
+                        <p style={{marginRight:16}} className='text'>Segunda</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={segunda}  
+                      onChange={({ target }) => {
+                      setSegunda(target.checked);
+                      }}  
+                      />
+                      
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:47}} className='text'>Terça</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={terca}  
+                      onChange={({ target }) => {
+                      setTerca(target.checked);
+                      }}  
+                      />
+                      </div>
+                      
+                      <div className='check-grupo'>
+                        <p style={{marginRight:31}} className='text'>Quarta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quarta}  
+                      onChange={({ target }) => {
+                      setQuarta(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:35}} className='text'>Quinta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={quinta}  
+                      onChange={({ target }) => {
+                      setQuinta(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:45}} className='text'>Sexta</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={sexta}  
+                      onChange={({ target }) => {
+                      setSexta(target.checked);
+                      }}  
+                      />
+                      </div>
+                      <div className='check-grupo'>
+                        <p style={{marginRight:26}} className='text'>Sábado</p>
+                      <input 
+                      type="checkbox" 
+                      name="grupo" 
+                      id="grupo"
+                      disabled={semVisita}
+                      checked={sabado}  
+                      onChange={({ target }) => {
+                      setSabado(target.checked);
+                      }}  
+                      />
+                      </div>
+                      </div>
+                        </div>
+
+                      </div>
+                      <div className='divbotoes-edit'>
+                      <button disabled={loadingUpdate } type='button' id='btn-edit-par' className='btn btn-cadastrar' onClick={editParceiro}>Editar</button>                  
+                    <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-edit-par' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
                     </div>
                     </div>
-                    </div> 
-                    <button disabled={loadingUpdate ||grupo=='1'} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={handleCloseEdit}>Editar</button>                  
-                    <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-mob' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
+                    
+            </div>
+            
+                   
             </div>
            </>)}
         </Modal.Body>
