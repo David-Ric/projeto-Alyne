@@ -173,6 +173,7 @@ export default function CadastroTabelaPrecoCliente() {
  }
   function handleShow(){
     setId(0);
+    setCodEmpresa('');
     setCodProduto('');
     setNomeProduto('');
     setCodConcorrente('');
@@ -197,7 +198,7 @@ export default function CadastroTabelaPrecoCliente() {
          response.data.data.map((parceiro:any) => {
            let rowProd: iDataSelect = {};
            rowProd.value = String(parceiro.id);
-           rowProd.label = parceiro.nome;
+           rowProd.label = String(parceiro.id)+ " - " + parceiro.nome;
          
             options.push(rowProd);
            setParceiroSelect(options);
@@ -256,7 +257,7 @@ export default function CadastroTabelaPrecoCliente() {
          response.data.data.map((produtos:any) => {
            let rowProd: iDataSelect = {};
            rowProd.value = String(produtos.id);
-           rowProd.label = produtos.descricao;
+           rowProd.label = String(produtos.id)+ " - " + produtos.descricao;
          
             options.push(rowProd);
            setTabelaSelect(options);
@@ -401,8 +402,8 @@ export default function CadastroTabelaPrecoCliente() {
           setCodEmpresa(response.data.codEmpresa);
           setCodParceiro(response.data.codParceiro);
           setCodTabelaPreco(response.data.codTabelaPreco);
-          setNomeParceiro(response.data.parceiros.nome);
-          setNomeTabela(response.data.tabelaPreco.descricao);
+          setNomeParceiro(response.data.codParceiro+" - "+response.data.parceiros.nome);
+          setNomeTabela(response.data.codTabelaPreco+" - "+response.data.tabelaPreco.descricao);
           setSelectGrupoBanco(banco)
           setId(response.data.id);
           setCodProduto(response.data.codProduto);
@@ -461,7 +462,7 @@ export default function CadastroTabelaPrecoCliente() {
          senhaconf = document.getElementById("prinome");
          document.getElementById("prinome")?.focus();
          setAlertErroRegister(true);
-         setMsgErro("É obrigatório informar o tipo de empresa.");
+         setMsgErro("É obrigatório informar a empresa.");
        return
        }
 
@@ -733,8 +734,8 @@ function PesquisaSimilar(){
       <tr className="tituloTab">
         <th style={{textAlign:'center'}} className="th1 div-cod-prod">Cód Tabela </th>
           <th className="th1 Nome-complet">Tipo Empresa</th>
-          <th style={{textAlign:'center'}} className="th2 div-cod-prod">Parceiro</th>
-          <th style={{textAlign:'center'}} className="th2 div-cod-prod">Tabela de Preço</th>
+          <th  className="th2 div-cod-prod">Parceiro</th>
+          <th className="th2 div-cod-prod">Tabela de Preço</th>
           <th style={{color:"transparent"}} className="th3">....</th>
          
           <th  className="th4">.</th>
@@ -748,9 +749,9 @@ function PesquisaSimilar(){
         <tr key={index}>
 
            <td className='div-cod-prod'  style={{textAlign:'center'}}>{tabela.id}</td>
-         <td style={{textAlign:'center'}}  className='Nome-complet'>{tabela.codEmpresa}</td> 
-          <td className='div-cod-prod'  style={{textAlign:'center'}}>{tabela.codParceiro}</td>
-          <td className='Nome-complet'>{tabela.codTabelaPreco}</td> 
+         <td  className='Nome-complet'>{tabela.codEmpresa==1?'INDUSTRIA':'DISTRIBUDORA'}</td> 
+          <td className='div-cod-prod'  style={{textAlign:'center'}}>{tabela.parceiros.nome}</td>
+          <td className='Nome-complet'>{tabela.tabelaPreco.descricao}</td> 
            
             <td style={{color: "transparent"}} >.............</td>
             <td style={{color: "transparent"}} >.............</td> 
