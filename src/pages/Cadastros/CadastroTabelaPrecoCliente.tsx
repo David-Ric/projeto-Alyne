@@ -749,7 +749,7 @@ function PesquisaSimilar(){
         <tr key={index}>
 
            <td className='div-cod-prod'  style={{textAlign:'center'}}>{tabela.id}</td>
-         <td  className='Nome-complet'>{tabela.codEmpresa==1?'INDUSTRIA':'DISTRIBUDORA'}</td> 
+         <td  className='Nome-complet'>{tabela.codEmpresa==1?'INDUSTRIA':'DISTRIBUIDORA'}</td> 
           <td className='div-cod-prod'  style={{textAlign:'center'}}>{tabela.parceiros.nome}</td>
           <td className='Nome-complet'>{tabela.tabelaPreco.descricao}</td> 
            

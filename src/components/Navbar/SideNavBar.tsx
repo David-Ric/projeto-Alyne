@@ -129,7 +129,7 @@ export default function SideNavBar() {
 						className={
 							isExpanded ? " arrow-bar  hamburger-in" : "arrow-bar hamburger-out"
 						}
-						onClick={() => {setExpendState(!isExpanded);textVisual()}}
+						onClick={() => {setExpendState(!isExpanded);textVisual();setOpenTrade(false);}}
 					>
 						<MdArrowForwardIos fontSize={24} color={"#7A7A7A"} />
 						
