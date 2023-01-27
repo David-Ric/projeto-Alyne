@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/Navbar/SideNavBar.scss";
-import { MdArrowForwardIos } from "react-icons/md";
+import { MdArrowForwardIos, MdOutlinePriceChange } from "react-icons/md";
 
 import "../../styles/Navbar/navbarDashDark.scss";
 import { Link } from "react-router-dom";
@@ -14,6 +14,8 @@ import { FiUsers } from "react-icons/fi";
 import { FaHospitalUser, FaLayerGroup,FaIndustry } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { RiShoppingBag3Line } from "react-icons/ri";
+import { TbBusinessplan } from "react-icons/tb";
+
 
 import Accordion from 'react-bootstrap/Accordion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -245,6 +247,27 @@ export default function SideNavBar() {
                 </span>
               
                 <span style={{marginLeft:8,marginTop:6}}>Produto x Concorrente</span>
+               
+              </Link>
+                </li>
+                
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/cadastro-tipo-negociacao">
+                <span>
+                  <TbBusinessplan id="" fontSize={28} />
+                </span>
+              
+                <span style={{marginLeft:8,marginTop:6}}>Tipo de Negociação</span>
+               
+              </Link>
+                </li>
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/tabela-de-preco">
+                <span>
+                  <MdOutlinePriceChange id="" fontSize={28} />
+                </span>
+              
+                <span style={{marginLeft:8,marginTop:6}}>Tabela de Preço</span>
                
               </Link>
                 </li>

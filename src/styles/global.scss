@@ -388,6 +388,18 @@ thead{
 	background-color: #fdfdff !important;	
 }
 
+.modal-img{
+	font-family: 'Unbounded', cursive;
+	text-align: center;
+	align-items: center;
+	justify-content: center;
+	.modal-content{
+		top: -30px;
+		@media(max-width:790px) {
+			
+		  }
+		}
+}
 .modal-confirm{
 	font-family: 'Unbounded', cursive;
 	text-align: center;
@@ -395,6 +407,7 @@ thead{
 	justify-content: center;
 	.modal-content{
 		top: 90px;
+		box-shadow: 0 2px 4px 1px #505052 !important;
 		@media(max-width:790px) {
 			
 		  }
@@ -496,6 +509,7 @@ thead{
     background-color: #c8e2fd;
   }
 .inputparceiro{
+	width: 100%;
 	box-shadow: 0 4px 8px 1px #d7d7d7 !important;
 }
   
@@ -577,4 +591,7 @@ thead{
 	@media(max-width:790px) {
 		width: 100%;
 		}
+  }
+  .cod-desc-Tabela{
+	display: flex;
   }

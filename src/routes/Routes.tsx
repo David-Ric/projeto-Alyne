@@ -16,6 +16,8 @@ import CadastroProdutos from '../pages/Cadastros/CadastroProdutos';
 import CadastroVendedores from '../pages/Cadastros/CadastroVendedores';
 import CadastroConcorrentes from '../pages/Cadastros/CadastroConcorrentes';
 import CadastroProdutosConcorrentes from '../pages/Cadastros/CadastroProdutosConcorrentes';
+import CadastroTipoNegociacao from '../pages/Cadastros/TipoNegociacao';
+import TabelaPreco from '../pages/Cadastros/TabelaPreco';
 
 export interface IApplicationProps { }
 const usuario: iDadosUsuario = JSON.parse(
@@ -41,6 +43,8 @@ const Router: React.FunctionComponent<IApplicationProps> = (props) => {
             <Route path='/produtos-concorrentes' element={<CadastroProdutosConcorrentes />} />
             <Route path='/cadastro-concorrentes' element={<CadastroConcorrentes />} /> 
             <Route path='/cadastro-vendedores' element={<CadastroVendedores />} /> 
+            <Route path='/cadastro-tipo-negociacao' element={<CadastroTipoNegociacao />} /> 
+            <Route path='/tabela-de-preco' element={<TabelaPreco />} /> 
             
             
             

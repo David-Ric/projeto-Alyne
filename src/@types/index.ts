@@ -37,6 +37,10 @@ export interface iGrupos {
   nameGrupo: string,
   }
 
+  export interface iTipoNegociacao {
+    id: number,
+    descricao: string,
+    }
   export interface iConcorrentes {
     id: number,
     nome: string,
@@ -61,7 +65,6 @@ export interface iGrupos {
       canal: string,
       classificacao: string,
       tamanhoLoja: string,
-      promotor: string,
       endereco: string,
       bairro: string,
       municipio: string,
@@ -81,6 +84,9 @@ export interface iGrupos {
       quinta: boolean,
       sexta: boolean,
       sabado: boolean
+      tipoNegociacao: string,
+      empresa: string,
+      codVendedor:number
     }
   export interface iVendedores {
      id:number,
@@ -88,28 +94,9 @@ export interface iGrupos {
      nome: string,
      status: string,
      regiao: string,
-     comissao_Vendas:number,
-     comissao_Gerencia: number,
-     vrl_hr_Comi_OS: number,
-     form_Comissao: string,
-     cargaHora:  string,
-     empresaId:  string,
-     empresa:  string,
-     gerenteId: string,
-     gerenteNome: string,
-     parceiroId: string,
-     parceiroNome: string,
-     funcionarioId: string,
-     funcionarioNome: string,
-     centroR_PadraoID: string,
-     centroR_PadraoDesc: string,
-     custo_Variavel: number,
      email: string,
      tipo: string,
      atua_Compras: boolean,
-     pag_Comi_Por_Data: string,
-     comissaoCM: boolean,
-     tipo_Fecha_Comissao: string, 
     }
     export interface  iDataSelect {
       value?: string;
@@ -136,4 +123,44 @@ export interface iGrupos {
         icon:string,
         }
       ]
+      }
+      export interface IFile {
+        uploaded?: boolean;
+        preview: string;
+        file: File | Blob | string;
+        progress?: number;
+        error?: boolean;
+        url: string;
+      }
+
+      export interface ITabelaPreco {
+        id: number,
+        codigo: number,
+        descricao: string,
+        dataInicial: string,
+        dataFinal: string,
+        itemTabela: [
+          {
+            id: number,
+            idTabelaPreco: number,
+            idProd: number,
+            produtos: {
+              id: number,
+              codigo: string,
+              nome: string,
+              idGrupo: string,
+              nomeGrupo: string
+            },
+            preco: number
+          }
+        ]
+      }
+      export interface IItemTabelaPreco {
+            id:number,
+            idTabelaPreco: number,
+            idProd: number,
+            produtos: {
+              nome: string,
+            },
+            preco: number
       }

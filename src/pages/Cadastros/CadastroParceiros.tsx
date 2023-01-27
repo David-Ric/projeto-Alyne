@@ -21,7 +21,7 @@ import { TfiNewWindow } from "react-icons/tfi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Table from 'react-bootstrap/Table';
-import { iUsuarios } from '../../@types';
+import { iTipoNegociacao, iUsuarios } from '../../@types';
 import OverlayTrigger from 'react-bootstrap/esm/OverlayTrigger';
 import { Tooltip } from 'react-bootstrap';
 import Paginacao from "../../components/Paginacao";
@@ -46,7 +46,7 @@ export default function CadastroParceiros() {
   const [canal, setCanal] = useState('');
   const [classificacao, setClassificacao] = useState('');
   const [tamanhoLoja, setTamanhoLoja] = useState('');
-  const [promotor, setPromotor] = useState('');
+  const [codVendedor, setCodVendedor] = useState(0);
   const [endereco, setEndereco] = useState('');
   const [bairro, setBairro] = useState('');
   const [municipio, setMunicipio] = useState('');
@@ -66,6 +66,9 @@ export default function CadastroParceiros() {
   const [quinta, setQuinta] = useState(false);
   const [sexta, setSexta] = useState(false);
   const [sabado, setSabado] = useState(false);
+  const [tipoNegociacao, setTipoNegociacao] = useState('');
+  const [empresa, setEmpresa] = useState('');
+  let [inputVenedor, setInputVenedor] = useState('');
 
 
 
@@ -110,6 +113,9 @@ export default function CadastroParceiros() {
 
    let [selectGrupo, setSelectGrupo] = useState<iDataSelect>();
    const [promotorPesquisa, setPromotorPesquisa] = useState<iDataSelect[]>([]);
+
+   let [negociacaoTipo, setNegociacaoTipo] = useState<iTipoNegociacao[]>([]);
+
 
    //======options dos selects ===================//
    const canalpesq = [
@@ -163,7 +169,10 @@ export default function CadastroParceiros() {
     { value: 'TO', label: 'TO' }
 
   ];
-
+  const empresaPesquisa = [
+    { value: '1', label: 'Indústria' },
+    { value: '2', label: 'Distribuidora' }
+  ];
 
 
 
@@ -185,31 +194,24 @@ export default function CadastroParceiros() {
      { value: '4', label: 'USUÁRIO' }
     
    ];
-  // const [grupoCreate, setGrupoCreate] = useState<iDataSelect[]>([
-  //    { value: '2', label: 'COMERCIAL' },
-  //    { value: '3', label: 'REPRESENTANTE' },
-  //    { value: '4', label: 'USUÁRIO' }
-  // ]);
-  //  const [grupos, setGrupos] = useState<iDataSelect[]>([
-  //    { value: '1', label: 'ADMINISTRATIVO' },
-  //    { value: '2', label: 'COMERCIAL' },
-  //    { value: '3', label: 'REPRESENTANTE' },
-  //    { value: '4', label: 'USUÁRIO' }
-  //  ]);
+  
 
 
   async function GetPromotor() {
     setFilter(true);
     await api
-      .get(`/api/Vendedores/promotor?pagina=${pagina}&totalpagina=999&filter=8`)
+    // .get(`/api/Vendedores/promotor?pagina=${pagina}&totalpagina=999&filter=`)
+      .get(`/api/Vendedores?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
        
         if (response.data.data.length > 0) {
+           let promotor = response.data.data.filter((p:any)=>p.tipo =="1"||p.tipo =="8" )
           let options:Array<iDataSelect>=new Array<iDataSelect>();
-          response.data.data.map((promotor:any) => {
+          // response.data.data.map((promotor:any) => {
+          promotor.map((promotor:any) => {
             let rowGrupo: iDataSelect = {};
             rowGrupo.value = String(promotor.codVendedor);
-            rowGrupo.label = promotor.nome;
+            rowGrupo.label = String(promotor.codVendedor)+ " - " + promotor.nome ;
            
              options.push(rowGrupo);
             setPromotorPesquisa(options);
@@ -256,6 +258,7 @@ export default function CadastroParceiros() {
  
   useEffect(() => {
     window.scrollTo(0, 0);
+    GetTipoNegociacao();
     GetPromotor();
     if(!filter){
       GetParceiros();
@@ -264,6 +267,27 @@ export default function CadastroParceiros() {
     }
     
   },[pagina]);
+
+  async function GetTipoNegociacao() {
+    setFilter(false);
+    
+    await api
+    
+      .get(`/api/Tipo_Negociacao?pagina=${pagina}&totalpagina=999`)
+      .then((response) => {
+        setNegociacaoTipo(response.data.data);
+        negociacaoTipo=response.data.data;
+    
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+     
+  }
+
+
+
+
   function handleShowMensage(){
    
     setShowMensage(true);
@@ -299,7 +323,7 @@ export default function CadastroParceiros() {
   setCanal('');
   setClassificacao('');
   setTamanhoLoja('');
-  setPromotor('');
+  setCodVendedor(0);
   setEndereco('');
   setBairro('');
   setMunicipio('');
@@ -307,6 +331,8 @@ export default function CadastroParceiros() {
   setLat('');
   setLong('');
   setStatus('');
+  setEmpresa('');
+  setTipoNegociacao('');
   setSemVisita(false);
   setPrimeiraSem(false);
   setSegundaSem(false);
@@ -373,7 +399,7 @@ export default function CadastroParceiros() {
   setCanal('');
   setClassificacao('');
   setTamanhoLoja('');
-  setPromotor('');
+  setCodVendedor(0);
   setEndereco('');
   setBairro('');
   setMunicipio('');
@@ -381,6 +407,8 @@ export default function CadastroParceiros() {
   setLat('');
   setLong('');
   setStatus('');
+  setEmpresa('');
+  setTipoNegociacao('');
   setSemVisita(false);
   setPrimeiraSem(false);
   setSegundaSem(false);
@@ -399,7 +427,7 @@ export default function CadastroParceiros() {
     await api
       .get(`/api/Parceiros/${id}`)
       .then((response) => {
-        //  setParceirosget(response.data)
+        console.log("parceiro id",response.data)
         setId(response.data.id);
         setNome(response.data.nome);
         setTipoPessoa(response.data.tipoPessoa);
@@ -410,7 +438,9 @@ export default function CadastroParceiros() {
         setCanal(response.data.canal);
         setClassificacao(response.data.classificacao);
         setTamanhoLoja(response.data.tamanhoLoja);
-        setPromotor(response.data.promotor);
+        setCodVendedor(response.data.codVendedor);
+        setInputVenedor(response.data.codVendedor+ '-' +response.data.vendedores.nome)
+        inputVenedor=response.data.codVendedor+ '-' +response.data.vendedores.nome
         setEndereco(response.data.endereco);
         setBairro(response.data.bairro);
         setMunicipio(response.data.municipio);
@@ -430,6 +460,8 @@ export default function CadastroParceiros() {
         setQuinta(response.data.quinta);
         setSexta(response.data.sexta);
         setSabado(response.data.sabado);
+        setEmpresa(response.data.empresa);
+        setTipoNegociacao(response.data.tipoNegociacao);
 
 
       })
@@ -451,7 +483,7 @@ export default function CadastroParceiros() {
     canal: canal,
     classificacao: classificacao,
     tamanhoLoja: tamanhoLoja,
-    promotor: promotor,
+    codVendedor: codVendedor,
     endereco: endereco,
     bairro: bairro,
     municipio: municipio,
@@ -470,7 +502,9 @@ export default function CadastroParceiros() {
     quarta: quarta,
     quinta: quinta,
     sexta: sexta,
-    sabado: sabado
+    sabado: sabado,
+    tipoNegociacao: tipoNegociacao,
+    empresa: empresa,
   })
     .then(response => {
       handleCloseEdit()
@@ -556,14 +590,14 @@ export default function CadastroParceiros() {
         setMsgErro("É obrigatório informar o tamanho da loja.");
       return
       }
-      if(promotor==''){
-        let senhaconf: any;
-        senhaconf = document.getElementById("promotor");
-        document.getElementById("promotor")?.focus();
-        setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o promotor.");
-      return
-      }
+      // if(promotor==''){
+      //   let senhaconf: any;
+      //   senhaconf = document.getElementById("promotor");
+      //   document.getElementById("promotor")?.focus();
+      //   setAlertErroRegister(true);
+      //   setMsgErro("É obrigatório informar o promotor.");
+      // return
+      // }
 
      
   setLoadingCreate(true)
@@ -577,7 +611,7 @@ export default function CadastroParceiros() {
   canal: canal,
   classificacao: classificacao,
   tamanhoLoja: tamanhoLoja,
-  promotor: promotor,
+  codVendedor: codVendedor,
   endereco: endereco,
   bairro: bairro,
   municipio: municipio,
@@ -597,6 +631,8 @@ export default function CadastroParceiros() {
   quinta: quinta,
   sexta: sexta,
   sabado: sabado,
+  tipoNegociacao: tipoNegociacao,
+  empresa: empresa,
        })
        
         .then(response => {
@@ -1063,8 +1099,6 @@ function SemVisitar(){
               }}
               />
             </div> 
-            </div>
-            <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <p className="title-input"  >Telefone: </p>
               <input className='form-control inputparceiro' 
@@ -1081,6 +1115,9 @@ function SemVisitar(){
               }}
               />
             </div>
+            </div>
+           
+            <div className='coluna-dupla'>
             <div  className='bloco-input '>
             <p className="title-input"  >Canal: <span style={{color:'red'}}>*</span></p>
 
@@ -1096,22 +1133,9 @@ function SemVisitar(){
                         LimparTodos();        
                       }} 
                     />
-{/* 
-              <input className='form-control inputparceiro' 
-              id='canal'
-              type="text"
-              //name='user' 
-              value={canal}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setCanal(e.target.value);
-                LimparTodos();
-              }}
-              /> */}
+
             </div> 
-            </div>
-            <div className='coluna-dupla'>
-            <div  className='bloco-input classifica'>
+            <div  className='bloco-input '>
             <p className="title-input"  >Classificação: <span style={{color:'red'}}>*</span></p>
             <Select 
                      id="classificacao"  
@@ -1137,8 +1161,8 @@ function SemVisitar(){
               }}
               /> */}
             </div>
-            <div  className='bloco-input tamanho-loja '>
-            <p className="title-input"  >Tamanho loja: <span style={{color:'red'}}>*</span></p>
+            <div  className='bloco-input '>
+            <p className="title-input"  >Tamanho da loja: <span style={{color:'red'}}>*</span></p>
             <Select 
                      id="tamanhoLoja"  
                      className="inputparceiro" 
@@ -1151,44 +1175,9 @@ function SemVisitar(){
                         LimparTodos();         
                       }} 
                     />
-              {/* <input className='form-control inputparceiro' 
-              id='tamanhoLoja'
-              type="text"
-              //name='user' 
-              value={tamanhoLoja}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setTamanhoLoja(e.target.value);
-                LimparTodos();
-              }}
-              /> */}
+             
             </div>
-            <div  className='bloco-input'>
-            <p className="title-input"  >Promotor: <span style={{color:'red'}}>*</span></p>
-            <Select 
-                     id="promotor"  
-                     className="inputparceiro" 
-                     placeholder={promotor}
-                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
-                   //  value={search} 
-                     options={promotorPesquisa}  
-                      onChange={(value: any)=>{ 
-                        setTamanhoLoja(value.label); 
-                        LimparTodos();         
-                      }} 
-                    />
-              {/* <input className='form-control inputparceiro' 
-              id='promotor'
-              type="text"
-              //name='user' 
-              value={promotor}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setPromotor(e.target.value);
-                LimparTodos();
-              }}
-              /> */}
-            </div> 
+            
             </div>
             <div className='coluna-dupla'>
             
@@ -1294,7 +1283,76 @@ function SemVisitar(){
               />
             </div>
             </div>
+           
             </div>
+            <div className='coluna-dupla'>
+            <div  className='bloco-input bloco-corretor'>
+            <p className="title-input"  >Promotor: <span style={{color:'red'}}>*</span></p>
+            <Select 
+                     id="promotor"  
+                     className="inputparceiro" 
+                    // placeholder={promotor}
+                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
+                   //  value={search} 
+                     options={promotorPesquisa}  
+                      onChange={(value: any)=>{ 
+                        setCodVendedor(value.value); 
+                        LimparTodos();         
+                      }} 
+                    />
+            </div> 
+            {/* <div  className='bloco-input tiponego '>
+            <p className="title-input"  >Tipo Empresa: <span style={{color:'red'}}>*</span></p>
+            {/* <Select 
+                     id="promotor"  
+                     className="inputparceiro " 
+                     placeholder={promotor}
+                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
+                   //  value={search} 
+                     options={empresaPesquisa}  
+                      onChange={(value: any)=>{ 
+                        setEmpresa(value.label); 
+                        LimparTodos();         
+                      }} 
+                    /> 
+                    <select className="form-select inputparceiro"
+                      aria-label="Escolha o número de quartos"
+                      value={empresa}
+                         onChange={(e) => {setEmpresa(e.target.value);}}
+                        >
+                           <option value="0"></option>
+                        <option value="1">Indústria</option>
+                        <option value="2">Distribuidora</option>
+                    </select>
+            </div> */}
+            <div  className='bloco-input tiponego'>
+            <p className="title-input"  >Tipo Negociação: <span style={{color:'red'}}>*</span></p>
+            {/* <Select 
+                     id="promotor"  
+                     className="inputparceiro" 
+                     placeholder={promotor}
+                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
+                   //  value={search} 
+                     options={promotorPesquisa}  
+                      onChange={(value: any)=>{ 
+                        setTipoNegociacao(value.label); 
+                        LimparTodos();         
+                      }} 
+                    /> */}
+                    <select className="form-select inputparceiro"
+                      aria-label="Escolha o número de quartos"
+                      value={tipoNegociacao}
+                         onChange={(e) => {setTipoNegociacao(e.target.value);}}
+                        >
+                           <option value="0"></option>
+                           {negociacaoTipo.length > 0 ? (
+                        <>
+                       {negociacaoTipo.map((tipo,index)=> (
+                        <option value={tipo.id}>{tipo.descricao}</option>
+                       ))}</>):(<><option value="0">Nenhum Tipo encontrado</option></>)}
+                    </select>
+                  </div> 
+                  </div>
                     </div>
                     <div className='div-visitas'>
                       <div className='bloco-visita-geral bloco-visitas'>
@@ -1605,8 +1663,6 @@ function SemVisitar(){
               }}
               />
             </div> 
-            </div>
-            <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <p className="title-input"  >Telefone: </p>
               <input className='form-control inputparceiro' 
@@ -1623,6 +1679,9 @@ function SemVisitar(){
               }}
               />
             </div>
+            </div>
+            
+            <div className='coluna-dupla'>
             <div  className='bloco-input '>
             <p className="title-input"  >Canal: <span style={{color:'red'}}>*</span></p>
 
@@ -1634,26 +1693,13 @@ function SemVisitar(){
                    //  value={search} 
                      options={canalpesq}  
                       onChange={(value: any)=>{ 
-                        setCanal(value.value); 
+                        setCanal(value.label); 
                         LimparTodos();        
                       }} 
                     />
-{/* 
-              <input className='form-control inputparceiro' 
-              id='canal'
-              type="text"
-              //name='user' 
-              value={canal}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setCanal(e.target.value);
-                LimparTodos();
-              }}
-              /> */}
+
             </div> 
-            </div>
-            <div className='coluna-dupla'>
-            <div  className='bloco-input classifica'>
+            <div  className='bloco-input '>
             <p className="title-input"  >Classificação: <span style={{color:'red'}}>*</span></p>
             <Select 
                      id="classificacao"  
@@ -1663,7 +1709,7 @@ function SemVisitar(){
                    //  value={search} 
                      options={classificacaopesq}  
                       onChange={(value: any)=>{ 
-                        setClassificacao(value.value); 
+                        setClassificacao(value.label); 
                         LimparTodos();       
                       }} 
                     />
@@ -1679,8 +1725,8 @@ function SemVisitar(){
               }}
               /> */}
             </div>
-            <div  className='bloco-input tamanho-loja '>
-            <p className="title-input"  >Tamanho loja: <span style={{color:'red'}}>*</span></p>
+            <div  className='bloco-input '>
+            <p className="title-input"  >Tamanho da loja: <span style={{color:'red'}}>*</span></p>
             <Select 
                      id="tamanhoLoja"  
                      className="inputparceiro" 
@@ -1689,36 +1735,13 @@ function SemVisitar(){
                    //  value={search} 
                      options={tamanhopesq}  
                       onChange={(value: any)=>{ 
-                        setTamanhoLoja(value.value); 
+                        setTamanhoLoja(value.label); 
                         LimparTodos();         
                       }} 
                     />
-              {/* <input className='form-control inputparceiro' 
-              id='tamanhoLoja'
-              type="text"
-              //name='user' 
-              value={tamanhoLoja}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setTamanhoLoja(e.target.value);
-                LimparTodos();
-              }}
-              /> */}
+             
             </div>
-            <div  className='bloco-input'>
-            <p className="title-input"  >Promotor: <span style={{color:'red'}}>*</span></p>
-              <input className='form-control inputparceiro' 
-              id='promotor'
-              type="text"
-              //name='user' 
-              value={promotor}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setPromotor(e.target.value);
-                LimparTodos();
-              }}
-              />
-            </div> 
+            
             </div>
             <div className='coluna-dupla'>
             
@@ -1825,6 +1848,74 @@ function SemVisitar(){
             </div>
             </div>
             </div>
+            <div className='coluna-dupla'>
+            <div  className='bloco-input bloco-corretor'>
+            <p className="title-input"  >Promotor: <span style={{color:'red'}}>*</span></p>
+            <Select 
+                     id="promotor"  
+                     className="inputparceiro" 
+                     placeholder={inputVenedor}
+                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
+                   //  value={search} 
+                     options={promotorPesquisa}  
+                      onChange={(value: any)=>{ 
+                        setCodVendedor(value.value); 
+                        LimparTodos();         
+                      }} 
+                    />
+            </div> 
+            {/* <div  className='bloco-input tiponego '>
+            <p className="title-input"  >Tipo Empresa: <span style={{color:'red'}}>*</span></p>
+            {/* <Select 
+                     id="promotor"  
+                     className="inputparceiro " 
+                     placeholder={promotor}
+                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
+                   //  value={search} 
+                     options={empresaPesquisa}  
+                      onChange={(value: any)=>{ 
+                        setEmpresa(value.label); 
+                        LimparTodos();         
+                      }} 
+                    /> 
+                    <select className="form-select inputparceiro"
+                      aria-label="Escolha o número de quartos"
+                      value={empresa}
+                         onChange={(e) => {setEmpresa(e.target.value);}}
+                        >
+                           <option value="0"></option>
+                        <option value="1">Indústria</option>
+                        <option value="2">Distribuidora</option>
+                    </select>
+            </div> */}
+            <div  className='bloco-input tiponego'>
+            <p className="title-input"  >Tipo Negociação: <span style={{color:'red'}}>*</span></p>
+            {/* <Select 
+                     id="promotor"  
+                     className="inputparceiro" 
+                     placeholder={promotor}
+                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
+                   //  value={search} 
+                     options={promotorPesquisa}  
+                      onChange={(value: any)=>{ 
+                        setTipoNegociacao(value.label); 
+                        LimparTodos();         
+                      }} 
+                    /> */}
+                    <select className="form-select inputparceiro"
+                      aria-label="Escolha o número de quartos"
+                      value={tipoNegociacao}
+                         onChange={(e) => {setTipoNegociacao(e.target.value);}}
+                        >
+                           <option value="0"></option>
+                           {negociacaoTipo.length > 0 ? (
+                        <>
+                       {negociacaoTipo.map((tipo,index)=> (
+                        <option value={tipo.id}>{tipo.descricao}</option>
+                       ))}</>):(<><option value="0">Nenhum Tipo encontrado</option></>)}
+                    </select>
+                  </div> 
+                  </div>
                     </div>
                     <div className='div-visitas'>
                       <div className='bloco-visita-geral bloco-visitas'>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import '../styles/pages-styles/MeuPerfil.scss';
 import '../styles/global.scss';
 import Navbar from '../components/Navbar';
@@ -15,12 +15,13 @@ import api from '../services/api';
 import Alert from "../components/Alert";
 import SideNavBar from '../components/Navbar/SideNavBar';
 import NavbarDashHeader from '../components/Navbar/NavbarDashHeader';
-import { iUsuarios, iDadosUsuario } from '../@types';
+import { iUsuarios, iDadosUsuario, IFile } from '../@types';
 import PhotoUser from '../assets/avatar1.png';
 import { phoneMask } from '../Masks/Masks';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import uploadFile from '../firebase/uploadFile';
+import Perfil from '../components/UploadArquivos/Perfil';
 
 
 
@@ -29,7 +30,7 @@ export default function MeuPerfil() {
     const userLog: iDadosUsuario = JSON.parse(
         localStorage.getItem("@Portal/usuario") || "{}"
       );
-     
+
 
   const history = useNavigate();
   let [user, setUser] = useState('');
@@ -37,7 +38,7 @@ export default function MeuPerfil() {
   const [msgErro, setMsgErro] = useState("");
   const [alertErro, setAlertErro] = useState(false);
   const [loading, setLoading] = useState(false);
-  
+
   const [primeiroNome, setPrimeiroNome] = useState('');
   const [ultimoNome, setUltimoNome] = useState('');
   const [usuario, setUsuario] = useState('');
@@ -57,7 +58,7 @@ export default function MeuPerfil() {
   const [tipoUsuario, setTipoUsuario] = useState(false);
 
 
- 
+
   const [alertErroMensage, setAlertErroMensage] = useState(false);
   const [alertErroRegister, setAlertErroRegister] = useState(false);
 
@@ -65,9 +66,12 @@ export default function MeuPerfil() {
   const [showEdit, setShowEdit] = useState(false);
   const [showMensage, setShowMensage] = useState(false);
 
+  const [showPhoto, setShowPhoto] = useState(false);
+
 
   const [edit, setEdit] = useState(false);
   const [ativostatus, setAtivostatus] = useState(false);
+  const fileRef = useRef<HTMLInputElement>(null);
   let [usuarios, setUsuarios] = useState<iUsuarios[]>([]);
   const [usuariosget, setUsuariosget] = useState<iUsuarios[]>([]);
   let [usuariosCount, setUsuariosCount] = useState<iUsuarios[]>([]);
@@ -77,15 +81,16 @@ export default function MeuPerfil() {
    const handleClose = () => setShow(false);
    const handleCloseEdit = () => setShowEdit(false);
    const handleCloseMensage = () => setShowMensage(false);
+   const handleClosePhoto = () => setShowPhoto(false);
    const [loadingCreate, setLoadingCreate] = useState(false);
    const [loadingUpdate, setLoadingUpdate] = useState(false);
    const [search, setSearch] = useState('');
    let [imageURL, setImageURL] = useState('');
-   
+
    const [searchStatus, setSearchStatus] = useState('');
    const [filter, setFilter] = useState(false);
    let [idUsuario, setIdUsuario] = useState(0);
-   
+
    const [image, setImagem] = useState('');
 
    const [file, setFile] = useState<any>();
@@ -95,26 +100,60 @@ export default function MeuPerfil() {
    const [progress, setProgress] = useState(0);
    const[userInfo, setuserInfo] = useState('');
 
+   const [userImageEdit, setUserImageEdit] = useState(false);
+  const [imgUser, setImgUser] = useState<any>({});
+  let [imgPerfil, setImgPerfil] = useState<IFile>();
+  const [newImgPerfil, setNewImgPerfil] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     GetUsuarioId();
     GetUsuarioByName();
   },[]);
 
- 
+
 
 
   function handleShowMensage(){
-   
+
     setShowMensage(true);
     setTimeout(function() {
-            
+
    //   setShowMensage(false);
-      
+
      }, 1200);
   }
- 
-  
+
+  const handleImgChange = useCallback((file: File) => {
+    setUserImageEdit(false);
+
+    let preview = URL.createObjectURL(file)
+
+    setImgUser({
+      preview,
+      raw: file,
+    });
+    const newUploadedFiles: IFile = {
+      file: file,
+    //  id: uuidv4(),
+    
+      preview,
+      progress: 0,
+      uploaded: false,
+      error: false,
+      url: "",
+    };
+    imgPerfil = newUploadedFiles;
+
+    setImgPerfil(newUploadedFiles);
+    // setTestee(setImgPerfil)
+
+    if (!userImageEdit) {
+      setNewImgPerfil(true);
+      // setEditar(true);
+    }
+    handleClosePhoto();
+  }, []);
 
   //============ get usuario por userName ============================//
   async function GetUsuarioByName() {
@@ -158,7 +197,7 @@ export default function MeuPerfil() {
     setTipoUsuario(false);
     setEdit(true);
     setShowEdit(true);
-    
+
     await api
       .get(`/api/Usuarios/${id}`)
       .then((response) => {
@@ -226,29 +265,29 @@ export default function MeuPerfil() {
 
     const { data } = error.response;
     setMsgErro(data.message);
-      
-     
+
+
       return;
     });
   }
   function SelecionarImg(){
     document.getElementById("dropimg")?.click();
-       
- 
+
+
   }
 
    //======== salvado imagem ==================================================//
 
    const handleInputChange = (event:any) =>{
     setuserInfo(event.target.files[0]);
-   
+
    }
    async function handleSubmit(e: any) {
     e.preventDefault();
     const data = new FormData();
     data.append("FormFile", file);
    console.log("foto",file)
-   
+
     await api
       .post(`/api/Usuarios/UploadImage/?name=${usuario}`, {
         file,
@@ -260,10 +299,10 @@ export default function MeuPerfil() {
 
 
    async function UploadImage() {
-    
+
     setLoading(true);
 
-    
+
     // new FormData();
     // formdata.append('avatar', userInfo);
     // console.log('image', formdata)
@@ -271,7 +310,7 @@ export default function MeuPerfil() {
      )
       .then((response) => {
      console.log(response.data)
-    
+
     setLoading(false);
     })
      .catch((error) => {
@@ -280,22 +319,22 @@ export default function MeuPerfil() {
      const  data  = error.response.data;
     setMsgErro(data);
      return;
- 
+
      });
     }
 
-  
- 
+
+
     //==========================================================//
   return (
     <>
-      
-      
+
+
       <div className='content-global'>
-     
+
         <div className='conteudo-cotainner'>
          <div className=''>
-         <SideNavBar/> 
+         <SideNavBar/>
          </div>
          <NavbarDashHeader/>
          <div className='titulo-page'>
@@ -305,19 +344,19 @@ export default function MeuPerfil() {
           <div className="d-flex justify-content-center total-loading">
           <div className='div-loading'>
           <div className="spinner-border" role="status">
-            
+
           </div>
           <h2 className="sr-only">Carregando...</h2>
           </div>
         </div>
-                 
+
             ) : (
             <div style={{justifyContent:'center'}} className="containPerfil d-flex">
             <div className='logo-perfil'></div>
-            
+
             <div className='conteudo-perfil'>
             <div className='conteudo-usercad'>
-            <img src={imageURL} alt=""className="imagem-user-name" onClick={SelecionarImg}/>
+            <img src={imageURL} alt=""className="imagem-user-name" onClick={()=>setShowPhoto(true)}/>
             {/* <img src={PhotoUser} alt="" width={200} /> */}
             <h6 style={{fontSize: 12, marginTop: 20, textAlign:"center"}}>Clique para alterar a imagem</h6>
             {/* <input id='dropimg' type='file' name='uploade_file' onChange={handleInputChange}/> */}
@@ -325,33 +364,33 @@ export default function MeuPerfil() {
             {/* <input type="file" onChange={handleUploadFile} />
             <button onClick={handleSubmit}>Enviar</button> */}
            {/* <input id='dropimg' type='file' name='image' onChange={(e:any) => {setImagem(e.target.files[0]); console.log("imagem",image)}}/> */}
-           
+
           </div>
         <div className='form-cadastro-perfil' >
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <p className="title-input"  >Primeiro Nome: </p>
-              <input className='form-control inputlogin' 
+              <input className='form-control inputlogin'
               id=''
               type="text"
-              //name='user' 
+              //name='user'
               value={primeiroNome}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
+              //onKeyDown={LimparErro}
+              onChange={(e)=>{
                 setPrimeiroNome(e.target.value);
               }}
-              
+
               />
             </div>
             <div  className='bloco-input'>
             <p className="title-input" >Nome de Usuário: </p>
-              <input className='form-control inputlogin' 
+              <input className='form-control inputlogin'
               id=''
               type="text"
-              //name='user' 
+              //name='user'
               value={nomeUsuario}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
+              //onKeyDown={LimparErro}
+              onChange={(e)=>{
                 setNomeUsuario(e.target.value);
               }}
               disabled
@@ -363,13 +402,13 @@ export default function MeuPerfil() {
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <p className="title-input" >Função: </p>
-              <input className='form-control inputlogin' 
+              <input className='form-control inputlogin'
               id=''
               type="text"
-              //name='user' 
+              //name='user'
               value={funcao}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
+              //onKeyDown={LimparErro}
+              onChange={(e)=>{
                 setFuncao(e.target.value.toLowerCase());
               }}
               disabled
@@ -378,41 +417,41 @@ export default function MeuPerfil() {
 
             <div className='bloco-input'>
             <p className="title-input"  >Telefone: </p>
-              <input className='form-control inputlogin' 
+              <input className='form-control inputlogin'
               id=''
               type="text"
-             // name='user' 
+             // name='user'
              maxLength={15}
               value={telefone?phoneMask(telefone):telefone}
-             // onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
+             // onKeyDown={LimparErro}
+              onChange={(e)=>{
                 setTelefone(e.target.value.toLowerCase());
               }}
-              
+
               />
             </div>
-            
+
             </div>
             <div className='coluna-dupla'>
-            
+
             <div  className='bloco-input'>
             <p className="title-input" >Status </p>
-              
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
+
+              <select className="form-select select campo-select"
+            aria-label="Escolha o número de quartos"
             value={ativo}
             disabled={grupo=='1'}
                          onChange={(e) => {setAtivo(e.target.value);}}
                         >
                         <option value="1">Ativo</option>
                         <option value="2">Inativo</option>
-                    </select>   
+                    </select>
             </div>
             <div className='bloco-input'>
             <p className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
             {grupo=="1"?(<>
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
+              <select className="form-select select campo-select"
+            aria-label="Escolha o número de quartos"
             value={grupo}
             disabled={grupo=='1'}
                          onChange={(e) => {setGrupo(e.target.value);
@@ -423,10 +462,10 @@ export default function MeuPerfil() {
                         <option value="2">COMERCIAL</option>
                         <option value="3">REPRESENTANTE</option>
                         <option value="4">USUÁRIO</option>
-                    </select> 
+                    </select>
             </>):(<>
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
+              <select className="form-select select campo-select"
+            aria-label="Escolha o número de quartos"
             value={grupo}
             disabled={grupo=='1'}
                          onChange={(e) => {setGrupo(e.target.value);
@@ -437,87 +476,87 @@ export default function MeuPerfil() {
                         <option value="2">COMERCIAL</option>
                         <option value="3">REPRESENTANTE</option>
                         <option value="4">USUÁRIO</option>
-                    </select> 
+                    </select>
             </>)}
-              
-              
+
+
                </div>
             </div>
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <button disabled={loadingUpdate} style={{marginTop: 50}} id='btn-desck' className='btn btn-cadastrar 'onClick={editUser}>Editar</button>
-           
+
             </div>
                     <div  className='bloco-input '>
                     <p className=" title-input"  >Acesso Personalizado: </p>
                     <div className='acesso-personalizado-perfil'>
-                      
+
                     {grupo !="1"?(<>
                       <div className='check-grupo'>
-                      <input 
-                      type="checkbox" name="grupo" 
-                      id="grupo" 
+                      <input
+                      type="checkbox" name="grupo"
+                      id="grupo"
                       disabled={grupo=='1'}
-                      checked={admin}  
+                      checked={admin}
                       onChange={({ target }) => {
                       setAdmin(target.checked);
-                      }} 
+                      }}
                       />
                       <p className='text'>Administrativo</p>
                       </div>
                       </>):(<></>)}
                       {grupo !="2"?(<>
                       <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
+                      <input
+                      type="checkbox"
+                      name="grupo"
                       id="grupo"
                       disabled={grupo=='1'}
-                      checked={comercial}  
+                      checked={comercial}
                       onChange={({ target }) => {
                       setComercial(target.checked);
-                      }}  
+                      }}
                       />
                       <p className='text'>Comercial</p>
                       </div>
-                      </>):(<></>)} 
+                      </>):(<></>)}
                       {grupo !="3"?(<>
                       <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
+                      <input
+                      type="checkbox"
+                      name="grupo"
                       id="grupo"
                       disabled={grupo=='1'}
-                      checked={representante}  
+                      checked={representante}
                       onChange={({ target }) => {
                       setRepresentante(target.checked);
-                      }}  
+                      }}
                       />
                       <p className='text'>Representante</p>
                       </div>
-                      </>):(<></>)} 
+                      </>):(<></>)}
                       {grupo !="4"?(<>
                       <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo" 
+                      <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
                       disabled={grupo=='1'}
-                      checked={tipoUsuario}  
+                      checked={tipoUsuario}
                       onChange={({ target }) => {
                       setTipoUsuario(target.checked);
-                      }} 
+                      }}
                       />
                       <p className='text'>Usuário</p>
                       </div>
-                      </>):(<></>)} 
+                      </>):(<></>)}
                     </div>
                     </div>
-                    </div> 
-                    <button disabled={loadingUpdate} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={handleCloseEdit}>Editar</button>                  
-    
+                    </div>
+                    <button disabled={loadingUpdate} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={handleCloseEdit}>Editar</button>
+
             </div>
-       
+
          </div>
          </div>
           )}
@@ -536,13 +575,22 @@ export default function MeuPerfil() {
 					)}
           <button style={{width:130}} className='btn btn-primary' onClick={handleCloseMensage}>Ok</button>
         </Modal.Body>
-      
+
       </Modal>
-      
+      <Modal className='modal-img' show={showPhoto} onHide={handleClosePhoto}>
+         <Modal.Header  closeButton>
+          <h1 style={{fontSize: 25}}>Atualizar foto Perfil</h1>
+        </Modal.Header> 
+        <Modal.Body>
+        <Perfil ref={fileRef} onChange={handleImgChange} />
+        </Modal.Body>
+
+      </Modal>
+
       </div>
-      
+
       <Footer/>
     </>
-    
+
   );
 }

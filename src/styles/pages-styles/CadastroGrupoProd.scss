@@ -114,6 +114,20 @@ margin-top: 85px !important;
      display: none;
     }
 }
+.logo-cadastro-tipo{
+    margin-top: 30px;
+    margin-right: 40px;
+    width:300px;
+  // height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/TIPONEGOCIACAO.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
 .logo-cadastro-grupo{
     margin-top: 30px;
     margin-right: 40px;
@@ -121,6 +135,20 @@ margin-top: 85px !important;
   // height:355px;
    bottom: 20px !important;
     background-image: url("../../assets/grupoProd.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+.logo-cadastro-tabelaPreco{
+    margin-top: 30px;
+    margin-right: 40px;
+    width:300px;
+   
+   bottom: 20px !important;
+    background-image: url("../../assets/TABELAPRECO.png");
     background-size: 100%;
     background-repeat: no-repeat, repeat;
     margin-bottom: 180px;
@@ -198,7 +226,7 @@ margin-top: 85px !important;
     width: 1200px;
     height: auto;
     top: -30px;
-    left: -70%;
+    left: -68%;
     @media(max-width:790px) {
         width: 100%;
         left: 0%;
@@ -269,6 +297,14 @@ margin-top: 85px !important;
 }
 .alerta-grupo{
     width:486%;
+    margin:auto !important;
+    text-align: center;
+    @media(max-width:790px) {
+        text-align: left;
+      }
+}
+.alerta-item{
+    width:520%;
     margin:auto !important;
     text-align: center;
     @media(max-width:790px) {
@@ -405,14 +441,193 @@ background-color: #ebebec;
     width: 150px !important;
 }
 .tamanho-loja{
-    width: 450px !important;
+    width: 200px !important;
     @media(max-width:790px) {
         width: 100% !important;
       }
 }
 .classifica{
-    width: 450px !important;
+    width: 200px !important;
     @media(max-width:790px) {
         width: 100% !important;
       }
+}
+.bloco-canal{
+    width: 250px !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       } 
+}
+.bloco-corretor{
+    width: 70% !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       } 
+}
+.tiponego{
+    width: 50% !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       } 
+}
+
+.bloco-codTab{
+    margin-top: 20px;
+    display: flex !important;
+    width: 80% !important;
+    .titulo-cod-tabelaPrice{
+        margin-top: 15px !important;
+        margin-right: 30px !important;
+    }
+    @media(max-width:790px) {
+        width: 100% !important;
+       flex-direction: column !important;
+       } 
+}
+.modal-cadastro-tabela{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    height: auto;
+  
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
+.bloco-data-edit{
+    padding: 20px !important;
+    padding-bottom: 10px !important;
+    width: 50% !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       } 
+}
+.bloco-data{
+    padding: 20px !important;
+    padding-bottom: 10px !important;
+    width: 100% !important;
+}
+.inputdataTab{
+    width: 100%;
+    height: auto;
+      border-radius: 0.1rem;
+      outline: initial!important;
+      -webkit-box-shadow: initial!important;
+     // box-shadow: none!important;
+      font-size: .8rem;
+      padding: 0.7rem 0.75rem 0.65rem 0.75rem;
+      line-height: 1.5;
+      border: 1px solid #d7d7d7;
+      background: #fff;
+      color: #212121;
+      margin-top: 2px;
+      box-shadow: 0 4px 8px 1px #d7d7d7 !important;
+  }
+  .inputdataTab:active, .inputdataTab:focus{
+    border: 1px solid #3e92e5;
+    background-color: #c8e2fd;
+  }
+.bloco-tabelaPreco{
+   
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #d7d7d7 ;
+
+}
+.bloco-acoes-tabelaPreco{
+    padding: 10px !important;
+    
+    border: 1px solid #d7d7d7 ;
+    @media(max-width:770px) {
+     margin-top: 20px;
+    }
+   
+}
+.btn-editartab{
+    width:100%;
+    padding: 15px;
+    font-size: 13px !important;
+   // border-radius: 50px;
+    background: linear-gradient(0deg, #054f77 0%, #4ea1cf 100%);
+    color: aliceblue;
+    @media(max-width:290px) {
+        width: 170px;
+    }
+}
+.btn-editartab:hover{
+    background:  linear-gradient(0deg, #033049 0%, #2f7aa2 100%);
+    color: aliceblue;
+}
+.btn-novotab{
+    width:100%;
+    padding: 15px;
+    font-size: 13px !important;
+   // border-radius: 50px;
+    background: linear-gradient(0deg, #090909 0%, #7a8186 100%);
+    color: aliceblue;
+    @media(max-width:290px) {
+        width: 170px;
+    }
+}
+.btn-novotab:hover{
+    background:  linear-gradient(0deg, #030303 0%, #3a3d3e 100%);
+    color: aliceblue;
+}
+.modal-cadastro-tabela-edit{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    width: 900px;
+    height: auto;
+    left: -40%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: 0%;
+        top:0px;
+      }
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
+.titulo-item{
+    text-align: left !important;
+}
+.bloco-item{
+    margin-bottom: 20px;
+}
+.modal-item{
+    text-align: left !important;
+}
+.botoes-item-tabela{
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex !important;
+    justify-content: space-between !important;
+    .btn-itens{
+        width: 40% !important;
+        font-size: 14px!important;
+        @media(max-width:790px) {
+            width: 100% !important;
+        }
+    }
+    @media(max-width:790px) {
+       flex-direction: column !important;
+       width: 100%;
+       padding-left: 0px;
+       padding-right: 0px;
+      }
+}
+.cod-desc-Tabela{
+    padding-left: 20px;
+    @media(max-width:790px) {
+        flex-direction: column !important;
+    }
 }

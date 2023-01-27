@@ -574,7 +574,7 @@ function PesquisaFuncionarioCod(){
                 </div>
                 <div className='d-flex'>
                   <input  name='pesquisa' type="radio" checked={pesquisaNome}  onChange={PesquisaNome} /><p style={{fontSize:13,marginLeft:8}} >Nome</p>
-                  <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaCod}  onChange={PesquisaCod} /><p style={{fontSize:13,marginLeft:8}} >Codigo</p>
+                  <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaCod}  onChange={PesquisaCod} /><p style={{fontSize:13,marginLeft:8}} >Código</p>
                   <input  style={{marginLeft:20}} name='pesquisa' type="radio" checked={pesquisaStatus}  onChange={PesquisaStatus} /><p style={{fontSize:13,marginLeft:8}} >Status</p>
                   </div>
               </div>
@@ -592,7 +592,7 @@ function PesquisaFuncionarioCod(){
             <div className='bloco-pesquisa-input'>
             {pesquisaCod?(<>
               <div className='codPesquisa'>
-              <p className="title-input"  >Codigo: </p>
+              <p className="title-input"  >Código: </p>
             <input  id="input-cod"  
             type="text" 
             className='form-coontrol input-cod-Pesquisa ' 
@@ -663,8 +663,9 @@ function PesquisaFuncionarioCod(){
           <th style={{textAlign:'center'}}  className="th4">Status</th>
           <th style={{textAlign:'center'}}  className="th4">Tipo</th>
           <th style={{textAlign:'center'}} className="th4 ">E-mail</th>
-          <th style={{textAlign:'center'}} className="th4 ">Parceiro</th>
-          <th style={{textAlign:'center'}} className="th4 ">..........</th>
+          {/* <th style={{textAlign:'center'}} className="th4 ">Parceiro</th> */}
+          <th style={{textAlign:'center',color:"transparent"}} className="th4 ">..........</th>
+          <th style={{textAlign:'center',color:"transparent"}} className="th4 ">..........</th>
           <th style={{textAlign:'center'}} className="th4 fixed-table">Ações</th>
       </tr>
       </thead>
@@ -679,7 +680,8 @@ function PesquisaFuncionarioCod(){
          <td style={vendedores.status =='true'?{color:'#008000', textAlign:"center"}:{color:'red', textAlign:"center"}}>{vendedores.status =="true"?"Ativo":"Inativo"}</td>
          <td style={{textAlign:"center"}} >{vendedores.tipo =="1"?"Vendedor":vendedores.tipo =="2"?"Comprador":vendedores.tipo =="3"?"Acessor":vendedores.tipo =="4"?"Gerente":vendedores.tipo =="5"?"Representante":vendedores.tipo =="6"?"Supervisor":vendedores.tipo =="8"?"Promotor":"Técnico"}</td>
          <td style={vendedores.email ==null ||vendedores.email ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{vendedores.email?vendedores.email:"Não informado"}</td>
-         <td style={vendedores.parceiroNome ==null ||vendedores.parceiroNome ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{vendedores.parceiroNome?vendedores.parceiroNome:"Não informado"}</td>
+         
+         {/* <td style={vendedores.parceiroNome ==null ||vendedores.parceiroNome ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{vendedores.parceiroNome?vendedores.parceiroNome:"Não informado"}</td> */}
          
           
             
@@ -772,7 +774,7 @@ function PesquisaFuncionarioCod(){
         <div  className='form-cadastro-user' >
             <div className='coluna-dupla'>
             <div  className='bloco-input bloco-codigo'>
-            <p className="title-input"  >Codigo: <span style={{color:'red'}}>*</span></p>
+            <p className="title-input"  >Código: <span style={{color:'red'}}>*</span></p>
               <input className='form-coontrol inputlogin' 
               id='codVendedor'
               type="text"
@@ -794,7 +796,7 @@ function PesquisaFuncionarioCod(){
               value={nome}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setNome(e.target.value);
+                setNome(e.target.value.toUpperCase());
                 LimparTodos();
               }}
               />
@@ -868,280 +870,7 @@ function PesquisaFuncionarioCod(){
             </div> 
             </div>
 
-            {/* <div className='coluna-dupla coluna-pesquisaPar-Ger'>
-
-              <div  className='coluna-pesquisa-inp '>
-              <div className='pesBloco'>
-                <div className='title-pesBloco'>
-                <span>Empresa:</span>
-                </div>
-                {/* <div className='d-flex'>
-                  <input  name='pesquisEmpresa' type="radio" checked={pesEmpresaNome}  onChange={PesquisaEmpresaNome} /><p style={{fontSize:13,marginLeft:8}} >Nome</p>
-                  <input  style={{marginLeft:20}} name='pesquisaEmpresa' type="radio" checked={pesEmpresaId}  onChange={PesquisaEmpresaCod} /><p style={{fontSize:13,marginLeft:8}} >Codigo</p>
-                  </div> 
-              </div>
-              {/* {pesEmpresaNome?(<>
-                <div style={{padding:10, paddingTop:0}}>
-                <p className=" title-input"  >Nome Empresa:</p>
-          
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
-            value={empresa}
-                         onChange={(e) => {setEmpresa(e.target.value);
-                        }}
-                        >
-                        <option value="0"></option>
-                        
-                    </select> 
-                    </div>
-              </>):(<></>)}
-              {/* {pesEmpresaId?(<> 
-                <div className='bloco-cod-par'>
-            <div className='bloco-input bloco-cod-pesq-vendedor '>
-            <p className=" title-input"  >Codigo: </p>
-          
-            <input className='form-control inputlogin input-id-par' 
-              id='parceiroId'
-              type="text"
-              disabled
-              value={empresaId}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setEmpresaId(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-                      
-                    
-               </div>
-               
-               
-            <div className='bloco-input bloco-perceiro'>
-            <p className=" title-input"  >Nome Empresa: </p>
-          
-            <input className='form-control inputlogin' 
-              id='email'
-              type="text"
-              disabled
-              value={empresa}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setEmpresa(e.target.value.toLowerCase());
-                LimparTodos();
-               }}
-              />
-               </div>
-               </div>
-              {/* </>):(<></>)} 
-            
-
-               </div>
-            
-               <div  className='coluna-pesquisa-inp '>
-              <div className='pesBloco'>
-                <div className='title-pesBloco'>
-                <span >Funcionário:</span>
-                </div>
-                {/* <div className='d-flex'>
-                  <input  name='pesquisFuncionario' type="radio" checked={pesFuncionarioNome}  onChange={PesquisaFuncionarioNome} /><p style={{fontSize:13,marginLeft:8}} >Nome</p>
-                  <input  style={{marginLeft:20}} name='pesquisaFuncionario' type="radio" checked={pesFuncionarioId}  onChange={PesquisaFuncionarioCod} /><p style={{fontSize:13,marginLeft:8}} >Codigo</p>
-                  </div> 
-              </div>
-              {/* {pesFuncionarioNome?(<>
-                <div style={{padding:10, paddingTop:0}}>
-                <p className=" title-input"  >Nome Funcionário: </p>
-          
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
-            value={funcionario}
-                         onChange={(e) => {setFuncionario(e.target.value);
-                        }}
-                        >
-                        <option value="0"></option>
-                        
-                    </select> 
-                    </div>
-              </>):(<></>)} 
-              {/* {pesFuncionarioId?(<> 
-                <div className='bloco-cod-par'>
-            <div className='bloco-input bloco-cod-pesq-vendedor '>
-            <p className=" title-input"  >Codigo: </p>
-          
-            <input className='form-control inputlogin input-id-par' 
-              id='parceiroId'
-              type="text"
-             disabled
-              value={funcionarioId}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setFuncionarioId(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-                      
-                    
-               </div>
-               
-               
-            <div className='bloco-input bloco-perceiro'>
-            <p className=" title-input"  >Nome Funcionário: </p>
-          
-            <input className='form-control inputlogin' 
-              id='email'
-              type="text"
-              disabled
-              value={funcionario}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setFuncionario(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-               </div>
-               </div>
-              {/* </>):(<></>)} 
-            
-
-               </div>
-            </div>
-
-
-            <div className='coluna-dupla coluna-pesquisaPar-Ger'>
-
-              <div  className='coluna-pesquisa-inp'>
-              <div className='pesBloco'>
-                <div className='title-pesBloco'>
-                <span >Parceiro:</span>
-                </div>
-                {/* <div className='d-flex'>
-                  <input  name='pesquisParceiro' type="radio" checked={pesParceiroNome}  onChange={PesquisaParceiroNome} /><p style={{fontSize:13,marginLeft:8}} >Nome</p>
-                  <input  style={{marginLeft:20}} name='pesquisaParceiro' type="radio" checked={pesParceiroId}  onChange={PesquisaParceiroCod} /><p style={{fontSize:13,marginLeft:8}} >Codigo</p>
-                  </div> 
-              </div>
-              {/* {pesParceiroNome?(<>
-                <div style={{padding:10, paddingTop:0}}>
-                <p className=" title-input"  >Nome Parceiro: </p>
-          
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
-            value={parceiro}
-                         onChange={(e) => {setParceiro(e.target.value);
-                        }}
-                        >
-                        <option value="0"></option>
-                        
-                    </select> 
-                    </div>
-              </>):(<></>)}
-              {pesParceiroId?(<> 
-                <div className='bloco-cod-par'>
-            <div className='bloco-input bloco-cod-pesq-vendedor '>
-            <p className=" title-input"  >Codigo: </p>
-          
-            <input className='form-control inputlogin input-id-par' 
-              id='parceiroId'
-              type="text"
-             disabled
-              value={parceiroId}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setParceiroId(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-                      
-                    
-               </div>
-               
-               
-            <div className='bloco-input bloco-perceiro'>
-            <p className=" title-input"  >Nome Parceiro: </p>
-          
-            <input className='form-control inputlogin' 
-              id='email'
-              type="text"
-              disabled
-              value={parceiro}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setParceiro(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-               </div>
-               </div>
-              {/* </>):(<></>)} 
-            
-
-               </div>
-            
-               <div  className='coluna-pesquisa-inp'>
-              <div className='pesBloco'>
-                <div className='title-pesBloco'>
-                <span >Pesquisar gerente por:</span>
-                </div>
-                {/* <div className='d-flex'>
-                  <input  name='pesquisGerente' type="radio" checked={pesGerenteNome}  onChange={PesquisaGerenteNome} /><p style={{fontSize:13,marginLeft:8}} >Nome</p>
-                  <input  style={{marginLeft:20}} name='pesquisaGerente' type="radio" checked={pesGerenteId}  onChange={PesquisaGerenteCod} /><p style={{fontSize:13,marginLeft:8}} >Codigo</p>
-                  </div> 
-              </div>
-              {/* {pesGerenteNome?(<>
-                <div style={{padding:10, paddingTop:0}}>
-                <p className=" title-input"  >Nome Gerente: </p>
-          
-              <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
-            value={gerente}
-                         onChange={(e) => {setGerente(e.target.value);
-                        }}
-                        >
-                        <option value="0"></option>
-                        
-                    </select> 
-                    </div>
-              </>):(<></>)}
-              {pesGerenteId?(<> 
-                <div className='bloco-cod-par'>
-            <div className='bloco-input bloco-cod-pesq-vendedor '>
-            <p className=" title-input"  >Codigo: </p>
-          
-            <input className='form-control inputlogin input-id-par' 
-              id='gerenteId'
-              type="text"
-              disabled
-              value={gerenteId}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setGerenteId(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-                      
-                    
-               </div>
-               
-               
-            <div className='bloco-input bloco-perceiro'>
-            <p className=" title-input"  >Nome Gerente: </p>
-          
-            <input className='form-control inputlogin' 
-              id='email'
-              type="text"
-             disabled
-              value={gerente}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setGerente(e.target.value.toLowerCase());
-                LimparTodos();
-              }}
-              />
-               </div>
-               </div>
-              {/* </>):(<></>)} 
-            
-
-               </div>
-            </div> */}
+           
             <div className='coluna-dupla'>
 
             <div  className='bloco-input bloco-buttom-vendedor'>
@@ -1178,7 +907,7 @@ function PesquisaFuncionarioCod(){
       
             <div className='coluna-dupla'>
             <div  className='bloco-input bloco-codigo'>
-            <p className="title-input"  >Codigo: <span style={{color:'red'}}>*</span></p>
+            <p className="title-input"  >Código: <span style={{color:'red'}}>*</span></p>
               <input className='form-coontrol inputlogin' 
               id='codVendedor'
               type="text"
@@ -1200,7 +929,7 @@ function PesquisaFuncionarioCod(){
               value={nome}
               //onKeyDown={LimparErro} 
               onChange={(e)=>{ 
-                setNome(e.target.value);
+                setNome(e.target.value.toUpperCase());
                 LimparTodos();
               }}
               />
