@@ -164,3 +164,22 @@ export interface iGrupos {
             },
             preco: number
       }
+      export interface  iEmpresa {
+        id: number;
+        descricao: string;
+      }
+      export interface iTabelaCliente{
+        id: number,
+        codEmpresa: number,
+        codParceiro: number,
+        parceiros: {
+         id: number,
+          nome: string,
+        },
+        codTabelaPreco: number,
+        tabelaPreco: {
+          id: number,
+          codigo: number,
+          descricao: string,
+        }
+      }

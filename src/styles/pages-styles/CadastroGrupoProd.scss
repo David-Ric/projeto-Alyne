@@ -114,6 +114,36 @@ margin-top: 85px !important;
      display: none;
     }
 }
+.logo-cadastro-tabela-cliente{
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-left: 20px;
+    width:300px;
+  // height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/TABELACLIENTE.png");
+    background-size: 80%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+.logo-cadastro-tipo-empresa{
+    margin-top: 30px;
+    margin-right: 40px;
+    margin-left: 20px;
+    width:300px;
+  // height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/EMPRESA.png");
+    background-size: 80%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
 .logo-cadastro-tipo{
     margin-top: 30px;
     margin-right: 40px;

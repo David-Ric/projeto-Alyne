@@ -367,11 +367,11 @@ function HandleInsert(){
               <div className='logo-cadastro-tipo'></div>
           <div className='conteudo'>
             <div style={{height:60}} className='div-button-top'>
-              
+            {inInsert?(<><button style={{marginRight:140,color:"#fff"}}className='btn btn-danger btn-direito' onClick={()=>{setInInsert(false);setAlertErroRegister(false)}}>Cancelar</button></>):(<></>)}  
           <OverlayTrigger
           placement={"top"}
           delay={{ show: 100, hide: 250 }}
-          overlay={<Tooltip>{inInsert?"Salvar grupo":"Novo grupo"}</Tooltip>}
+          overlay={<Tooltip>{inInsert?"Salvar Tipo":"Novo Tipo"}</Tooltip>}
         >
       <button  className='btn btn-dark btn-direito' 
        onClick={()=>{
@@ -389,9 +389,14 @@ function HandleInsert(){
       </button>
       </OverlayTrigger>
       </div>
+      {alertErroRegister && (
+					<div className="mt-3 mb-0">
+						<Alert msg={msgErro} setAlertErro={setAlertErroRegister} />
+					</div>
+					)}
             <div style={{marginTop:10, width:"100%"}} className={inInsert?'conteudo-input':'conteudo-botoes'}>
               <div className='div-input-grupo'>
-              <p className="title-input"  >{inInsert?"Insira o nome do grupo":"Pesquisar por nome:"} </p>
+              <p className="title-input"  >{inInsert?"Insira a descrição do tipo":"Pesquisar por descrição:"} </p>
             <input  id="nomegrupoPesquisa"  
             type="text" 
             className='form-coontrol inputlogin input-grupo-prod' 

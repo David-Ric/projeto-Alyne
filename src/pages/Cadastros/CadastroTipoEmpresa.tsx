@@ -21,25 +21,25 @@ import { TfiNewWindow } from "react-icons/tfi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Table from 'react-bootstrap/Table';
-import { iGrupos } from '../../@types';
+import { iEmpresa, iGrupos } from '../../@types';
 import OverlayTrigger from 'react-bootstrap/esm/OverlayTrigger';
 import { Tooltip } from 'react-bootstrap';
 import Paginacao from "../../components/Paginacao";
 import { phoneMask } from '../../Masks/Masks';
 import { FaSearchPlus } from "react-icons/fa";
 import { AiOutlineClear } from "react-icons/ai";
-import { iDadosUsuario } from '../../@types';
+import { iDadosUsuario, iTipoNegociacao } from '../../@types';
 
 
 
-export default function CadastroGruposProdutos() {
+export default function CadastroTipoEmpresa() {
   const history = useNavigate();
 
   const [primeiroNome, setPrimeiroNome] = useState('');
   const [ultimoNome, setUltimoNome] = useState('');
   const [usuario, setUsuario] = useState('');
-  const [idGrupo, setIdGrupo] = useState(0);
-  const [nameGrupo, setNameGrupo] = useState('');
+  const [id, setId] = useState(0);
+  const [descricao, setDescricao] = useState('');
 
 
   // const [senhaConfirm, setSenhaConfirm] = useState('');
@@ -67,7 +67,7 @@ export default function CadastroGruposProdutos() {
 
   const [edit, setEdit] = useState(false);
   const [ativostatus, setAtivostatus] = useState(false);
-  let [grupos, setGrupos] = useState<iGrupos[]>([]);
+  let [tipoEmpresa, setTipoEmpresa] = useState<iEmpresa[]>([]);
   // const [usuariosget, setUsuariosget] = useState<iUsuarios[]>([]);
   // let [usuariosCount, setUsuariosCount] = useState<iUsuarios[]>([]);
   // let [usuariosFilter, setUsuariosFilter] = useState<iUsuarios[]>([]);
@@ -117,9 +117,9 @@ export default function CadastroGruposProdutos() {
   useEffect(() => {
     window.scrollTo(0, 0);
     if(!filter){
-      GetGrupos();
+      GetTipoEmpresa();
     }else{
-      GetGruposFilter();
+      GetTipoEmpresaFilter();
     }
     
   },[pagina]);
@@ -151,7 +151,7 @@ export default function CadastroGruposProdutos() {
   setAlertErroRegister(false);
  }
   function handleShow(){
-    setNameGrupo('');
+    setDescricao('');
 
    // setIdGrupo(0)
     
@@ -159,16 +159,16 @@ export default function CadastroGruposProdutos() {
   }
  
 
-  async function GetGrupos() {
+  async function GetTipoEmpresa() {
     setFilter(false);
     
     await api
     
-      .get(`/api/Grupo_Produtos?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Empresa?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
-        setGrupos(response.data.data);
-        console.log("grupo",grupos)
-        grupos=response.data.data;
+        setTipoEmpresa(response.data.data);
+        console.log("grupo",tipoEmpresa)
+        tipoEmpresa=response.data.data;
         setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
     
       })
@@ -178,15 +178,15 @@ export default function CadastroGruposProdutos() {
      
   }
 
-  async function GetGruposFilter() {
+  async function GetTipoEmpresaFilter() {
     setFilter(true);
     await api
-      .get(`/api/Grupo_Produtos/filter?pagina=${pagina}&totalpagina=999&Nome_Grupo=${search}`)
+      .get(`/api/Empresa/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
-        setGrupos(response.data.data);
-        grupos=response.data.data;
+        setTipoEmpresa(response.data.data);
+        tipoEmpresa=response.data.data;
      
-       console.log('usuarios pesquisa',grupos);
+       console.log('usuarios pesquisa',tipoEmpresa);
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
@@ -196,18 +196,18 @@ export default function CadastroGruposProdutos() {
  
   
     //=========== get usuarios por ID ==================================//
-  async function GetGrupoId(id:any) {
+  async function GetTipoEmpresaId(id:any) {
     setSearch('');
   
       setShowEdit(true);
  
     
     await api
-      .get(`/api/Grupo_Produtos/${id}`)
+      .get(`/api/Empresa/${id}`)
       .then((response) => {
          // setUsuariosget(response.data)
-          setIdGrupo(response.data.id);
-          setNameGrupo(response.data.nameGrupo);
+          setId(response.data.id);
+          setDescricao(response.data.descricao);
          
 
       //  console.log('usuario Id',usuariosget);
@@ -217,21 +217,21 @@ export default function CadastroGruposProdutos() {
       });
   }
   //============ Editar Usuario ===============================//
-  async function EditGrupos(){
+  async function EditTipoNegociacao(){
     setLoadingUpdate(true)
-  await api.put(`/api/Grupo_Produtos/${idGrupo}`, {
-  id: idGrupo,
-  NameGrupo:nameGrupo
+  await api.put(`/api/Empresa/${id}`, {
+  id: id,
+  descricao:descricao
  
   })
     .then(response => {
       handleCloseEdit();
       setSearch('');
-      GetGrupos();
+      GetTipoEmpresa();
       setLoadingUpdate(false)
       handleShowMensage()
       setAlertErroMensage(true);
-      setMsgErro("Dados do grupo atualizados com sucesso.");
+      setMsgErro("Dados do Tipo de Negociação atualizados com sucesso.");
     })
     .catch((error) => {
       setSearch('');
@@ -257,25 +257,25 @@ export default function CadastroGruposProdutos() {
         senhaconf = document.getElementById("nomegrupoPesquisa");
         document.getElementById("nomegrupoPesquisa")?.focus();
         setAlertErroRegister(true);
-        setMsgErro("É obrigatório informar o nome do grupo de produto.");
+        setMsgErro("É obrigatório informar a descrição.");
       return
       }
 
       
   setLoading(true)
-  await api.post("/api/Grupo_Produtos",{
-        nameGrupo: search,
+  await api.post("/api/Empresa",{
+        descricao: search,
         
        })
        
         .then(response => {
           setLoading(false)
           setSearch('');
-          GetGrupos();
+          GetTipoEmpresa();
         
           handleShowMensage();
           setAlertErroMensage(true);
-          setMsgErro("Grupo criado com sucesso.");
+          setMsgErro("Tipo de Empresa criada com sucesso.");
         })
         .catch((error) => {
           setSearch('');
@@ -293,16 +293,16 @@ export default function CadastroGruposProdutos() {
         setInInsert(false)
       }
       //==== EXCLUIR GRUPO ======================================
-      async function DeleteGrupo(id: any){
+      async function DeleteTipoEmpresa(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Grupo_Produtos/${id}`)
+      await api.delete(`/api/Empresa/${id}`)
         .then(response => {
           handleCloseEdit()
-          GetGrupos();
+          GetTipoEmpresa();
           setLoadingUpdate(false)
           handleShowMensage()
           setAlertErroMensage(true);
-          setMsgErro("Grupo excluído com sucesso.");
+          setMsgErro("Tipo empresa excluído com sucesso.");
         })
         .catch((error) => {
           setLoadingUpdate(false)
@@ -323,7 +323,7 @@ function LimparPesquisa(){
   setSearch('');
   setPagina(1);
   setFilter(false);
-  GetGrupos();
+  GetTipoEmpresa();
 }
 
 
@@ -350,7 +350,7 @@ function HandleInsert(){
          <div>
          <NavbarDashHeader/>
          <div className='titulo-page'>
-            <h1>Grupos de Produtos</h1>
+            <h1>Cadastro de Empresa</h1>
             </div>
             {loading ? (
           <div className="d-flex justify-content-center total-loading">
@@ -364,15 +364,16 @@ function HandleInsert(){
                  
                           ) : (
             <div style={{justifyContent:'center'}} className="contain d-flex">
-              <div className='logo-cadastro-grupo'></div>
+              <div className='logo-cadastro-tipo-empresa'></div>
           <div className='conteudo'>
             <div style={{height:60}} className='div-button-top'>
-            {inInsert?(<><button style={{marginRight:140,color:"#fff"}}className='btn btn-danger btn-direito' onClick={()=>{setInInsert(false);setAlertErroRegister(false)}}>Cancelar</button></>):(<></>)}       
+            {inInsert?(<><button style={{marginRight:140,color:"#fff"}}className='btn btn-danger btn-direito' onClick={()=>{setInInsert(false);setAlertErroRegister(false)}}>Cancelar</button></>):(<></>)}  
           <OverlayTrigger
           placement={"top"}
           delay={{ show: 100, hide: 250 }}
-          overlay={<Tooltip>{inInsert?"Salvar grupo":"Novo grupo"}</Tooltip>}
+          overlay={<Tooltip>{inInsert?"Salvar empresa":"Nova empresa"}</Tooltip>}
         >
+          
       <button  className='btn btn-dark btn-direito' 
        onClick={()=>{
         {inInsert?CreateGrupo():HandleInsert();}
@@ -396,7 +397,7 @@ function HandleInsert(){
 					)}
             <div style={{marginTop:10, width:"100%"}} className={inInsert?'conteudo-input':'conteudo-botoes'}>
               <div className='div-input-grupo'>
-              <p className="title-input"  >{inInsert?"Insira o nome do grupo":"Pesquisar por nome:"} </p>
+              <p className="title-input"  >{inInsert?"Insira a descrição":"Pesquisar por descrição:"} </p>
             <input  id="nomegrupoPesquisa"  
             type="text" 
             className='form-coontrol inputlogin input-grupo-prod' 
@@ -404,12 +405,12 @@ function HandleInsert(){
              value={search}
              onChange={(e)=>{ 
               setSearch(e.target.value.toUpperCase());
-             
+             LimparTodos();
             }}
               />
             </div>
             {inInsert?(<></>):(<>
-                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetGruposFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
+                    <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas btn-pesquisar'onClick={()=>{setPagina(1);GetTipoEmpresaFilter()}}>Pesquisar<FaSearchPlus style={{marginLeft: 6}} fontSize={17}/></button>
                     <button style={{marginTop:30}} className='btn btn-primary btn-pesquisas' onClick={LimparPesquisa}>Limpar<AiOutlineClear style={{marginLeft: 6}} fontSize={20}/></button>
                     </>)}
                     </div>
@@ -421,17 +422,17 @@ function HandleInsert(){
       <tr className="tituloTab">
         
           <th style={{textAlign:'center'}} className="th1 id-grupo">ID</th>
-          <th className="th2 nome-grupo">Nome</th>
+          <th className="th2 nome-grupo">Descrição:</th>
           <th style={{textAlign:'center'}} className="th4 fixed-table">Ações</th>
       </tr>
       </thead>
       <tbody>
-      {grupos.length > 0 ? (
+      {tipoEmpresa.length > 0 ? (
                         <>
-      {grupos.map((grupos,index)=> (
+      {tipoEmpresa.map((tipo,index)=> (
         <tr key={index}>
-         <td style={{textAlign:'center'}}  className='id-grupo'>{grupos.id}</td> 
-         <td className='nome-grupo'>{grupos.nameGrupo}</td> 
+         <td style={{textAlign:'center'}}  className='id-grupo'>{tipo.id}</td> 
+         <td className='nome-grupo'>{tipo.descricao}</td> 
           
             
             <td style={{textAlign:'center'}} className="fixed-table td-fixo">
@@ -446,7 +447,7 @@ function HandleInsert(){
               style={{marginRight:15,marginLeft:15}}
               onClick={()=>{
 
-                GetGrupoId(grupos.id);
+                GetTipoEmpresaId(tipo.id);
                 ShowModalEdit();
                 }}>
                 <HiOutlinePencilSquare/>
@@ -461,7 +462,7 @@ function HandleInsert(){
             >
               <button onClick={()=>{
                // GetGrupoId(grupos.id);
-                DeleteGrupo(grupos.id);}}
+                DeleteTipoEmpresa(tipo.id);}}
               className='btn btn-table btn-delete'>
                 <RiDeleteBin5Line/>
               </button>
@@ -473,7 +474,7 @@ function HandleInsert(){
         ): (
                         
           <div style={{margin:"auto"}} className="alert alert-warning alerta-grupo" role="alert">
-            Nenhum grupo encontrado.
+            Nenhuma Empresa encontrada.
           </div>
         
         
@@ -500,7 +501,7 @@ function HandleInsert(){
 
       <Modal className='modal-confirm' show={showEdit} onHide={handleCloseEdit}>
         <Modal.Header  closeButton>
-          <h1>Alterar Grupo</h1>
+          <h1>Alterar Empresa</h1>
         </Modal.Header>
         <Modal.Body>
         {loadingUpdate ? (
@@ -520,13 +521,13 @@ function HandleInsert(){
             
             <div  className='bloco-input'>
               <div>
-            <p className="title-input" style={{textAlign:"justify"}} >Nome: </p>
+            <p className="title-input" style={{textAlign:"justify"}} >Descrição: </p>
               <input className='form-control inputlogin' 
               id=''
               type="text"
-              value={nameGrupo}
+              value={descricao}
               onChange={(e)=>{ 
-                setNameGrupo(e.target.value.toUpperCase());
+                setDescricao(e.target.value.toUpperCase());
               }}
               />
               </div>
@@ -541,7 +542,7 @@ function HandleInsert(){
             </div>
             <div className='coluna-dupla'>
             <div  className='bloco-input boco-botoes-grupo'>
-            <button disabled={loadingUpdate} id='btn-desc' className='btn btn-cadastrar 'onClick={EditGrupos}>Editar</button>
+            <button disabled={loadingUpdate} id='btn-desc' className='btn btn-cadastrar 'onClick={EditTipoNegociacao}>Editar</button>
             <button disabled={loadingUpdate}  id='btn-desc' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
             </div>
                     

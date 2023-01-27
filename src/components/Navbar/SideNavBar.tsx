@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/Navbar/SideNavBar.scss";
-import { MdArrowForwardIos, MdOutlinePriceChange } from "react-icons/md";
+import { MdArrowForwardIos, MdOutlinePriceChange, MdTableView } from "react-icons/md";
 
 import "../../styles/Navbar/navbarDashDark.scss";
 import { Link } from "react-router-dom";
@@ -24,6 +24,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { MdOutlineAppRegistration } from "react-icons/md";
 import { iDadosUsuario, iMenu } from '../../@types';
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
+import { GrTableAdd } from "react-icons/gr";
 
 
 export default function SideNavBar() {
@@ -268,6 +269,26 @@ export default function SideNavBar() {
                 </span>
               
                 <span style={{marginLeft:8,marginTop:6}}>Tabela de Preço</span>
+               
+              </Link>
+                </li>
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/cadastro-tipo-empresa">
+                <span>
+                  <FaIndustry id="" fontSize={25} />
+                </span>
+              
+                <span style={{marginLeft:8,marginTop:6}}>Cadastro de Empresas</span>
+               
+              </Link>
+                </li>
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/tabela-de-preco-cliente">
+                <span>
+                  <MdTableView id="" fontSize={28} />
+                </span>
+              
+                <span style={{marginLeft:8,marginTop:6}}>Tabela de Preço Cliente</span>
                
               </Link>
                 </li>
