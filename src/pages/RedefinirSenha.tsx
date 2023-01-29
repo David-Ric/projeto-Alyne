@@ -51,16 +51,16 @@ export default function RedefinirSenha() {
 
   function logado(){
    
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="1"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupoId==1){
       history('/admin-home'); 
     }
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="2"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupoId==2){
       history('/comercial-home'); 
     }
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="3"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupoId==3){
       history('/representante-home'); 
     }
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="4"){
+    if(usuario.token && usuario.status=="1"&& usuario.grupoId==4){
       history('/inicial-home'); 
     }
   }
@@ -127,16 +127,16 @@ function handleCloseMensage(){
          "@Portal/usuario",
          JSON.stringify(response.data)
        );
-        if(response.data.grupo =='1'){
+        if(response.data.grupoId ==1){
          history('/admin-home'); 
         }
-        if(response.data.grupo =='2'){
+        if(response.data.grupoId ==2){
          history('/comercial-home'); 
         }
-        if(response.data.grupo =='3'){
+        if(response.data.grupoId ==3){
          history('/representante-home'); 
         }
-        if(response.data.grupo =='4'){
+        if(response.data.grupoId ==4){
          history('/inicial-home'); 
         }
      

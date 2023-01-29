@@ -129,15 +129,15 @@ export default function CadastroVendedores() {
   function logado(){
    
    
-    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="2" && usuariolog.admin !=true){
-      history('/comercial-home'); 
-    }
-    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="3" && usuariolog.admin !=true){
-      history('/representante-home'); 
-    }
-    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="4" && usuariolog.admin !=true){
-      history('/inicial-home'); 
-    }
+    // if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="2" && usuariolog.admin !=true){
+    //   history('/comercial-home'); 
+    // }
+    // if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="3" && usuariolog.admin !=true){
+    //   history('/representante-home'); 
+    // }
+    // if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="4" && usuariolog.admin !=true){
+    //   history('/inicial-home'); 
+    // }
   }
  
   useEffect(() => {

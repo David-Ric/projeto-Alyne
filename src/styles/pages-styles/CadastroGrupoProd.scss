@@ -234,7 +234,7 @@ margin-top: 85px !important;
     .modal-content{
     width: 830px;
     height: auto;
-    top: -30px;
+   // top: -30px;
     left: -30%;
     @media(max-width:790px) {
         width: 100%;
@@ -271,60 +271,60 @@ margin-top: 85px !important;
     }
    
 }
-.modal-edit-user{
-    font-family: 'Unbounded', cursive;
-    .modal-content{
-        justify-content: center !important;
-    width: 1200px;
-    height: auto;
-    top: -30px;
-    left: -70%;
-    @media(max-width:790px) {
-        width: 100%;
-        left: -3%;
-        top:0px;
-      }
-    }
-    .modal-body{
-        justify-content: center !important;
-        align-items: center !important;
-        display: flex;
-        padding-top: 0 !important;
-        @media(max-width:790px) {
-          flex-direction: column !important;
-          }
-    }
-    .conteudo-user{
-        line-height: 10px !important;
-        padding-top: 60px;
-        margin: auto !important;
-        margin-bottom: 250px !important;
-        align-items: center;
-        width: 250px;
-        img{
-            margin-left: 50px;
-        }
-        h2{
-            text-align: center;
-            max-height: 25px;
-        }
-        @media(max-width:790px) {
-            justify-content: center !important;
-            padding: 10px;
-            margin-bottom: 0px !important;
-            }
-    }
-    .form-cadastro-user{
-        width: 75%;
-        @media(max-width:790px) {
-            width: 100%;
-          }
-    }
-    h1{
-    font-size: 25px;
-    }
+// .modal-edit-user{
+//     font-family: 'Unbounded', cursive;
+//     .modal-content{
+//         justify-content: center !important;
+//     width: 1200px;
+//     height: auto;
+//    // top: -30px;
+//     left: -70%;
+//     @media(max-width:790px) {
+//         width: 100%;
+//         left: -3%;
+//         top:0px;
+//       }
+//     }
+//     .modal-body{
+//         justify-content: center !important;
+//         align-items: center !important;
+//         display: flex;
+//         padding-top: 0 !important;
+//         @media(max-width:790px) {
+//           flex-direction: column !important;
+//           }
+//     }
+//     .conteudo-user{
+//         line-height: 10px !important;
+//        // padding-top: 60px;
+//         margin: auto !important;
+//         margin-bottom: 100px !important;
+//         align-items: center;
+//         width: 250px;
+//         img{
+//             margin-left: 50px;
+//         }
+//         h2{
+//             text-align: center;
+//             max-height: 25px;
+//         }
+//         @media(max-width:790px) {
+//             justify-content: center !important;
+//             padding: 10px;
+//             margin-bottom: 0px !important;
+//             }
+//     }
+//     .form-cadastro-user{
+//         width: 75%;
+//         @media(max-width:790px) {
+//             width: 100%;
+//           }
+//     }
+//     h1{
+//     font-size: 25px;
+//     }
    
-}
+// }
 .alerta-grupo{
     width:486%;
     margin:auto !important;

@@ -211,7 +211,7 @@ export default function MeuPerfil() {
           setTelefone(response.data.telefone);
           setAtivo(response.data.status);
           setFuncao(response.data.funcao);
-          setGrupo(response.data.grupo);
+          setGrupo(String(response.data.grupoId));
           setAdmin(response.data.admin);
           setComercial(response.data.comercial);
           setRepresentante(response.data.representante);
@@ -235,7 +235,7 @@ export default function MeuPerfil() {
   nomeCompleto:primeiroNome ,
   email: email,
   telefone:telefone,
-  grupo: grupo,
+  grupoId: Number(grupo),
   status: ativo,
   funcao: funcao,
   admin: admin,
@@ -356,9 +356,11 @@ export default function MeuPerfil() {
 
             <div className='conteudo-perfil'>
             <div className='conteudo-usercad'>
-            <img src={imageURL} alt=""className="imagem-user-name" onClick={()=>setShowPhoto(true)}/>
+            <img src={imageURL} alt=""className="imagem-user-name" 
+            // onClick={()=>setShowPhoto(true)}
+            />
             {/* <img src={PhotoUser} alt="" width={200} /> */}
-            <h6 style={{fontSize: 12, marginTop: 20, textAlign:"center"}}>Clique para alterar a imagem</h6>
+            {/* <h6 style={{fontSize: 12, marginTop: 20, textAlign:"center"}}>Clique para alterar a imagem</h6> */}
             {/* <input id='dropimg' type='file' name='uploade_file' onChange={handleInputChange}/> */}
             {/* <input id='dropimg' type="file" onChange={handleUploadFile} /> */}
             {/* <input type="file" onChange={handleUploadFile} />
@@ -487,7 +489,7 @@ export default function MeuPerfil() {
             <button disabled={loadingUpdate} style={{marginTop: 50}} id='btn-desck' className='btn btn-cadastrar 'onClick={editUser}>Editar</button>
 
             </div>
-                    <div  className='bloco-input '>
+                    {/* <div  className='bloco-input '>
                     <p className=" title-input"  >Acesso Personalizado: </p>
                     <div className='acesso-personalizado-perfil'>
 
@@ -551,7 +553,7 @@ export default function MeuPerfil() {
                       </div>
                       </>):(<></>)}
                     </div>
-                    </div>
+                    </div> */}
                     </div>
                     <button disabled={loadingUpdate} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={handleCloseEdit}>Editar</button>
 

@@ -595,3 +595,40 @@ thead{
   .cod-desc-Tabela{
 	display: flex;
   }
+  .btn-user{
+	width: 49% !important;
+	@media(max-width:790px) {
+		width: 100% !important;
+		}
+  }
+  .coluna-botoes-cad-user{
+	padding-left: 10px;
+	padding-right: 10px;
+	display: flex;
+	text-align: center !important;
+	button{
+		text-align: center !important;
+	}
+	justify-content: center;
+	@media(max-width:790px) {
+		flex-direction: column;
+		}
+  }
+  .bloco-permissao{
+	padding-left: 30px !important;
+	padding-right: 30px !important;
+	justify-content: center !important;
+	button{
+		text-align: center !important;
+		width: 50% !important;
+		margin-left: 25% !important;
+		@media(max-width:790px) {
+			width: 100% !important;
+			margin-left: 0% !important;
+		}
+	}
+	@media(max-width:790px) {
+		padding-left: 10px !important;
+	padding-right: 10px !important;
+		}
+  }

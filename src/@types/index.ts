@@ -4,13 +4,9 @@ export interface iDadosUsuario {
   id: number,
   username: string,
   email: string,
-  grupo: string,
+  grupoId: number,
   status: string,
   funcao:string,
-  admin: boolean,
-  usuario: boolean,
-  comercial: boolean,
-  representante: boolean,
   password: string,
   nomeCompleto: string,
   token: string
@@ -20,16 +16,20 @@ export interface iUsuarios {
 id: number,
 username: string,
 nomeCompleto: string,
-grupo: string,
+grupoId: number,
 funcao: string,
 email: string,
 telefone: string,
 imagemURL: string,
-admin: boolean,
-representante: boolean,
-usuario:boolean
-comercial: boolean,
 status: string,
+permissoes: [
+  {
+    id: number,
+    usuarioId: number,
+    menuId: number,
+    descMenu: string
+  }
+]
 }
 
 export interface iGrupos {

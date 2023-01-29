@@ -153,7 +153,7 @@ export default function SideNavBar() {
             
             
 
-             {usuario.grupo=="1"||usuario.admin==true?(<>
+             {usuario.grupoId==1?(<>
               {/* <li>
               <Link to="/cadastro-usuarios">
                 <span>
@@ -168,7 +168,7 @@ export default function SideNavBar() {
             </li> */}
             </>):(<></>)}
            
-            {usuario.grupo=="1" ||usuario.grupo=="2" ||usuario.comercial==true?(<>
+            {usuario.grupoId==1 ||usuario.grupoId==2?(<>
              <li>
               <Link onClick={Trade} to="">
                 <span>
@@ -295,7 +295,7 @@ export default function SideNavBar() {
               </ul>
               
               </div>  
-             {usuario.grupo=="1"||usuario.admin==true?(<>
+             {usuario.grupoId==1?(<>
             <li>
               <Link to="">
                 <span>
@@ -308,7 +308,7 @@ export default function SideNavBar() {
               </Link>
             </li>
             </>):(<></>)}
-            {usuario.grupo=="1"||usuario.admin==true?(<>
+            {usuario.grupoId==1?(<>
             <li>
               <Link to="">
                 <span>

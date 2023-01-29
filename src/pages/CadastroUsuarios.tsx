@@ -30,6 +30,7 @@ import { FaSearchPlus } from "react-icons/fa";
 import { AiOutlineClear } from "react-icons/ai";
 import { iDadosUsuario, iDataSelect } from '../@types';
 import Select from 'react-select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 export default function CadUsuarios() {
@@ -139,18 +140,18 @@ export default function CadUsuarios() {
 
   function logado(){
    
-    // if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="1"){
-    //   history('/admin-home'); 
-    // }
-    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="2" && usuariolog.admin !=true){
-      history('/comercial-home'); 
-    }
-    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="3" && usuariolog.admin !=true){
-      history('/representante-home'); 
-    }
-    if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupo=="4" && usuariolog.admin !=true){
-      history('/inicial-home'); 
-    }
+    //  if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupoId==1){
+    //    history('/admin-home'); 
+    //  }
+    //  if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupoId==2){
+    //    history('/comercial-home'); 
+    //  }
+    //  if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupoId==3 ){
+    //    history('/representante-home'); 
+    //  }
+    //  if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupoId==4){
+    //    history('/inicial-home'); 
+    //  }
   }
  
   useEffect(() => {
@@ -296,7 +297,7 @@ export default function CadUsuarios() {
           setTelefone(response.data.telefone);
           setAtivo(response.data.status);
           setFuncao(response.data.funcao);
-          setGrupo(response.data.grupo);
+          setGrupo(String(response.data.grupoId));
     
           setAdmin(response.data.admin);
           setComercial(response.data.comercial);
@@ -319,7 +320,7 @@ export default function CadUsuarios() {
   nomeCompleto:primeiroNome ,
   email: email,
   telefone:telefone,
-  grupo: grupo,
+  grupoId: Number(grupo),
   status: ativo,
   funcao: funcao,
   admin: admin,
@@ -413,7 +414,7 @@ export default function CadUsuarios() {
   await api.post("/api/Auth/register",{
         username: usuario,
         email: email,
-        grupo: grupo,
+        grupoId: Number(grupo),
         status: ativo,
         funcao: funcao,
         admin: admin,
@@ -541,7 +542,7 @@ function PesquisaStatus(){
               <p className="title-input"  >Pesquisar por nome: </p>
             <input  id="nomePesquisa"  
             type="text" 
-            className='form-coontrol inputlogin' 
+            className='form-control inputlogin' 
              name=""
              value={search}
              onChange={(e)=>{ 
@@ -612,9 +613,9 @@ function PesquisaStatus(){
         <tr key={index}>
          <td className='Nome-completo'>{usuarios.nomeCompleto}</td> 
           <td style={{textAlign:'center'}}>
-            {usuarios.grupo =="1"?'Administrativo'
-            :usuarios.grupo =="2"?"Comercial"
-            :usuarios.grupo =="3"?"Representante":"Usuario"}
+            {usuarios.grupoId ==1?'Administrativo'
+            :usuarios.grupoId ==2?"Comercial"
+            :usuarios.grupoId ==3?"Representante":"Usuario"}
             </td>
             <td style={usuarios.funcao ==null ||usuarios.funcao ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{usuarios.funcao?usuarios.funcao:"Não informado"}</td>
             <td style={usuarios.status =='1'?{color:'#008000', textAlign:"center"}:{color:'red', textAlign:"center"}}>{usuarios.status =="1"?"Ativo":"Inativo"}</td>
@@ -808,16 +809,6 @@ function PesquisaStatus(){
             <div  className='bloco-input'>
             <p id="grupos" className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
 
-
-            {/* <select className="form-select select campo-select" aria-label="Escolha o número de quartos" value={grupo}
-                          onChange={(e) => {setGrupo(e.target.value); LimparTodos();}}
-                        >
-                        <option value="">---</option>
-                        {/* <option value="1">ADMINISTRATIVO</option> 
-                        <option value="2">COMERCIAL</option>
-                        <option value="3">REPRESENTANTE</option>
-                        <option value="4">USUÁRIO</option>
-                    </select>    */}
                      <Select 
                      id='grupo-create'
                      className=" select-comp" 
@@ -831,8 +822,9 @@ function PesquisaStatus(){
                         console.log('Select',value)          
                       }} 
                     />
-                  
-            <p style={{marginTop:15}} className="title-input"  >Função: </p>
+                   </div>
+                   <div  className='bloco-input'>
+            <p style={{marginTop:2, marginBottom:5}} className="title-input"  >Função: </p>
               <input className='form-coontrol inputlogin' 
               id='funcao'
               type="text"
@@ -843,10 +835,10 @@ function PesquisaStatus(){
                 setFuncao(e.target.value);
               }}
               />
-            
-                    <button disabled={loadingCreate} id='btn-desck' className='btn btn-cadastrar'onClick={CreateUsuario}>Cadastrar</button>
+         
             </div>
-                    <div  className='bloco-input'>
+            
+                    {/* <div  className='bloco-input'>
                     <p className=" title-input"  >Acesso Personalizado: </p>
                     <div className='acesso-personalizado'>
                     
@@ -906,9 +898,12 @@ function PesquisaStatus(){
                       </div>
                       </>):(<></>)} 
                     </div>
-                    </div>
+                    </div> */}
                     </div> 
-                    <button disabled={loadingCreate} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={CreateUsuario}>Cadastrar</button>                  
+                    <div className='coluna-botoes-cad-user'>
+                    
+                    <button disabled={loadingCreate} type='button' id='' className='btn btn-cadastrar btn-user' onClick={CreateUsuario}>Cadastrar</button>                  
+                    </div>
             </div>
             </>    )}
         </Modal.Body>
@@ -936,6 +931,9 @@ function PesquisaStatus(){
             <img src={PhotoUser} alt="" width={150} />
             <h2>{usuario}</h2>
             <h2>{email}</h2>
+            
+            <button disabled={loadingCreate || grupo=='1'} id='' className='btn btn-permissao '>Permissões</button>
+          
           </div>
         <div  className='form-cadastro-user' >
             <div className='coluna-dupla'>
@@ -966,7 +964,9 @@ function PesquisaStatus(){
               }}
               disabled
               />
+              
             </div>
+            
             </div>
 
 
@@ -1037,7 +1037,7 @@ function PesquisaStatus(){
                     /> */}
               <select className="form-select select campo-select" 
             aria-label="Escolha o número de quartos" 
-            value={grupo}
+            value={String(grupo)}
             disabled={grupo=='1'}
                          onChange={(e) => {setGrupo(e.target.value);
                         }}
@@ -1064,7 +1064,7 @@ function PesquisaStatus(){
                     /> */}
                <select className="form-select select campo-select" 
             aria-label="Escolha o número de quartos" 
-            value={grupo}
+            value={String(grupo)}
             disabled={grupo=='1'}
                          onChange={(e) => {setGrupo(e.target.value);
                         }}
@@ -1081,11 +1081,15 @@ function PesquisaStatus(){
                </div>
             </div>
             <div className='coluna-dupla'>
+            
             <div  className='bloco-input'>
-            <button disabled={loadingUpdate||grupo=='1'} style={{marginTop: 135}} id='btn-desck' className='btn btn-cadastrar btn-editar'onClick={editUser}>Editar</button>
-            <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-desck' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
+            <button disabled={loadingUpdate||grupo=='1'}  id='' className='btn btn-cadastrar 'onClick={editUser}>Editar</button>
             </div>
-                    <div  className='bloco-input'>
+            <div  className='bloco-input'>
+            <button disabled={loadingUpdate}  id='' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
+            </div>
+           
+                    {/* <div  className='bloco-input'>
                     <p className=" title-input"  >Acesso Personalizado: </p>
                     <div className='acesso-personalizado-edit'>
                       
@@ -1149,10 +1153,10 @@ function PesquisaStatus(){
                       </div>
                       </>):(<></>)} 
                     </div>
-                    </div>
+                    </div> */}
                     </div> 
-                    <button disabled={loadingUpdate ||grupo=='1'} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={editUser}>Editar</button>                  
-                    <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-mob' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
+                    {/* <button disabled={loadingUpdate ||grupo=='1'} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={editUser}>Editar</button>                  
+                    <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-mob' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button> */}
             </div>
            </>)}
         </Modal.Body>

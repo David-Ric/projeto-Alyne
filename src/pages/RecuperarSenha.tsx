@@ -42,18 +42,18 @@ export default function RecuperarSenha() {
 
   function logado(){
    
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="1"){
-      history('/admin-home'); 
-    }
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="2"){
-      history('/comercial-home'); 
-    }
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="3"){
-      history('/representante-home'); 
-    }
-    if(usuario.token && usuario.status=="1"&& usuario.grupo=="4"){
-      history('/inicial-home'); 
-    }
+     if(usuario.token && usuario.status=="1"&& usuario.grupoId==1){
+       history('/admin-home'); 
+     }
+     if(usuario.token && usuario.status=="1"&& usuario.grupoId==2){
+       history('/comercial-home'); 
+     }
+     if(usuario.token && usuario.status=="1"&& usuario.grupoId==3){
+       history('/representante-home'); 
+     }
+     if(usuario.token && usuario.status=="1"&& usuario.grupoId==4){
+       history('/inicial-home'); 
+     }
   }
 
 
