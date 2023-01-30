@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import "../../styles/Navbar/SideNavBar.scss";
-import { MdArrowForwardIos, MdOutlinePriceChange, MdTableView } from "react-icons/md";
+import { MdArrowForwardIos, MdMenuBook, MdOutlinePriceChange, MdTableView } from "react-icons/md";
 
 import "../../styles/Navbar/navbarDashDark.scss";
 import { Link } from "react-router-dom";
 import { AiOutlinePieChart,AiOutlineUsergroupAdd } from "react-icons/ai";
 import { ImUsers } from "react-icons/im";
-import { BsBuilding, BsPlusSquare,BsFillFileEarmarkRichtextFill,BsCardImage } from "react-icons/bs";
+import { BsBuilding, BsPlusSquare,BsFillFileEarmarkRichtextFill,BsCardImage, BsMenuButtonWideFill } from "react-icons/bs";
 import { GoThreeBars } from "react-icons/go";
 import { IoIosClose } from "react-icons/io";
 import { BsCoin } from "react-icons/bs";
@@ -37,17 +37,17 @@ export default function SideNavBar() {
     const [active, setMode] = useState(false);
     const [openTrade, setOpenTrade] = useState(false);
 
-    const [menu, setMenu] = useState<iMenu[]>
-    ([
-      {id:1,menu:"Administrativo",subMenu:
-      [{id:5,idMenu:1, menu:"Usuarios",link:"/cadastro-usuarios",icon:""},
+    // const [menu, setMenu] = useState<iMenu[]>
+    // ([
+    //   {id:1,menu:"Administrativo",subMenu:
+    //   [{id:5,idMenu:1, menu:"Usuarios",link:"/cadastro-usuarios",icon:""},
       
-    ]},
-      {id:2,menu:"Cadastros",subMenu:[
-        {id:6,idMenu:2,menu:"Parceiros",link:"/cadastro-parceiros",icon:""},
-      ]},
+    // ]},
+    //   {id:2,menu:"Cadastros",subMenu:[
+    //     {id:6,idMenu:2,menu:"Parceiros",link:"/cadastro-parceiros",icon:""},
+    //   ]},
      
-    ]);
+    // ]);
    
     
 
@@ -289,6 +289,26 @@ export default function SideNavBar() {
                 </span>
               
                 <span style={{marginLeft:8,marginTop:6}}>Tabela de Preço Cliente</span>
+               
+              </Link>
+                </li>
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/cadastro-de-paginas">
+                <span>
+                  <MdMenuBook id="" fontSize={28} />
+                </span>
+              
+                <span style={{marginLeft:8,marginTop:6}}>Páginas Base</span>
+               
+              </Link>
+                </li>
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/montar-menu">
+                <span>
+                  <BsMenuButtonWideFill id="" fontSize={28} />
+                </span>
+              
+                <span style={{marginLeft:8,marginTop:6}}>Montar Menu</span>
                
               </Link>
                 </li>

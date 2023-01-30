@@ -111,19 +111,6 @@ export interface iGrupos {
       nomeGrupo: string
     }
 
-    export interface iMenu {
-      id: number,
-      menu: string,
-      subMenu:[
-        {
-        id: number,
-        idMenu: number,
-        menu: string,
-        link:string,
-        icon:string,
-        }
-      ]
-      }
       export interface IFile {
         uploaded?: boolean;
         preview: string;
@@ -183,3 +170,64 @@ export interface iGrupos {
           descricao: string,
         }
       }
+      export interface iPaginaBase{
+        id: number,
+        codigo: number,
+        nome: string,
+        url: string,
+        icon: string
+      }
+      export interface iMenu{
+        id: number,
+        codigo: number,
+        ordem: number,
+        nome: string,
+        icon: string,
+        subMenu:[{
+            id: number,
+            codigo: number,
+            ordem: number,
+            nome: string,
+            icon: string,
+            menuMasterId: number,
+           pagina: [
+              {
+                id: number,
+                codigo: number,
+                nome: string,
+                url: string,
+                icon: string,
+                menuId: number
+              }
+            ]
+          }],
+        pagina: [
+          {
+            id: number,
+            codigo: number,
+            nome: string,
+            url: string,
+            icon: string,
+            menuId: number
+          }
+        ]
+      }
+      export interface iSubMenu{
+             id: number,
+             codigo: number,
+             ordem: number,
+             nome: string,
+             icon: string,
+             menuMasterId: number,
+            pagina: [
+               {
+                 id: number,
+                 codigo: number,
+                 nome: string,
+                 url: string,
+                 icon: string,
+                 menuId: number
+               }
+             ]
+       }
+      

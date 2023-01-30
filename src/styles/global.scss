@@ -167,7 +167,7 @@ p {
 	//align-items: center;
 	justify-content: center !important;
 	//background-color: aqua;
-	min-height: 880px;
+	min-height: 984px;
 	height: auto;
 	padding-left: 110px !important;
 	padding-right: 50px !important;
@@ -631,4 +631,31 @@ thead{
 		padding-left: 10px !important;
 	padding-right: 10px !important;
 		}
+  }
+.coluna-dupla-menu{
+	justify-content: center !important;
+}
+  .bloco-menu-cad{
+	width: 49% !important;
+	@media(max-width:790px) {
+		width: 100% !important;
+	}
+  }
+  .btn-cad-menu{
+	padding: 12px !important;
+	font-size: 15px !important;
+	text-align: center !important;
+  }
+  .bloco-paginas{
+	display: flex !important;
+    flex-wrap: wrap;
+	width: 95%;
+	border: 2px solid #bcb9b9;
+	min-height: 40px;
+	margin:auto;
+	margin-top: 30px !important;
+	padding: 20px;
+  }
+  .grupo-de-paginas{
+	width: 300px !important;
   }

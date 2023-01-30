@@ -20,6 +20,8 @@ import CadastroTipoNegociacao from '../pages/Cadastros/TipoNegociacao';
 import TabelaPreco from '../pages/Cadastros/TabelaPreco';
 import CadastroTipoEmpresa from '../pages/Cadastros/CadastroTipoEmpresa';
 import CadastroTabelaPrecoCliente from '../pages/Cadastros/CadastroTabelaPrecoCliente';
+import CadastroPaginasBase from '../pages/Cadastros/CadastroPaginasBase';
+import MontarMenu from '../pages/Cadastros/MontarMenu';
 
 export interface IApplicationProps { }
 const usuario: iDadosUsuario = JSON.parse(
@@ -35,10 +37,10 @@ const Router: React.FunctionComponent<IApplicationProps> = (props) => {
             <Route path='/representante-home' element={<RepresentantePrincipal />} />
             <Route path='/recuperar-senha' element={<RecuperarSenha />} />
             <Route path='/redefinir-senha' element={<RedefinirSenha />} />
-            <Route path='/cadastro-usuarios' element={<CadUsuarios />} />
             <Route path='/meu-perfil' element={<MeuPerfil />} />
 
             {/* ====== Cadastros =============================================== */}
+            <Route path='/cadastro-usuarios' element={<CadUsuarios />} />
             <Route path='/cadastro-grupos-produtos' element={<CadastroGruposProdutos />} />
             <Route path='/cadastro-parceiros' element={<CadastroParceiros />} />
             <Route path='/cadastro-produtos' element={<CadastroProdutos />} />
@@ -49,6 +51,8 @@ const Router: React.FunctionComponent<IApplicationProps> = (props) => {
             <Route path='/tabela-de-preco' element={<TabelaPreco />} /> 
             <Route path='/cadastro-tipo-empresa' element={<CadastroTipoEmpresa />} /> 
             <Route path='/tabela-de-preco-cliente' element={<CadastroTabelaPrecoCliente />} /> 
+            <Route path='/cadastro-de-paginas' element={<CadastroPaginasBase />} /> 
+            <Route path='/montar-menu' element={<MontarMenu />} /> 
      
         </Routes>
 

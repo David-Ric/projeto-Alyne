@@ -127,7 +127,7 @@ export default function CadastroParceiros() {
   ];
   const classificacaopesq = [
     { value: '1', label: 'Diamante' },
-    { value: '2', label: 'Oruro' },
+    { value: '2', label: 'Ouro' },
     { value: '3', label: 'Prata' },
     { value: '4', label: 'Bronze' }
 
@@ -210,7 +210,7 @@ export default function CadastroParceiros() {
           // response.data.data.map((promotor:any) => {
           promotor.map((promotor:any) => {
             let rowGrupo: iDataSelect = {};
-            rowGrupo.value = String(promotor.codVendedor);
+            rowGrupo.value = String(promotor.Id);
             rowGrupo.label = String(promotor.codVendedor)+ " - " + promotor.nome ;
            
              options.push(rowGrupo);
@@ -439,8 +439,8 @@ export default function CadastroParceiros() {
         setClassificacao(response.data.classificacao);
         setTamanhoLoja(response.data.tamanhoLoja);
         setCodVendedor(response.data.codVendedor);
-        setInputVenedor(response.data.codVendedor+ '-' +response.data.vendedores.nome)
-        inputVenedor=response.data.codVendedor+ '-' +response.data.vendedores.nome
+        setInputVenedor(response.data.vendedores.codVendedor+ '-' +response.data.vendedores.nome)
+        inputVenedor=response.data.vendedores.codVendedor+ '-' +response.data.vendedores.nome
         setEndereco(response.data.endereco);
         setBairro(response.data.bairro);
         setMunicipio(response.data.municipio);
@@ -538,7 +538,7 @@ export default function CadastroParceiros() {
   }
     //============ Criar Usuario ===============================//
     async function CreateParceiro(){
-
+console.log('codVendedor',codVendedor)
       if(nome==''){
         let senhaconf: any;
         senhaconf = document.getElementById("nome");
@@ -567,6 +567,7 @@ export default function CadastroParceiros() {
        
       }
       if(canal==''){
+        window.scrollTo(0, 0);
         let senhaconf: any;
         senhaconf = document.getElementById("canal");
         document.getElementById("canal")?.focus();
@@ -575,6 +576,7 @@ export default function CadastroParceiros() {
       return
       }
       if(classificacao==''){
+        window.scrollTo(0, 0);
         let senhaconf: any;
         senhaconf = document.getElementById("classificacao");
         document.getElementById("classificacao")?.focus();
@@ -583,6 +585,7 @@ export default function CadastroParceiros() {
       return
       }
       if(tamanhoLoja==''){
+        window.scrollTo(0, 0);
         let senhaconf: any;
         senhaconf = document.getElementById("tamanhoLoja");
         document.getElementById("tamanhoLoja")?.focus();
@@ -590,14 +593,25 @@ export default function CadastroParceiros() {
         setMsgErro("É obrigatório informar o tamanho da loja.");
       return
       }
-      // if(promotor==''){
-      //   let senhaconf: any;
-      //   senhaconf = document.getElementById("promotor");
-      //   document.getElementById("promotor")?.focus();
-      //   setAlertErroRegister(true);
-      //   setMsgErro("É obrigatório informar o promotor.");
-      // return
-      // }
+       if(codVendedor==0){
+        window.scrollTo(0, 0);
+         let senhaconf: any;
+         senhaconf = document.getElementById("promotor");
+         document.getElementById("promotor")?.focus();
+         setAlertErroRegister(true);
+         setMsgErro("É obrigatório informar o promotor.");
+       return
+       }
+       if(tipoNegociacao==''){
+        window.scrollTo(0, 0);
+        let senhaconf: any;
+        senhaconf = document.getElementById("promotor");
+        document.getElementById("promotor")?.focus();
+        setAlertErroRegister(true);
+        setMsgErro("É obrigatório informar o tipo de negociação.");
+      return
+      }
+       
 
      
   setLoadingCreate(true)
@@ -1017,7 +1031,8 @@ function SemVisitar(){
               value={tipoPessoa}
               onChange={(e)=>{ 
                 setTipoPessoa(e.target.value); 
-                setCnpjCpf("");          
+                setCnpjCpf("");  
+                LimparTodos();        
                }}
               >
                 <option value="F">Física</option>
@@ -1342,7 +1357,7 @@ function SemVisitar(){
                     <select className="form-select inputparceiro"
                       aria-label="Escolha o número de quartos"
                       value={tipoNegociacao}
-                         onChange={(e) => {setTipoNegociacao(e.target.value);}}
+                         onChange={(e) => {setTipoNegociacao(e.target.value);LimparTodos();}}
                         >
                            <option value="0"></option>
                            {negociacaoTipo.length > 0 ? (

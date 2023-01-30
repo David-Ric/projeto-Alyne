@@ -117,6 +117,34 @@ margin-top: 85px !important;
      display: none;
     }
 }
+.logo-cadastro-menu{
+    margin-top: 40px;
+    width: 300px;
+    margin-right: 40px;
+  // height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/MONTARMENU.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
+.logo-cadastro-paginas{
+    margin-top: 40px;
+    width: 300px;
+    margin-right: 40px;
+  // height:355px;
+   bottom: 20px !important;
+    background-image: url("../../assets/PAGINASBASE.png");
+    background-size: 100%;
+    background-repeat: no-repeat, repeat;
+    margin-bottom: 180px;
+    @media(max-width:790px) {
+        display: none;
+     }
+}
 .logo-cadastro-vendas{
     margin-top: 60px;
     width: 280px;
