@@ -20,18 +20,18 @@
     //  }
 }
 
-.form-cadastro-user{
-  //  width: 800px;
-   // min-height: 560px;
-   // box-shadow: 0 4px 8px 1px #121213;
-   // padding: 15px;
-    background-color: #fff;
-    top: 20px !important;
-    @media (max-width:768px){
-		width: 100%;
-        padding: 8px;
-	  }
-}
+// .form-cadastro-user{
+//   //  width: 800px;
+//    // min-height: 560px;
+//    // box-shadow: 0 4px 8px 1px #121213;
+//    // padding: 15px;
+//     background-color: #fff;
+//     top: 20px !important;
+//     @media (max-width:768px){
+// 		width: 100%;
+//         padding: 8px;
+// 	  }
+// }
 .acesso-personalizado-edit{
     width: 100%;
     margin-top: 5px;
@@ -42,13 +42,17 @@
     padding: 15px;
 }
 .acesso-personalizado{
-    width: 100%;
+    width: 40%;
     margin-top: 5px;
-    height: 208px;
+    margin-left: 10px;
+   // height: 208px;
     background-color: #f9f5f5;
     box-shadow: 0 4px 8px 1px #c6c6ca;
     flex: 0 0 auto;
     padding: 15px;
+    .tabela-responsiva{
+        margin-top: 10px !important;
+    }
 }
 .check-grupo{
     display: flex;
@@ -143,10 +147,10 @@ margin-top: 85px !important;
 .modal-cadastro-user{
     font-family: 'Unbounded', cursive;
     .modal-content{
-    width: 830px;
+    width: 1200px;
     height: auto;
    // top: -30px;
-    left: -30%;
+    left: -70%;
     @media(max-width:790px) {
         width: 100%;
         left: 0%;
@@ -285,4 +289,11 @@ display: flex;
 @media(max-width:790px) {
     flex-direction: column;
    }
+}
+.conteudo-modal-cadastro-user{
+    width: 100% !important;
+    display:flex;
+}
+.coluna-dados-user{
+    width: 70% !important;
 }

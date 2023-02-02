@@ -189,17 +189,7 @@ export interface iGrupos {
             ordem: number,
             nome: string,
             icon: string,
-            menuMasterId: number,
-           pagina: [
-              {
-                id: number,
-                codigo: number,
-                nome: string,
-                url: string,
-                icon: string,
-                menuId: number
-              }
-            ]
+            menuId: number,
           }],
         pagina: [
           {
@@ -218,7 +208,7 @@ export interface iGrupos {
              ordem: number,
              nome: string,
              icon: string,
-             menuMasterId: number,
+             menuId: number,
             pagina: [
                {
                  id: number,
@@ -229,5 +219,13 @@ export interface iGrupos {
                  menuId: number
                }
              ]
+       }
+       export interface iPaginas{
+        id: number,
+        codigo: number,
+        nome: string,
+        url: string,
+        icon: string,
+        menuId: number
        }
       

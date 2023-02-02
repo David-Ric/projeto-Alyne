@@ -313,7 +313,7 @@ export default function CadastroPaginasBase() {
           handleShowMensage();
           setAlertErroMensage(true);
           window.scrollTo(0, 0);
-          setMsgErro(`Página criads com sucesso.`);
+          setMsgErro(`Página criada com sucesso.`);
         })
         .catch((error) => {
          
@@ -723,6 +723,7 @@ function PesquisaCod(){
               <input className='form-coontrol inputlogin' 
               id='codigo'
               type="text"
+              disabled
               //name='user' 
               value={codigo}
               //onKeyDown={LimparErro} 

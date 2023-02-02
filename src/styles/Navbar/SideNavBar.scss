@@ -12,7 +12,7 @@
     color: #e0dede !important;
 	text-decoration: none;
     line-height: 70px;
-    padding-left: 30px;
+    padding-left: 20px;
     a{
         color: #e0dede !important;
         text-decoration: none !important;
@@ -613,10 +613,54 @@
     color: #4BB7F1;
    }
    .accordion-body{
+    padding: 1px !important;
+   // padding-left: 10px !important;
     color: #e0dede;
     background-color: #555454!important;
    }
    .accordion-body:hover{
     color: #4BB7F1;
   
+   }
+   .menuFechado{
+    margin-top: 5px !important;
+    width: 65px !important;
+    .accordion-button{
+      padding: 1px !important;
+    }
+    #logo-admin{
+      font-size: 30px !important;
+    }
+    #logo-admin2{
+      font-size: 24px !important;
+      margin-left: 4px !important;
+      margin-right: 15px !important;
+    }
+   }
+   .menuAberto{
+    transition: 0.7s;
+    width: 340px !important;
+    .accordion-button{
+      padding: 5px !important;
+    }
+    #logo-admin{
+      font-size: 27px !important;
+      margin-right: 15px !important;
+    }
+    #logo-admin2{
+      font-size: 24px !important;
+      margin-left: 4px !important;
+      margin-right: 15px !important;
+    }
+   }
+   .menuInterativo{
+    margin-top: 30px !important;
+   }
+   .invisivel{
+    transition: 0.7s;
+    display: none;
+   }
+   .bloco-botoes-finalizar{
+    text-align: center !important;
+    align-items: center;
    }

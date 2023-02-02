@@ -21,7 +21,7 @@ import { TfiNewWindow } from "react-icons/tfi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Table from 'react-bootstrap/Table';
-import { iUsuarios } from '../@types';
+import { iMenu, iUsuarios } from '../@types';
 import OverlayTrigger from 'react-bootstrap/esm/OverlayTrigger';
 import { Tooltip } from 'react-bootstrap';
 import Paginacao from "../components/Paginacao";
@@ -53,7 +53,7 @@ export default function CadUsuarios() {
   const [comercial, setComercial] = useState(false);
   const [representante, setRepresentante] = useState(false);
   const [tipoUsuario, setTipoUsuario] = useState(false);
-
+  let [menuPrincipal, setMenuPrincipal] = useState<iMenu[]>([]);
 
   const [error, setError] = useState("");
   const [msgErro, setMsgErro] = useState("");
@@ -73,6 +73,8 @@ export default function CadUsuarios() {
   let [usuariosCount, setUsuariosCount] = useState<iUsuarios[]>([]);
   let [usuariosFilter, setUsuariosFilter] = useState<iUsuarios[]>([]);
   let [totalPaginas, setTotalPaginas] = useState(0);
+  let [totalPaginasPerm, setTotalPaginasPerm] = useState(0);
+
 
    const handleClose = () => setShow(false);
    const handleCloseEdit = () => setShowEdit(false);
@@ -87,6 +89,7 @@ export default function CadUsuarios() {
 
    const [pagina, setPagina] = useState(1);
    const [qtdePagina, setQtdePagina] = useState(10);
+   const [qtdePagMenu, setQtdePagMeu] = useState(5);
 
   
 
@@ -135,9 +138,69 @@ export default function CadUsuarios() {
   // const handleShow = () => setShow(true);
   useEffect(() => { 
     logado()
+   
    // GetUsuariosAcount();
   },[]);
+  async function GetMontarMenu() {
+    setFilter(false);
 
+    await api
+
+      .get(`/api/Menu?pagina=${pagina}&totalpagina=${qtdePagMenu}`)
+      .then((response) => {
+
+        setMenuPrincipal(response.data.data);
+        menuPrincipal=response.data.data;
+      //  console.log("vendedor",menuPrincipal)
+
+
+        setTotalPaginasPerm(Math.ceil(response.data.total / qtdePagMenu));
+
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+
+  }
+  async function GetPaginaId(id:any) {
+    // setIdPagina(0);
+    // setCodigo('');
+    // setNome('');
+    // setUrl('');
+    // setIcon('');
+
+    setEdit(true);
+    setShowEdit(true);
+    setLoadingUpdate(false);
+    await api
+      .get(`/api/Menu/${id}`)
+      .then((response) => {
+        // setMenuIdGet(response.data.pagina);
+        //  menuIdGet=response.data.pagina;
+        //   setIdPagina(response.data.id);
+        //    setNome(response.data.nome);
+        //    setNomeMenuEdit(response.data.nome);
+        //    nomeMenuEdit=response.data.nome;
+        //     setNomeSubMenuEdit(response.data.subMenu[0]?.nome);
+        //     nomeSubMenuEdit=response.data.subMenu[0]?.nome;
+        //     setCodMenuEdit(response.data.codigo);
+        //     codMenuEdit=response.data.codigo;
+        //     setIdSubMenuEdit(response.data.subMenu[0]?.id);
+        //     idSubMenuEdit=response.data.subMenu[0]?.id;
+        //     setIdMenuEdit(response.data.id);
+        //     idMenuEdit=response.data.id;
+        //    setCodigo(String(response.data.codigo));
+        //    setUrl(response.data.url);
+        //    setIcon(response.data.icon);
+        //    GetSubMenuEdit()
+        console.log('menu Id',response.data);
+        // console.log("menu get id",menuIdGet);
+        // GetPaginasEdite();
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+  }
   function logado(){
    
     //  if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupoId==1){
@@ -156,6 +219,7 @@ export default function CadUsuarios() {
  
   useEffect(() => {
     window.scrollTo(0, 0);
+    GetMontarMenu();
     if(!filter){
       GetUsuarios();
     }else{
@@ -684,7 +748,7 @@ function PesquisaStatus(){
 
       {/* ================Modal Register ============================================== */}
 
-      <Modal className='modal-cadastro-user' show={show} onHide={handleClose}>
+      <Modal className='modal-cadastro-user ' show={show} onHide={handleClose}>
         <Modal.Header  closeButton>
           <h1>Cadastro de Usuário</h1>
         </Modal.Header>
@@ -705,7 +769,8 @@ function PesquisaStatus(){
 						<Alert msg={msgErro} setAlertErro={setAlertErroRegister} />
 					</div>
 					)}
-        <div  className='form-cadastro-user' >
+          <div className='conteudo-modal-cadastro-user'>
+        <div  className='coluna-dados-user' >
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <p className="title-input"  >Nome Completo: <span style={{color:'red'}}>*</span></p>
@@ -721,20 +786,6 @@ function PesquisaStatus(){
               }}
               />
             </div>
-            {/* <div  className='bloco-input'>
-            <p className="title-input" >Último Nome: <span style={{color:'red'}}>*</span> </p>
-              <input className='form-control inputlogin' 
-              id='ultnome'
-              type="text"
-              //name='user' 
-              value={nomeUsuario}
-              //onKeyDown={LimparErro} 
-              onChange={(e)=>{ 
-                setNomeUsuario(e.target.value);
-                LimparTodos();
-              }}
-              />
-            </div> */}
             </div>
 
 
@@ -804,6 +855,9 @@ function PesquisaStatus(){
               />
               
                </div>
+               {/* <div  className='bloco-input bloco-btn-perm'>
+               <button disabled={loadingCreate || grupo=='1'} id='' className='btn btn-permissao-criar '>Permissões</button>
+               </div> */}
             </div>
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
@@ -838,71 +892,100 @@ function PesquisaStatus(){
          
             </div>
             
-                    {/* <div  className='bloco-input'>
-                    <p className=" title-input"  >Acesso Personalizado: </p>
-                    <div className='acesso-personalizado'>
+                   
                     
-                    {grupo !="1"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" name="grupo" 
-                      id="grupo" 
-                      checked={admin}  
-                      onChange={({ target }) => {
-                      setAdmin(target.checked);
-                      }} 
-                      />
-                      <p className='text'>Administrativo</p>
-                      </div>
-                      </>):(<></>)}
-                      {grupo !="2"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo"
-                      checked={comercial}  
-                      onChange={({ target }) => {
-                      setComercial(target.checked);
-                      }}  
-                      />
-                      <p className='text'>Comercial</p>
-                      </div>
-                      </>):(<></>)} 
-                      {grupo !="3"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo"
-                      checked={representante}  
-                      onChange={({ target }) => {
-                      setRepresentante(target.checked);
-                      }}  
-                      />
-                      <p className='text'>Representante</p>
-                      </div>
-                      </>):(<></>)} 
-                      {grupo !="4"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo" 
-                      checked={tipoUsuario}  
-                      onChange={({ target }) => {
-                      setTipoUsuario(target.checked);
-                      }} 
-                      />
-                      <p className='text'>Usuário</p>
-                      </div>
-                      </>):(<></>)} 
-                    </div>
-                    </div> */}
                     </div> 
                     <div className='coluna-botoes-cad-user'>
                     
                     <button disabled={loadingCreate} type='button' id='' className='btn btn-cadastrar btn-user' onClick={CreateUsuario}>Cadastrar</button>                  
+                    </div>
+            </div>
+            <div className='acesso-personalizado'>
+              <h2>Conceder permissões:</h2>
+            <div className="table-responsive table-scroll tabela-responsiva">
+
+<div className=' table-wrap'>
+<Table responsive className='table-global table  main-table'>
+<thead>
+<tr className="tituloTab">
+<th style={{width: 100}} className="th1 cod-grupo">Codigo</th>
+<th className="th1 Nome-completo">Nome</th>
+<th style={{textAlign:'center',color:"transparent"}} className="th4 ">..........</th>
+<th style={{textAlign:'center',color:"transparent"}} className="th4 ">..........</th>
+<th style={{textAlign:'center'}} className="th4 fixed-table">Ações</th>
+</tr>
+</thead>
+<tbody>
+
+{menuPrincipal.length > 0 ? (
+              <>
+{menuPrincipal.map((pagina_Base)=> (
+<tr >
+<td style={{textAlign:"center"}} className=''>{pagina_Base.codigo}</td>
+<td className='Nome-completo'>{pagina_Base.nome}</td>
+
+
+{/* <td style={pagina_Base.parceiroNome ==null ||pagina_Base.parceiroNome ==""?{color:'red',textAlign:'center'}:{color:'#000',textAlign:'center'}}>{pagina_Base.parceiroNome?vendedores.parceiroNome:"Não informado"}</td> */}
+
+
+
+  <td style={{textAlign:'center'}} className="fixed-table td-fixo">
+
+  <OverlayTrigger
+    placement={"top"}
+    delay={{ show: 100, hide: 250 }}
+    overlay={<Tooltip>Editar</Tooltip>}
+  >
+    <button
+    className='btn btn-table btn-edit'
+    style={{marginRight:15,marginLeft:15}}
+    onClick={()=>{
+
+      GetPaginaId(pagina_Base.id);
+    //  console.log("id ",pagina_Base.id)
+    // ShowModalEdit();
+      }}>
+      <HiOutlinePencilSquare/>
+    </button>
+    </OverlayTrigger>
+
+
+    {/* <OverlayTrigger
+    placement={"top"}
+    delay={{ show: 100, hide: 250 }}
+    overlay={<Tooltip>Deletar</Tooltip>}
+  >
+    <button onClick={()=>{
+     DeletePagina(pagina_Base.id);
+    }}
+
+    className='btn btn-table btn-delete'>
+      <RiDeleteBin5Line/>
+    </button>
+    </OverlayTrigger> */}
+    </td>
+</tr>
+))}
+</>
+): (
+
+<div style={{margin:"auto"}} className="alert alert-warning alerta-Vendedor" role="alert">
+  Nenhum menu encontrado.
+</div>
+
+
+)}
+</tbody>
+</Table>
+<Paginacao
+          total={totalPaginasPerm}
+          limit={1}
+          paginaAtual={pagina}
+          setPagina={setPagina}
+        />
+</div>
+</div>   
+                
                     </div>
             </div>
             </>    )}

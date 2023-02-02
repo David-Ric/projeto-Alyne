@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/Navbar/SideNavBar.scss";
-import { MdArrowForwardIos, MdMenuBook, MdOutlinePriceChange, MdTableView } from "react-icons/md";
+import { MdArrowForwardIos, MdMenuBook, MdOutlineAdminPanelSettings, MdOutlinePriceChange, MdTableView } from "react-icons/md";
 
 import "../../styles/Navbar/navbarDashDark.scss";
 import { Link } from "react-router-dom";
@@ -15,14 +15,14 @@ import { FaHospitalUser, FaLayerGroup,FaIndustry } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
 import { RiShoppingBag3Line } from "react-icons/ri";
 import { TbBusinessplan } from "react-icons/tb";
-
+import api from '../../services/api';
 
 import Accordion from 'react-bootstrap/Accordion';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 import { MdOutlineAppRegistration } from "react-icons/md";
-import { iDadosUsuario, iMenu } from '../../@types';
+import { iDadosUsuario, iMenu, iPaginas } from '../../@types';
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { GrTableAdd } from "react-icons/gr";
 
@@ -36,18 +36,14 @@ export default function SideNavBar() {
     const [textMenu, settextMenu] = useState(true);
     const [active, setMode] = useState(false);
     const [openTrade, setOpenTrade] = useState(false);
+    const [filter, setFilter] = useState(false);
+    let [menuPrincipal, setMenuPrincipal] = useState<iMenu[]>([]);
+    let [paginasMenu, setPaginasMenu] = useState<iPaginas[]>([]);
+    const [pagina, setPagina] = useState(1);
+    const [qtdePagina, setQtdePagina] = useState(10);
+    let [totalPaginas, setTotalPaginas] = useState(0);
+    const menuGet =localStorage.getItem('@Portal/usuario/atualiza-menu')
 
-    // const [menu, setMenu] = useState<iMenu[]>
-    // ([
-    //   {id:1,menu:"Administrativo",subMenu:
-    //   [{id:5,idMenu:1, menu:"Usuarios",link:"/cadastro-usuarios",icon:""},
-      
-    // ]},
-    //   {id:2,menu:"Cadastros",subMenu:[
-    //     {id:6,idMenu:2,menu:"Parceiros",link:"/cadastro-parceiros",icon:""},
-    //   ]},
-     
-    // ]);
    
     
 
@@ -58,7 +54,45 @@ export default function SideNavBar() {
     const ToggleMode = () => {
       setMode(!active);
     };
+    useEffect(() => {
+      window.scrollTo(0, 0);
+     if(localStorage.getItem('@Portal/usuario/atualiza-menu')=='1'){
+      GetMontarMenu();
+     }
+
+    });
     
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+      GetMontarMenu();
+
+    },[pagina]);
+
+    async function GetMontarMenu() {
+      setFilter(false);
+      localStorage.removeItem('@Portal/usuario/atualiza-menu')
+      await api
+      
+        .get(`/api/Menu?pagina=${pagina}&totalpagina=${qtdePagina}`)
+        .then((response) => {
+      
+          setMenuPrincipal(response.data.data);
+          menuPrincipal=response.data.data;
+          console.log("menu principal",menuPrincipal)
+          
+       
+          setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
+     
+        })
+        .catch((error) => {
+          console.log("Ocorreu um erro");
+        });
+       
+    }
+
+
+
 
     function MenuMob(){
         if(!menuExpanded){
@@ -80,6 +114,20 @@ export default function SideNavBar() {
             setespand(false)
         }
         }
+
+
+        function TextMenu() {
+          if(!isExpanded){
+             setTimeout(function() {
+              
+              setespand(true)
+              
+             }, 300);
+          }
+          else{
+            
+          }
+          }
          
 
     function sumirtexto(){
@@ -139,6 +187,163 @@ export default function SideNavBar() {
 					
                     <div className="sidebar-menu">
           <ul>
+            <li className="menuInterativo">
+          {menuPrincipal.length>0?(<>
+            {menuPrincipal.map((menu,index)=> (<>
+            <li style={{marginTop:30}}>
+             <Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" flush key={index}>
+               <Accordion.Item eventKey="">
+               {/* <Accordion.Header 	onClick={() => {setExpendState(true);textVisual()}}> */}
+                 <Accordion.Header 	onClick={() => {setExpendState(true);TextMenu()}}>
+                 {menu.codigo==1?
+                 (<> <MdOutlineAdminPanelSettings  id="logo-admin" /></>):
+                 menu.codigo==2?
+                 (<> <TiShoppingCart fontSize={24} id="logo-admin" /></>):
+                 menu.codigo==3?
+                 (<> <BsCoin fontSize={24} id="logo-admin2"  /></>):
+                 menu.codigo==4?
+                 (<> <MdOutlineAppRegistration fontSize={24} id="logo-admin"  /></>):(<></>)}
+                 {espand && (
+                   <span>{menu?.nome}</span>)}
+                   
+                   </Accordion.Header>
+         
+                 <Accordion.Body>
+                  {menu.subMenu[0]?.codigo>0?(<>
+                    <Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" key={menu.subMenu[0].id} flush>
+               <Accordion.Item eventKey="">
+               {/* <Accordion.Header 	onClick={() => {setExpendState(true);textVisual()}}> */}
+                 <Accordion.Header 	onClick={() => {setExpendState(true);TextMenu()}}>
+                 {menu.subMenu[0]?.codigo===1?
+                 (<> <MdOutlineAdminPanelSettings fontSize={24} id="logo-admin" /></>):
+                 menu.subMenu[0]?.codigo===2?
+                 (<> <TiShoppingCart fontSize={24} id="logo-admin"  /></>):
+                 menu.subMenu[0]?.codigo===3?
+                 (<> <BsCoin fontSize={24} id="logo-admin2"  /></>):
+                 menu.subMenu[0]?.codigo===4?
+                 (<> <MdOutlineAppRegistration fontSize={24} id="logo-admin"  /></>):(<></>)}
+                 {espand && (
+                   <span>{menu.subMenu[0]?.nome}</span>)}
+                   
+                   </Accordion.Header>
+         
+                 <Accordion.Body>
+                  <div>
+                 
+                  {menu.pagina.map((pagina)=>(<>
+                  <Link style={{display:"flex", marginLeft:10}} 
+                          to={pagina?.url}>
+                       < span>
+                       {pagina?.codigo===5?
+                 (<> <AiOutlineUsergroupAdd fontSize={24} id="logo-admin" /></>):
+                 pagina?.codigo===6?
+                 (<> <FiUsers fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===7?
+                 (<> <FaHospitalUser fontSize={24} id="logo-admin2"  /></>):
+                 pagina?.codigo===8?
+                 (<> <FaLayerGroup fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===9?
+                 (<> <RiShoppingBag3Line fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===10?
+                 (<> <TiShoppingCart  fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===11?
+                 (<> <TbBusinessplan fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===12?
+                 (<> <MdOutlinePriceChange fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===13?
+                 (<> <FaIndustry fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===14?
+                 (<> <MdTableView fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===15?
+                 (<> <TiShoppingCart fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===16?
+                 (<> <MdMenuBook fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===17?
+                 (<> <BsMenuButtonWideFill fontSize={24} id="logo-admin"  /></>):
+                 (<></>)}
+                       
+   
+                       </span>
+                       <span className={isExpanded?'visivel':'invisivel'} style={{marginLeft:8,marginTop:6}}>{pagina?.nome}</span>
+                     </Link> 
+                 </>))}
+                 </div>
+                 </Accordion.Body>
+         
+               </Accordion.Item>
+             </Accordion> 
+                  </>):(<>
+                  
+                    {menu.pagina.map((pagina)=>(<>
+                  <Link style={{display:"flex", marginLeft:10}} 
+                          to={pagina?.url}>
+                       < span>
+                       {pagina?.codigo===5?
+                 (<> <AiOutlineUsergroupAdd fontSize={24} id="logo-admin" /></>):
+                 pagina?.codigo===6?
+                 (<> <FiUsers fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===7?
+                 (<> <FaHospitalUser fontSize={24} id="logo-admin2"  /></>):
+                 pagina?.codigo===8?
+                 (<> <FaLayerGroup fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===9?
+                 (<> <RiShoppingBag3Line fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===10?
+                 (<> <TiShoppingCart  fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===11?
+                 (<> <TbBusinessplan fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===12?
+                 (<> <MdOutlinePriceChange fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===13?
+                 (<> <FaIndustry fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===14?
+                 (<> <MdTableView fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===15?
+                 (<> <TiShoppingCart fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===16?
+                 (<> <MdMenuBook fontSize={24} id="logo-admin"  /></>):
+                 pagina?.codigo===17?
+                 (<> <BsMenuButtonWideFill fontSize={24} id="logo-admin"  /></>):
+                 (<></>)}
+                       
+   
+                       </span>
+                       <span className={isExpanded?'visivel':'invisivel'} style={{marginLeft:8,marginTop:6}}>{pagina?.nome}</span>
+                     </Link> 
+                 </>))}
+                  </>)}
+                  
+                 {/* <Link style={{display:"flex"}} 
+                          to={menu.subMenu[0].pagina[0]?.url}>
+                       < span>
+                       {menu.subMenu[0]?.id==5?(<><AiOutlineUsergroupAdd id="logo1" fontSize={35}  /></>):(<><FiUsers id="" fontSize={28} /></>)}
+                         
+                         
+                       </span>
+                       <span style={{marginLeft:8,marginTop:6}}>{menu.subMenu[0].pagina[0]?.url}</span>
+                     </Link> */}
+                 </Accordion.Body>
+         
+               </Accordion.Item>
+             </Accordion> 
+             </li>
+             </>))} 
+          </>):(<>
+                <ul>
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/montar-menu">
+                <span>
+                  <BsMenuButtonWideFill id="" fontSize={23} />
+                </span>
+              
+                <span className={isExpanded?'visivel':'invisivel'} style={{marginLeft:12,marginTop:6}}>Montar Menu</span>
+               
+              </Link>
+                </li>
+                </ul>
+            </>)}  
+            </li>
+           
             {/* <li>
               <Link to="/">
                 <span>
@@ -167,8 +372,9 @@ export default function SideNavBar() {
               </Link>
             </li> */}
             </>):(<></>)}
+            
            
-            {usuario.grupoId==1 ||usuario.grupoId==2?(<>
+            {/* {usuario.grupoId==1 ||usuario.grupoId==2?(<>
              <li>
               <Link onClick={Trade} to="">
                 <span>
@@ -180,13 +386,13 @@ export default function SideNavBar() {
                 <span className="textmobile">Cadastros</span>
               </Link>
             </li> 
-             </>):(<></>)}
-             <div  className={openTrade?"submenu-cad menu-cadastros":"submenu-cad menu-no-cadastros"}>
+             </>):(<></>)} */}
+             {/* <div  className={openTrade?"submenu-cad menu-cadastros":"submenu-cad menu-no-cadastros"}>
               <ul>
               <li>
               <Link style={{display:"flex"}} onClick={Trade}  to="/cadastro-usuarios">
                 <span>
-                {/* <FontAwesomeIcon icon={icon} /> */}
+              
                <AiOutlineUsergroupAdd id="logo1" fontSize={35}  /> 
                 </span>
                 <span className="textmobile">Usuários</span>
@@ -314,9 +520,9 @@ export default function SideNavBar() {
                 </li>
               </ul>
               
-              </div>  
+              </div>   */}
              {usuario.grupoId==1?(<>
-            <li>
+            {/* <li>
               <Link to="">
                 <span>
                   <FaIndustry fontSize={24} id="logo3" />
@@ -326,10 +532,10 @@ export default function SideNavBar() {
                 )}
                 <span className="textmobile">Trade</span>
               </Link>
-            </li>
+            </li> */}
             </>):(<></>)}
             {usuario.grupoId==1?(<>
-            <li>
+            {/* <li>
               <Link to="">
                 <span>
                   <BsCoin id="logo4" fontSize={28} />
@@ -339,36 +545,12 @@ export default function SideNavBar() {
                 )}
                 <span className="textmobile">Vendas</span>
               </Link>
-            </li>
+            </li> */}
             </>):(<></>)}
              
       
 
-      {/* {menu.map((menu,index)=> (<>
-             
-             <Accordion defaultActiveKey="0" flush>
-               <Accordion.Item eventKey="">
-                 <Accordion.Header 	onClick={() => {setExpendState(true);textVisual()}}>
-                 {menu.id==1?(<> <FaIndustry fontSize={24} id="logo3" /></>):(<> <MdOutlineAppRegistration id="logo2" fontSize={28} /></>)}
-                 {espand && (
-                   <span>{menu.menu}</span>)}
-                   
-                   </Accordion.Header>
-         
-                 <Accordion.Body>
-                 <Link style={{display:"flex"}} 
-                          to={menu.subMenu[0].link}>
-                       < span>
-                       {menu.subMenu[0].id==5?(<><AiOutlineUsergroupAdd id="logo1" fontSize={35}  /></>):(<><FiUsers id="" fontSize={28} /></>)}
-                         
-                         
-                       </span>
-                       <span style={{marginLeft:8,marginTop:6}}>{menu.subMenu[0].menu}</span>
-                     </Link>
-                 </Accordion.Body>
-         
-               </Accordion.Item>
-             </Accordion> </> ))} */}
+       
             
            
           </ul>

@@ -41,15 +41,15 @@
     flex: 0 0 auto;
     padding: 15px;
 }
-.acesso-personalizado{
-    width: 100%;
-    margin-top: 5px;
-    height: 208px;
-    background-color: #f9f5f5;
-    box-shadow: 0 4px 8px 1px #c6c6ca;
-    flex: 0 0 auto;
-    padding: 15px;
-}
+// .acesso-personalizado{
+//     width: 100%;
+//     margin-top: 5px;
+//     height: 208px;
+//     background-color: #f9f5f5;
+//     box-shadow: 0 4px 8px 1px #c6c6ca;
+//     flex: 0 0 auto;
+//     padding: 15px;
+// }
 .check-grupo{
     display: flex;
     text-align: center;
@@ -229,27 +229,27 @@ margin-top: 85px !important;
      }
 }
 
-.modal-cadastro-user{
-    font-family: 'Unbounded', cursive;
-    .modal-content{
-    width: 830px;
-    height: auto;
-   // top: -30px;
-    left: -30%;
-    @media(max-width:790px) {
-        width: 100%;
-        left: 0%;
-        top:0px;
-      }
-    }
-    .modal-body{
-        padding-top: 0 !important;
-    }
-    h1{
-    font-size: 25px;
-    }
+// .modal-cadastro-user{
+//     font-family: 'Unbounded', cursive;
+//     .modal-content{
+//     width: 830px;
+//     height: auto;
+//    // top: -30px;
+//     left: -30%;
+//     @media(max-width:790px) {
+//         width: 100%;
+//         left: 0%;
+//         top:0px;
+//       }
+//     }
+//     .modal-body{
+//         padding-top: 0 !important;
+//     }
+//     h1{
+//     font-size: 25px;
+//     }
    
-}
+// }
 .modal-cadastro-parceiro{
     font-family: 'Unbounded', cursive;
     .modal-content{
