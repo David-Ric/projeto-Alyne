@@ -22,14 +22,41 @@ email: string,
 telefone: string,
 imagemURL: string,
 status: string,
-permissoes: [
+menuPermissao: [
   {
     id: number,
-    usuarioId: number,
-    menuId: number,
-    descMenu: string
+    userId: number,
+    codigo: number,
+    nome: string,
+    subMenu: [
+      {
+        id: number,
+        codigo: number,
+        nome: string,
+        menuPermissaoId: number,
+        pagina: [
+          {
+            id: number,
+            codigo: number,
+            nome: string,
+            menuPermissaoId: number,
+            subMenuPermissaoId: number
+          }
+        ]
+      }
+    ],
+    pagina: [
+      {
+        id: number,
+        codigo: number,
+        nome: string,
+        menuPermissaoId: number,
+        subMenuPermissaoId: number
+      }
+    ]
   }
 ]
+
 }
 
 export interface iGrupos {
@@ -190,6 +217,17 @@ export interface iGrupos {
             nome: string,
             icon: string,
             menuId: number,
+            pagina: [
+              {
+                id: number,
+                codigo: number,
+                nome: string,
+                url: string,
+                icon: string,
+                menuId: number,
+                subMenuId:number
+              }
+            ]
           }],
         pagina: [
           {
@@ -198,7 +236,8 @@ export interface iGrupos {
             nome: string,
             url: string,
             icon: string,
-            menuId: number
+            menuId: number,
+            subMenuId:number
           }
         ]
       }
@@ -216,7 +255,8 @@ export interface iGrupos {
                  nome: string,
                  url: string,
                  icon: string,
-                 menuId: number
+                 menuId: number,
+                 subMenuId:number
                }
              ]
        }
@@ -226,6 +266,61 @@ export interface iGrupos {
         nome: string,
         url: string,
         icon: string,
-        menuId: number
+        menuId: number,
+        subMenuId:number
        }
       
+      export interface IMenuPermissao  {
+        id: number,
+        userId: number,
+        codigo: number,
+        nome: string,
+        subMenu: [
+          {
+            id: number,
+            codigo: number,
+            nome: string,
+            menuPermissaoId: number,
+            pagina: [
+              {
+                id: number,
+                codigo: number,
+                nome: string,
+                menuPermissaoId: number,
+                subMenuPermissaoId: number
+              }
+            ]
+          }
+        ],
+        pagina: [
+          {
+            id: number,
+            codigo: number,
+            nome: string,
+            menuPermissaoId: number,
+            subMenuPermissaoId: number
+          }
+        ]
+      }
+      export interface ISubMenuPermissao{
+        id: number,
+        codigo: number,
+        nome: string,
+        menuPermissaoId: number,
+        pagina: [
+          {
+            id: number,
+            codigo: number,
+            nome: string,
+            menuPermissaoId: number,
+            subMenuPermissaoId: number
+          }
+        ]
+      }
+      export interface IpaginaPermissao{
+        id: number,
+            codigo: number,
+            nome: string,
+            menuPermissaoId: number,
+            subMenuPermissaoId: number
+      }

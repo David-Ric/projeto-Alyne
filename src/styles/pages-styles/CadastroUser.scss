@@ -53,6 +53,10 @@
     .tabela-responsiva{
         margin-top: 10px !important;
     }
+    @media(max-width:770px) {
+        margin-top: 30px;
+        width: 100%;
+    }
 }
 .check-grupo{
     display: flex;
@@ -165,6 +169,27 @@ margin-top: 85px !important;
     }
    
 }
+.modal-cadastro-user-inicial{
+    font-family: 'Unbounded', cursive;
+    .modal-content{
+    width: 800px;
+    height: auto;
+   // top: -30px;
+    left: -30%;
+    @media(max-width:790px) {
+        width: 100%;
+        left: 0%;
+        top:0px;
+      }
+    }
+    .modal-body{
+        padding-top: 0 !important;
+    }
+    h1{
+    font-size: 25px;
+    }
+   
+}
 .modal-edit-user{
     font-family: 'Unbounded', cursive;
     .modal-content{
@@ -172,7 +197,7 @@ margin-top: 85px !important;
     width: 1000px;
     height: auto;
    // top: -30px;
-    left: -57%;
+    left: -47%;
     @media(max-width:790px) {
         width: 100%;
         left: -3%;
@@ -293,7 +318,19 @@ display: flex;
 .conteudo-modal-cadastro-user{
     width: 100% !important;
     display:flex;
+    @media(max-width:790px) {
+        flex-direction: column;
+       }
 }
 .coluna-dados-user{
     width: 70% !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       }
+}
+.coluna-dados-user-inicial{
+    width: 100% !important;
+    @media(max-width:790px) {
+        width: 100% !important;
+       }
 }

@@ -25,6 +25,8 @@ import { MdOutlineAppRegistration } from "react-icons/md";
 import { iDadosUsuario, iMenu, iPaginas } from '../../@types';
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { GrTableAdd } from "react-icons/gr";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 
 export default function SideNavBar() {
@@ -43,6 +45,7 @@ export default function SideNavBar() {
     const [qtdePagina, setQtdePagina] = useState(10);
     let [totalPaginas, setTotalPaginas] = useState(0);
     const menuGet =localStorage.getItem('@Portal/usuario/atualiza-menu')
+    const [icone, setIcone] = useState('fa fa-eye');
 
    
     
@@ -183,145 +186,67 @@ export default function SideNavBar() {
 						
 					</button>
 				</div>
-				{/* <div className="nav-menu"> */}
 					
                     <div className="sidebar-menu">
           <ul>
+           {/* ============inicio do menu ==================================================== */}
+
             <li className="menuInterativo">
           {menuPrincipal.length>0?(<>
             {menuPrincipal.map((menu,index)=> (<>
             <li style={{marginTop:30}}>
              <Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" flush key={index}>
                <Accordion.Item eventKey="">
-               {/* <Accordion.Header 	onClick={() => {setExpendState(true);textVisual()}}> */}
+              
                  <Accordion.Header 	onClick={() => {setExpendState(true);TextMenu()}}>
-                 {menu.codigo==1?
-                 (<> <MdOutlineAdminPanelSettings  id="logo-admin" /></>):
-                 menu.codigo==2?
-                 (<> <TiShoppingCart fontSize={24} id="logo-admin" /></>):
-                 menu.codigo==3?
-                 (<> <BsCoin fontSize={24} id="logo-admin2"  /></>):
-                 menu.codigo==4?
-                 (<> <MdOutlineAppRegistration fontSize={24} id="logo-admin"  /></>):(<></>)}
-                 {espand && (
-                   <span>{menu?.nome}</span>)}
-                   
+                 <span className="menus-nav"><span id="icon-menu"  className={menu?.icon}/>{espand && (
+                   <span className="nome-menu">{menu?.nome}</span>)}</span> 
                    </Accordion.Header>
          
                  <Accordion.Body>
                   {menu.subMenu[0]?.codigo>0?(<>
-                    <Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" key={menu.subMenu[0].id} flush>
+                    {menu.subMenu.map((menu,index)=> (<>
+                    <Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" key={index} flush>
                <Accordion.Item eventKey="">
-               {/* <Accordion.Header 	onClick={() => {setExpendState(true);textVisual()}}> */}
+                 
                  <Accordion.Header 	onClick={() => {setExpendState(true);TextMenu()}}>
-                 {menu.subMenu[0]?.codigo===1?
-                 (<> <MdOutlineAdminPanelSettings fontSize={24} id="logo-admin" /></>):
-                 menu.subMenu[0]?.codigo===2?
-                 (<> <TiShoppingCart fontSize={24} id="logo-admin"  /></>):
-                 menu.subMenu[0]?.codigo===3?
-                 (<> <BsCoin fontSize={24} id="logo-admin2"  /></>):
-                 menu.subMenu[0]?.codigo===4?
-                 (<> <MdOutlineAppRegistration fontSize={24} id="logo-admin"  /></>):(<></>)}
-                 {espand && (
-                   <span>{menu.subMenu[0]?.nome}</span>)}
-                   
-                   </Accordion.Header>
+                    
+                    <span  className="menus-nav">
+                    <span id="icon-sub-menu"  className={menu?.icon}/>
+                    {espand && (
+                   <span className="nome-menu">{menu?.nome}</span>)}
+                   </span>
+
+                  </Accordion.Header>
          
                  <Accordion.Body>
-                  <div>
+                    
+                    <div>
+                        {menu.pagina?.map((pagina)=>(<>
+                        <Link style={{display:"flex", marginLeft:10}} 
+                              to={pagina?.url}>
+                          <span  className="menus-nav"><span id="icon-sub-menu"  className={pagina?.icon}/>
+                          <span className={isExpanded?'visivel':'invisivel'} >{pagina?.nome}</span></span> 
+                        </Link> 
+                        </>))} 
+                    </div>
                  
-                  {menu.pagina.map((pagina)=>(<>
-                  <Link style={{display:"flex", marginLeft:10}} 
-                          to={pagina?.url}>
-                       < span>
-                       {pagina?.codigo===5?
-                 (<> <AiOutlineUsergroupAdd fontSize={24} id="logo-admin" /></>):
-                 pagina?.codigo===6?
-                 (<> <FiUsers fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===7?
-                 (<> <FaHospitalUser fontSize={24} id="logo-admin2"  /></>):
-                 pagina?.codigo===8?
-                 (<> <FaLayerGroup fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===9?
-                 (<> <RiShoppingBag3Line fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===10?
-                 (<> <TiShoppingCart  fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===11?
-                 (<> <TbBusinessplan fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===12?
-                 (<> <MdOutlinePriceChange fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===13?
-                 (<> <FaIndustry fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===14?
-                 (<> <MdTableView fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===15?
-                 (<> <TiShoppingCart fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===16?
-                 (<> <MdMenuBook fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===17?
-                 (<> <BsMenuButtonWideFill fontSize={24} id="logo-admin"  /></>):
-                 (<></>)}
-                       
-   
-                       </span>
-                       <span className={isExpanded?'visivel':'invisivel'} style={{marginLeft:8,marginTop:6}}>{pagina?.nome}</span>
-                     </Link> 
-                 </>))}
-                 </div>
                  </Accordion.Body>
          
                </Accordion.Item>
-             </Accordion> 
+             </Accordion> </>))}
                   </>):(<>
                   
                     {menu.pagina.map((pagina)=>(<>
-                  <Link style={{display:"flex", marginLeft:10}} 
+                         <Link style={{display:"flex", marginLeft:10}} 
                           to={pagina?.url}>
-                       < span>
-                       {pagina?.codigo===5?
-                 (<> <AiOutlineUsergroupAdd fontSize={24} id="logo-admin" /></>):
-                 pagina?.codigo===6?
-                 (<> <FiUsers fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===7?
-                 (<> <FaHospitalUser fontSize={24} id="logo-admin2"  /></>):
-                 pagina?.codigo===8?
-                 (<> <FaLayerGroup fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===9?
-                 (<> <RiShoppingBag3Line fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===10?
-                 (<> <TiShoppingCart  fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===11?
-                 (<> <TbBusinessplan fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===12?
-                 (<> <MdOutlinePriceChange fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===13?
-                 (<> <FaIndustry fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===14?
-                 (<> <MdTableView fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===15?
-                 (<> <TiShoppingCart fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===16?
-                 (<> <MdMenuBook fontSize={24} id="logo-admin"  /></>):
-                 pagina?.codigo===17?
-                 (<> <BsMenuButtonWideFill fontSize={24} id="logo-admin"  /></>):
-                 (<></>)}
-                       
-   
-                       </span>
-                       <span className={isExpanded?'visivel':'invisivel'} style={{marginLeft:8,marginTop:6}}>{pagina?.nome}</span>
-                     </Link> 
-                 </>))}
-                  </>)}
-                  
-                 {/* <Link style={{display:"flex"}} 
-                          to={menu.subMenu[0].pagina[0]?.url}>
-                       < span>
-                       {menu.subMenu[0]?.id==5?(<><AiOutlineUsergroupAdd id="logo1" fontSize={35}  /></>):(<><FiUsers id="" fontSize={28} /></>)}
-                         
-                         
-                       </span>
-                       <span style={{marginLeft:8,marginTop:6}}>{menu.subMenu[0].pagina[0]?.url}</span>
-                     </Link> */}
+                          <span className="menus-nav"><span id="icon-menu"  className={pagina?.icon}/>
+                          <span style={{fontSize:17}} className="nome-menu">{pagina?.nome}</span></span> 
+                       </Link> 
+                     </>))}
+                    </>)}
+                      
+                 
                  </Accordion.Body>
          
                </Accordion.Item>
@@ -344,17 +269,8 @@ export default function SideNavBar() {
             </>)}  
             </li>
            
-            {/* <li>
-              <Link to="/">
-                <span>
-                  <AiOutlinePieChart fontSize={28} />
-                </span>
-                {isExpanded && (
-                <span>Dashboard</span>
-                )}
-              </Link>
-            </li> */}
-            
+
+            {/* ======================================================================================= */}
             
             
 

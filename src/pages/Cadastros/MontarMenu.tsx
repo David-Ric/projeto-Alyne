@@ -52,6 +52,7 @@ export default function MontarMenu() {
 
   const [edit, setEdit] = useState(false);
   let [menuPrincipal, setMenuPrincipal] = useState<iMenu[]>([]);
+  let [menuGetID, setMenuGetID] = useState<iMenu[]>([]);
   let [menuIdGet, setMenuIdGet] = useState<iPaginas[]>([]);
   let [menuPorcod, setMenuPorcod] = useState<iMenu[]>([]);
   let [pagina_Base, setPagina_Base] = useState<iPaginaBase[]>([]);
@@ -67,9 +68,13 @@ export default function MontarMenu() {
   let [paginaPesquisa, setPaginaPesquisa] = useState<iDataSelect[]>([]);
 
   let [subMenu, setSubMenu] = useState(false);
+  let [subMenuEscolhido, setSubMenuEscolhido] = useState(false);
   let [salvar, setSalvar] = useState(false);
 
   let [criar, setCriar] = useState(false);
+  let [ escolhendoSub, setEscolhendoSub] = useState(false);
+  let [ paginaPorSub, setPaginaPorSub] = useState(false);
+ 
 
 
   let [totalPaginas, setTotalPaginas] = useState(0);
@@ -96,9 +101,11 @@ export default function MontarMenu() {
 let [codMenu, setCodMenu] = useState(0);
 let [nomeMenu, setNomeMenu] = useState('');
 let [iconMenu, setIconMenu] = useState('');
+let [iconSubMenu, setIconSubMenu] = useState('');
+let [iconPagina, setIconPagina] = useState('');
 let [codSubMenu, setCodSubMenu] = useState(0);
 let [nomeSubMenu, setNomeSubMenu] = useState('');
-let [iconSubMenu, setIconSubMenu] = useState('');
+
 
 let [nomeMenuEdit, setNomeMenuEdit] = useState('');
 let [nomeSubMenuEdit, setNomeSubMenuEdit] = useState('');
@@ -155,6 +162,16 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
       }
 
   },[pagina]);
+
+  function NovoSub(){
+    setPaginaPorSub(false)
+    paginaPorSub=false
+    setSubMenuEscolhido(false)
+    subMenuEscolhido=false
+    setEscolhendoSub(false)
+    escolhendoSub=false
+
+  }
   function handleShowMensage(){
 
     setShowMensage(true);
@@ -311,7 +328,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
 
             setPagina_Base(pagina);
             pagina_Base=pagina
-          // console.log("pagina",pagina_Base)
+           console.log("pagina",pagina_Base)
         }
       })
       .catch((error) => {
@@ -391,6 +408,8 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   setAlertErroRegister(false);
  }
   function handleShow(){
+    subMenuEscolhido=false;
+    setSubMenuEscolhido(false);
     setIdPagina(0);
     setCodigo('');
     setNome('');
@@ -403,10 +422,14 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
     setShow(true);
   }
  function Finalizar(){
+  setEscolhendoSub(false);
+   escolhendoSub=false;
   setEditarMenu(false);
     editarMenu=false;
     GetMontarMenu();
     handleClose();
+    setPaginaPorSub(false);
+    paginaPorSub=false;
  }
 
   async function GetMontarMenu() {
@@ -489,6 +512,9 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
     await api
       .get(`/api/Menu/${id}`)
       .then((response) => {
+        setMenuGetID(response.data.subMenu);
+        menuGetID=response.data.subMenu;
+        console.log("submenu",menuGetID)
         setMenuIdGet(response.data.pagina);
          menuIdGet=response.data.pagina;
           setIdPagina(response.data.id);
@@ -509,6 +535,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
            GetSubMenuEdit()
         console.log('menu Id',response.data);
         console.log("menu get id",menuIdGet);
+       
         GetPaginasEdite();
       })
       .catch((error) => {
@@ -547,7 +574,7 @@ async function EditeMenu(){
       codigo: codSubMenu,
       ordem: 0,
       nome: nomeSubMenu,
-      icon: "",
+      icon: iconSubMenu,
       menuId: idMenuExistente
     }
   ]
@@ -564,9 +591,25 @@ async function EditeMenu(){
 
     });
   }
-   //========adicionar páginas na edição ================================//
+  //========adicionar páginas na edição com submenu ================================//
 
-   async function AdicionarPaginaEdite(){
+  async function AdicionarPaginaEditeSubMenu(subId: any){
+    if(codMenuEdit==1){
+      setIconMenu('fa fa-bank');
+      iconMenu='fa fa-bank';
+    }
+    if(codMenuEdit==2){
+      setIconMenu('fa fa-bar-chart');
+      iconMenu='fa fa-bar-chart';
+    }
+    if(codMenuEdit==3){
+      setIconMenu('fa fa-money');
+      iconMenu='fa fa-money';
+    }
+    if(codMenuEdit==4){
+      setIconMenu('fa fa-address-card');
+      iconMenu='fa fa-address-card';
+    }
     setLoadingUpdate(true)
   await api.put(`/api/Menu/${idMenuEdit}`, {
     id: idMenuEdit,
@@ -579,7 +622,54 @@ async function EditeMenu(){
             codigo: codPagina,
             nome: nomePagina,
             url: urlPagina,
-            icon: "",
+            icon:iconPagina,
+            menuId: idMenuEdit,
+            subMenuId: subId
+          }
+        ]
+  })
+    .then(response => {
+      console.log("Pagina criada com sucesso");
+      localStorage.setItem('@Portal/usuario/atualiza-menu','1')
+      GetPaginaId(idMenuEdit);
+      setLoadingUpdate(false);
+    })
+    .catch((error) => {
+      setLoadingUpdate(false)
+    });
+  }
+   //========adicionar páginas na edição ================================//
+
+   async function AdicionarPaginaEdite(){
+    if(codMenuEdit==1){
+      setIconMenu('fa fa-bank');
+      iconMenu='fa fa-bank';
+    }
+    if(codMenuEdit==2){
+      setIconMenu('fa fa-bar-chart');
+      iconMenu='fa fa-bar-chart';
+    }
+    if(codMenuEdit==3){
+      setIconMenu('fa fa-money');
+      iconMenu='fa fa-money';
+    }
+    if(codMenuEdit==4){
+      setIconMenu('fa fa-address-card');
+      iconMenu='fa fa-address-card';
+    }
+    setLoadingUpdate(true)
+  await api.put(`/api/Menu/${idMenuEdit}`, {
+    id: idMenuEdit,
+    codigo:codMenuEdit,
+    ordem:0,
+    nome: nomeMenuEdit,
+    icon:iconMenu,
+        pagina: [
+          {
+            codigo: codPagina,
+            nome: nomePagina,
+            url: urlPagina,
+            icon:iconPagina,
             menuId: idMenuEdit
           }
         ]
@@ -610,8 +700,9 @@ async function EditeMenu(){
               codigo: codPagina,
               nome: nomePagina,
               url: urlPagina,
-              icon: "",
-              menuId: idMenuExistente
+              icon: iconPagina,
+              menuId: idMenuExistente,
+              subMenuId:subMenuMenu
             }
           ]
     })
@@ -636,7 +727,7 @@ async function EditeMenu(){
     codigo: Number(codigo),
     nome: nome,
     url: url,
-    icon: icon
+    icon: iconPagina
   })
     .then(response => {
       handleCloseEdit()
@@ -670,8 +761,10 @@ async function ContinuarCreate(){
         .then((response) => {
          console.log('menu',response.data)
         
-          setIdMenuExistente(response.data.data[0].id)
-          idMenuExistente=response.data.data[0].id
+          setIdMenuExistente(response.data.data[0].id);
+          idMenuExistente=response.data.data[0].id;
+          iconMenu=response.data.data[0].icon;
+          setIconMenu(response.data.data[0].icon);
           console.log('menu existente',idMenuExistente);
        
         })
@@ -711,7 +804,7 @@ async function EditarSubMenuPost(){
     codigo: codSubMenu,
     ordem: 0,
     nome: nomeSubMenu,
-    icon: "",
+    icon: iconMenu,
     menuId: idMenuExistente
   })
     .then(response => {
@@ -748,8 +841,8 @@ async function GetSubmenu(){
          .get(`/api/Menu/Get-Codigo?pagina=${pagina}&totalpagina=999&Codigo=${codMenu}`)
          .then((response) => {
           console.log('menu com submenu',response.data)
-          setSubMenuMenu(response.data.data[0].subMenu[0].id);
-          subMenuMenu=response.data.data[0].subMenu[0].id;
+          setSubMenuMenu(response.data.data[0].subMenu.at(-1).id);
+          subMenuMenu=response.data.data[0].subMenu.at(-1).id;
           console.log('submenu',response.data.data[0].subMenu[0].id)
          
          })
@@ -815,7 +908,7 @@ async function GetSubmenu(){
 
        async function DeletePagina(id: any){
         setLoadingUpdate(true)
-      await api.get(`/api/Paginas/${id}`)
+      await api.delete(`/api/Paginas/menuCod?menuCod=${id}`)
         .then(response => {
           handleCloseEdit()
          // GetMontarMenu();
@@ -1141,42 +1234,101 @@ function PesquisaCod(){
                         codMenu=value.value;
                         setNomeMenu(value.label);
                         nomeMenu=value.label;
+                        if(codMenu==1){
+                          setIconMenu('fa fa-bank');
+                          iconMenu='fa fa-bank';
+                        }
+                        if(codMenu==2){
+                          setIconMenu('fa fa-bar-chart');
+                          iconMenu='fa fa-bar-chart';
+                        }
+                        if(codMenu==3){
+                          setIconMenu('fa fa-money');
+                          iconMenu='fa fa-money';
+                        }
+                        if(codMenu==4){
+                          setIconMenu('fa fa-address-card');
+                          iconMenu='fa fa-address-card';
+                        }
                         CreateMenu();
                         escolherMenu();
                         LimparTodos();
                       }}
-                    />
+                    /> {subMenu?(<>
+                     <div style={{marginTop: 30}}  className='check-grupo grupo-de-paginas'>
+                      <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
+                      disabled={escolhendoSub}
+                      //checked={}
+                       onChange={({ target }) => {
+                        subMenuEscolhido=true;
+                        setSubMenuEscolhido(true);
+                        setEscolhendoSub(true);
+                        escolhendoSub=true;
+                       }}
+                      />
+                      <p className='text'>Continuar sem submenu</p>
+
+                      </div>
+                      </>):(<></>)}
             </div>
             {subMenu?(<>
             <div  className='bloco-input bloco-menu-cad'>
 
             <p className="title-input"  >SubMenu: </p>
-            <Select
-                     id="promotor"
-                     className="inputparceiro"
-                     placeholder='Digite ou selecione'
-                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
-                   //  value={search}
-                     options={subMenuPesquisa}
-                      onChange={(value: any)=>{
-                        setCodSubMenu(value.value);
-                        codSubMenu=value.value;
-                        setNomeSubMenu(value.label);
-                        nomeSubMenu=value.label;
-                        if(subMenuExiste){
-                         // EditarSubMenuPost();
-                         MudarsubMenuPost()
-                        }else{
-                          CriarSubMenu();
+            {subMenuPesquisa.map((pagina_Base)=> (
+            <div className='check-grupo grupo-de-paginas'>
+                      <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
+                      disabled={escolhendoSub}
+                      //checked={}
+                       onChange={({ target }) => {
+                        setCodSubMenu(Number(pagina_Base.value));
+                        codSubMenu=Number(pagina_Base.value);
+                        setNomeSubMenu(String(pagina_Base.label));
+                        nomeSubMenu=String(pagina_Base.label);
+                        if(codSubMenu==1){
+                          setIconSubMenu('fa fa-bank');
+                          iconSubMenu='fa fa-bank';
                         }
-                        LimparTodos();
-                      }}
-                    />
+                        if(codSubMenu==2){
+                          setIconSubMenu('fa fa-bar-chart');
+                          iconSubMenu='fa fa-bar-chart';
+                        }
+                        if(codSubMenu==3){
+                          setIconSubMenu('fa fa-money');
+                          iconSubMenu='fa fa-money';
+                        }
+                        if(codSubMenu==4){
+                          setIconSubMenu('fa fa-address-card');
+                          iconSubMenu='fa fa-address-card';
+                        }
+                        
+                        subMenuEscolhido=true;
+                        setSubMenuEscolhido(true);
+                           CriarSubMenu();
+                         LimparTodos();
+                         setEscolhendoSub(true);
+                         escolhendoSub=true;
+                         setPaginaPorSub(true);
+                        paginaPorSub=true;
+                  
+                       }}
+                      />
+                      <p className='text'>{pagina_Base.label}</p>
+
+                      </div>
+             ))}
+           
             </div>
             </>):(<></>)}
 
             </div>
-            {subMenu?(<>
+            {subMenuEscolhido?(<>
             <div  className='bloco-paginas'>
 
       {pagina_Base.map((pagina_Base)=> (
@@ -1185,6 +1337,7 @@ function PesquisaCod(){
                       type="checkbox"
                       name="grupo"
                       id="grupo"
+                      
                       //checked={}
                        onChange={({ target }) => {
                         setCodPagina(pagina_Base.codigo);
@@ -1192,8 +1345,11 @@ function PesquisaCod(){
                         setNomePagina(pagina_Base.nome);
                         nomePagina=pagina_Base.nome;
                         setUrlPagina(pagina_Base.url);
+                        setIconPagina(pagina_Base.icon);
+                        iconPagina=pagina_Base.icon;
                         urlPagina=pagina_Base.url;
                         GetPaginaMenuExistente(pagina_Base.codigo);
+                        
                        // CriarPaginaSubmenu()
                     //   setComercial(target.checked);
                     setSalvar(true)
@@ -1206,13 +1362,21 @@ function PesquisaCod(){
              ))}
             </div>
             </>):(<></>)}
+            <div className='coluna-dupla'>
+              {paginaPorSub?(<>
+                <div  className='bloco-input bloco-buttom-vendedor'>
 
-             <div  className='bloco-input bloco-buttom-vendedor'>
+                    <button  disabled={loadingCreate||salvar==false} id='' className='btn btn-cadastrar-novoSub btn-cad-menu'onClick={NovoSub}>Novo Submenu</button>
+                </div>
+              </>):(<></>)}
+           
+         <div  className='bloco-input bloco-buttom-vendedor'>
 
-                    <button  disabled={loadingCreate||salvar==false} id='' className='btn btn-cadastrar-vendedor btn-cad-menu'onClick={Finalizar}>Finalizar</button>
-         </div>
+        <button  disabled={loadingCreate||salvar==false} id='' className={paginaPorSub?'btn btn-cadastrar-vendedor btn-cad-menu':'btn btn-cadastrar-vendedor btn-cad-menu1'}onClick={Finalizar}>Finalizar</button>
+        </div>  
 
 
+            </div>
             </div>
             </>    )}
         </Modal.Body>
@@ -1243,55 +1407,30 @@ function PesquisaCod(){
             <div  className='bloco-input bloco-menu-cad'>
             <p className="title-input"  >Menu Principal: </p>
             <h1>{nomeMenuEdit}</h1>
-            {/* <Select
-                     id="promotor"
-                     className="inputparceiro"
-                     placeholder={nomeMenuEdit}
-                  noOptionsMessage={() => "Nenhuma menu encontrado"}
-                   //  value={search}
-                     options={menuPesquisa}
-                      onChange={(value: any)=>{
-                        setCodMenu(value.value);
-                        codMenu=value.value;
-                        setNomeMenu(value.label);
-                        nomeMenu=value.label;
-                        CreateMenu();
-                        escolherMenu();
-                        LimparTodos();
-                      }}
-                    /> */}
+           
             </div>
 
             <div  className='bloco-input bloco-menu-cad'>
 
-            <p className="title-input"  >SubMenu: </p>
-            <Select
-                     id="promotor"
-                     className="inputparceiro"
-                     placeholder={nomeSubMenuEdit}
-                  noOptionsMessage={() => "Nenhuma promotor encontrada"}
-                   //  value={search}
-                     options={subMenuPesquisa}
-                      onChange={(value: any)=>{
-                        setCodSubMenu(value.value);
-                        codSubMenu=value.value;
-                        setNomeSubMenu(value.label);
-                        nomeSubMenu=value.label;
-                        EditarSubMenu();
-                        // CriarSubMenu();
-                        LimparTodos();
-                      }}
-                    />
+            
             </div>
 
             </div>
-            <div  className='bloco-paginas'>
-            <div style={{width:"100%",marginBottom:20}}>
-                            <h2>Excluir existentes</h2>
+
+                            {menuGetID.length > 0 ? (<>
+                              
+                              
+                              {menuGetID?.map((SubMenu)=> (<>
+                                <div  className='bloco-paginas'>
+               
+                 <div style={{width:"100%",marginBottom:20}}>
+               
+                 <h2>{SubMenu?.nome} </h2>
+                       
                             </div>
-           {menuIdGet?.map((pagina_Base)=> (<>
-            
-                 <div className='check-grupo grupo-de-paginas'>
+                  
+                  {SubMenu?.pagina.map((pagina_Base)=>(<>
+                    <div className='check-grupo grupo-de-paginas'>
                   <button  name="grupo"
                            id="grupo"
                            className='btn-chek-excluir' onClick={()=>{
@@ -1299,16 +1438,12 @@ function PesquisaCod(){
                            }}>x</button>
                         
                            <p className='text'>{pagina_Base.nome}</p>
-
                            </div>
-                          
-                           </>   ))}
-                         
-                         
+                           </>))}
                            
-                          
-                 </div>
-                 <div  className='bloco-paginas'>
+                           </div>
+
+                           <div  className='bloco-paginas'>
                             <div style={{width:"100%",marginBottom:20}}>
                             <h2>Adicionar Novos</h2>
                             </div>
@@ -1327,6 +1462,66 @@ function PesquisaCod(){
                         nomePagina=pagina_Base.nome;
                         setUrlPagina(pagina_Base.url);
                         urlPagina=pagina_Base.url;
+                        setIconPagina(pagina_Base?.icon);
+                        iconPagina=pagina_Base?.icon;
+                        console.log('submenu',SubMenu.id);
+                        AdicionarPaginaEditeSubMenu(SubMenu.id);
+                        // AdicionarPaginaEdite();
+                    //   setComercial(target.checked);
+                    setSalvar(true)
+                    salvar=true
+                       }}
+                      />
+                      <p className='text'>{pagina_Base.nome}</p>
+
+                      </div>
+             ))}
+                            </div>
+                           </>   ))}
+                        
+                      
+                            
+                            </>):(<>
+                              <div  className='bloco-paginas'>
+                              <div style={{width:"100%",marginBottom:20}}>
+                              <h2>Excluir existentes</h2>
+                            </div>
+                              
+                              {menuIdGet?.map((pagina_Base)=> (<>
+                 <div className='check-grupo grupo-de-paginas'>
+                  <button  name="grupo"
+                           id="grupo"
+                           className='btn-chek-excluir' onClick={()=>{
+                            DeletePaginaId(pagina_Base.id, pagina_Base.menuId)                           
+                           }}>x</button>
+                        
+                           <p className='text'>{pagina_Base.nome}</p>
+
+                           </div>
+                          
+                           </>   ))}
+                           </div>
+                           <div  className='bloco-paginas'>
+                            <div style={{width:"100%",marginBottom:20}}>
+                            <h2>Adicionar Novos</h2>
+                            </div>
+                          
+                            {pagina_BaseEdite.map((pagina_Base)=> (
+            <div className='check-grupo grupo-de-paginas'>
+                      <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
+                      //checked={}
+                       onChange={({ target }) => {
+                        setCodPagina(pagina_Base.codigo);
+                        codPagina=pagina_Base.codigo;
+                        setNomePagina(pagina_Base.nome);
+                        nomePagina=pagina_Base.nome;
+                        setUrlPagina(pagina_Base.url);
+                        urlPagina=pagina_Base.url;
+                        setIconPagina(pagina_Base?.icon);
+                        iconPagina=pagina_Base?.icon;
                         AdicionarPaginaEdite();
                     //   setComercial(target.checked);
                     setSalvar(true)
@@ -1338,21 +1533,23 @@ function PesquisaCod(){
                       </div>
              ))}
                             </div>
+                            </>)}
+           
+                         
+                         
+                           
+                          
+                 {/* </div> */}
+               
 
-
-
-
-
-{/* 
-            <div className='coluna-dupla'> */}
             <div  className='bloco-botoes-finalizar'>
             <button disabled={loadingUpdate}  id='' className='btn btn-cadastrar btn-edit-vend'onClick={handleCloseEdit}>Finalizar</button>
-            {/* <button disabled={loadingUpdate} id='b' className='btn btn-cancelar btn-edit-vend'onClick={handleCloseEdit}>Cancelar</button> */}
+        
             </div>
 
-                    {/* </div> */}
             </div>
            </>)}
+          
         </Modal.Body>
 
       </Modal>

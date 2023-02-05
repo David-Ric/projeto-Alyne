@@ -46,7 +46,7 @@ export default function CadastroParceiros() {
   const [canal, setCanal] = useState('');
   const [classificacao, setClassificacao] = useState('');
   const [tamanhoLoja, setTamanhoLoja] = useState('');
-  const [codVendedor, setCodVendedor] = useState(0);
+  let [codVendedor, setCodVendedor] = useState('');
   const [endereco, setEndereco] = useState('');
   const [bairro, setBairro] = useState('');
   const [municipio, setMunicipio] = useState('');
@@ -210,7 +210,7 @@ export default function CadastroParceiros() {
           // response.data.data.map((promotor:any) => {
           promotor.map((promotor:any) => {
             let rowGrupo: iDataSelect = {};
-            rowGrupo.value = String(promotor.Id);
+            rowGrupo.value = String(promotor.id);
             rowGrupo.label = String(promotor.codVendedor)+ " - " + promotor.nome ;
            
              options.push(rowGrupo);
@@ -323,7 +323,7 @@ export default function CadastroParceiros() {
   setCanal('');
   setClassificacao('');
   setTamanhoLoja('');
-  setCodVendedor(0);
+  setCodVendedor('');
   setEndereco('');
   setBairro('');
   setMunicipio('');
@@ -399,7 +399,7 @@ export default function CadastroParceiros() {
   setCanal('');
   setClassificacao('');
   setTamanhoLoja('');
-  setCodVendedor(0);
+  setCodVendedor('');
   setEndereco('');
   setBairro('');
   setMunicipio('');
@@ -593,7 +593,7 @@ console.log('codVendedor',codVendedor)
         setMsgErro("É obrigatório informar o tamanho da loja.");
       return
       }
-       if(codVendedor==0){
+       if(codVendedor==''){
         window.scrollTo(0, 0);
          let senhaconf: any;
          senhaconf = document.getElementById("promotor");
@@ -625,7 +625,7 @@ console.log('codVendedor',codVendedor)
   canal: canal,
   classificacao: classificacao,
   tamanhoLoja: tamanhoLoja,
-  codVendedor: codVendedor,
+  codVendedor: Number(codVendedor),
   endereco: endereco,
   bairro: bairro,
   municipio: municipio,
@@ -1311,7 +1311,9 @@ function SemVisitar(){
                    //  value={search} 
                      options={promotorPesquisa}  
                       onChange={(value: any)=>{ 
-                        setCodVendedor(value.value); 
+                        setCodVendedor(value.value);
+                        codVendedor=value.value; 
+                        console.log('cod vendedor',codVendedor)
                         LimparTodos();         
                       }} 
                     />
@@ -1874,7 +1876,8 @@ function SemVisitar(){
                    //  value={search} 
                      options={promotorPesquisa}  
                       onChange={(value: any)=>{ 
-                        setCodVendedor(value.value); 
+                        setCodVendedor(value.value);
+                        codVendedor=value.value; 
                         LimparTodos();         
                       }} 
                     />

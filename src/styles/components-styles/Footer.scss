@@ -47,6 +47,9 @@
 .portal-footer{
     margin-left: 10%;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+    margin-top: 10px !important;
+   
     @media(max-width:780px) {
         display: none;
     }

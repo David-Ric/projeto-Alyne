@@ -28,9 +28,10 @@ import Paginacao from "../components/Paginacao";
 import { phoneMask } from '../Masks/Masks';
 import { FaSearchPlus } from "react-icons/fa";
 import { AiOutlineClear } from "react-icons/ai";
-import { iDadosUsuario, iDataSelect } from '../@types';
+import { iDadosUsuario, iDataSelect,iPaginaBase,iPaginas } from '../@types';
 import Select from 'react-select';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TiInputChecked } from 'react-icons/ti';
 
 
 export default function CadUsuarios() {
@@ -54,6 +55,7 @@ export default function CadUsuarios() {
   const [representante, setRepresentante] = useState(false);
   const [tipoUsuario, setTipoUsuario] = useState(false);
   let [menuPrincipal, setMenuPrincipal] = useState<iMenu[]>([]);
+  let [pagina_Base, setPagina_Base] = useState<iPaginaBase[]>([]);
 
   const [error, setError] = useState("");
   const [msgErro, setMsgErro] = useState("");
@@ -63,22 +65,35 @@ export default function CadUsuarios() {
 
   const [show, setShow] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const [showEditMenu, setShowEditMenu] = useState(false);
   const [showMensage, setShowMensage] = useState(false);
-
-
+  const [showMensageCadPermi, setShowMensageCadPermi] = useState(false);
+  
   const [edit, setEdit] = useState(false);
   const [ativostatus, setAtivostatus] = useState(false);
   let [usuarios, setUsuarios] = useState<iUsuarios[]>([]);
-  const [usuariosget, setUsuariosget] = useState<iUsuarios[]>([]);
+  let [usuariosget, setUsuariosget] = useState<iUsuarios[]>([]);
   let [usuariosCount, setUsuariosCount] = useState<iUsuarios[]>([]);
   let [usuariosFilter, setUsuariosFilter] = useState<iUsuarios[]>([]);
+  let [menuIdGet, setMenuIdGet] = useState<iPaginas[]>([]);
+
+  let [permissoesUser, setPermissoesUser] = useState<iMenu[]>([]);
+
   let [totalPaginas, setTotalPaginas] = useState(0);
   let [totalPaginasPerm, setTotalPaginasPerm] = useState(0);
 
 
    const handleClose = () => setShow(false);
    const handleCloseEdit = () => setShowEdit(false);
+   const handleCloseEditMenu = () => setShowEditMenu(false);
+
+   //=========modal edite permissoes ===========================//
+   const handleCloseModalEditePer = () => setShowModalEditePer(false);
+   const [showModalEditePer, setShowModalEditePer] = useState(false);
+   //==========================================================//
    const handleCloseMensage = () => setShowMensage(false);
+   const handleCloseMensageCadPermi = () => setShowMensageCadPermi(false);
+   
    const [loading, setLoading] = useState(false);
    const [loadingCreate, setLoadingCreate] = useState(false);
    const [loadingUpdate, setLoadingUpdate] = useState(false);
@@ -86,15 +101,51 @@ export default function CadUsuarios() {
    const [searchStatus, setSearchStatus] = useState('');
    const [filter, setFilter] = useState(false);
    
+   let [codPagina, setCodPagina] = useState(0);
+let [nomePagina, setNomePagina] = useState('');
+let [urlPagina, setUrlPagina] = useState('');
+
+   let [codMenu, setCodMenu] = useState(0);
+let [nomeMenu, setNomeMenu] = useState('');
+let [iconMenu, setIconMenu] = useState('');
+let [codSubMenu, setCodSubMenu] = useState(0);
+let [nomeSubMenu, setNomeSubMenu] = useState('');
+let [iconSubMenu, setIconSubMenu] = useState('');
+let [menuGetID, setMenuGetID] = useState<iMenu[]>([]);
+
+let [nomeMenuEdit, setNomeMenuEdit] = useState('');
+let [nomeSubMenuEdit, setNomeSubMenuEdit] = useState('');
+let [codMenuEdit, setCodMenuEdit] = useState(0);
+let [idSubMenuEdit, setIdSubMenuEdit] = useState(0);
+let [idMenuEdit, setIdMenuEdit] = useState(0);
+let [idMenu, setIdMenu] = useState(1);
+
+const [idPagina, setIdPagina] = useState(0);
+  const [codigo, setCodigo] = useState("");
+  const [nome, setNome] = useState("");
+  let [salvar, setSalvar] = useState(false);
 
    const [pagina, setPagina] = useState(1);
    const [qtdePagina, setQtdePagina] = useState(10);
    const [qtdePagMenu, setQtdePagMeu] = useState(5);
+   let [subMenuPesquisa, setSubMenuPesquisa] = useState<iDataSelect[]>([]);
+  //  let [eMenu, setEmenu] = useState<iPermissoes[]>([]);
+  //  let [esubMenu, setEsubMenu] = useState<iPermissoes[]>([]);
+   
 
+   const [url, setUrl] = useState("");
+   const [icon, setIcon] = useState("");
+   let [idMenuExistente, setIdMenuExistente] = useState(0);
+
+   let [codMenuPrincipal, setCodMenuPrincipal] = useState(0);
+   let [idSubMenu, setIdSubMenu] = useState(0);
   
-
+   let [userIdPermit, setUserIdPermit] = useState(0);
+   let [userGrupoId, setUserGrupoId] = useState(0);
+   
    const [pesquisaNome, setPesquisaNome] = useState(true);
    const [pesquisaStatus, setPesquisaStatus] = useState(false);
+   let [permissoesOk, setPermissoesOk] = useState(false);
 
    let [selectGrupo, setSelectGrupo] = useState<iDataSelect>();
 
@@ -134,13 +185,36 @@ export default function CadUsuarios() {
    const usuariolog: iDadosUsuario = JSON.parse(
     localStorage.getItem("@Portal/usuario") || "{}"
   );
-
+  async function ContinuarCreate(){
+    // console.log('codigo menu',codMenu)
+       await api
+           .get(`/api/Menu/Get-Codigo?pagina=${pagina}&totalpagina=999&Codigo=${codMenu}`)
+           .then((response) => {
+            console.log('menu',response.data)
+           
+             setIdMenuExistente(response.data.data[0].id)
+             idMenuExistente=response.data.data[0].id
+             console.log('menu existente',idMenuExistente);
+          
+           })
+           .catch((error) => {
+            console.log("Ocorreu um erro");
+              // setCriar(true);
+              // criar=true;
+   
+           });
+   }
   // const handleShow = () => setShow(true);
   useEffect(() => { 
     logado()
    
    // GetUsuariosAcount();
   },[]);
+function PermissoesOk(){
+  setPermissoesOk(true);
+  permissoesOk=true;
+}
+
   async function GetMontarMenu() {
     setFilter(false);
 
@@ -151,9 +225,9 @@ export default function CadUsuarios() {
 
         setMenuPrincipal(response.data.data);
         menuPrincipal=response.data.data;
-      //  console.log("vendedor",menuPrincipal)
+       console.log("menu geral",menuPrincipal)
 
-
+    
         setTotalPaginasPerm(Math.ceil(response.data.total / qtdePagMenu));
 
       })
@@ -162,45 +236,100 @@ export default function CadUsuarios() {
       });
 
   }
-  async function GetPaginaId(id:any) {
-    // setIdPagina(0);
-    // setCodigo('');
-    // setNome('');
-    // setUrl('');
-    // setIcon('');
+   //=========== get usuarios por ID ==================================//
+   async function GetPaginaId(id:any) {
+    setIdPagina(0);
+    setCodigo('');
+    setNome('');
+    setUrl('');
+    setIcon('');
 
     setEdit(true);
-    setShowEdit(true);
-    setLoadingUpdate(false);
+    setShowEditMenu(true);
+    setLoadingUpdate(true);
     await api
       .get(`/api/Menu/${id}`)
       .then((response) => {
-        // setMenuIdGet(response.data.pagina);
-        //  menuIdGet=response.data.pagina;
-        //   setIdPagina(response.data.id);
-        //    setNome(response.data.nome);
-        //    setNomeMenuEdit(response.data.nome);
-        //    nomeMenuEdit=response.data.nome;
-        //     setNomeSubMenuEdit(response.data.subMenu[0]?.nome);
-        //     nomeSubMenuEdit=response.data.subMenu[0]?.nome;
-        //     setCodMenuEdit(response.data.codigo);
-        //     codMenuEdit=response.data.codigo;
-        //     setIdSubMenuEdit(response.data.subMenu[0]?.id);
-        //     idSubMenuEdit=response.data.subMenu[0]?.id;
-        //     setIdMenuEdit(response.data.id);
-        //     idMenuEdit=response.data.id;
-        //    setCodigo(String(response.data.codigo));
-        //    setUrl(response.data.url);
-        //    setIcon(response.data.icon);
-        //    GetSubMenuEdit()
+        setMenuGetID(response.data.subMenu);
+        setCodMenuPrincipal(response.data.codigo);
+        codMenuPrincipal=response.data.codigo;
+        menuGetID=response.data.subMenu;
+        console.log("submenu",menuGetID)
+        setMenuIdGet(response.data.pagina);
+         menuIdGet=response.data.pagina;
+          setIdPagina(response.data.id);
+           setNome(response.data.nome);
+           setNomeMenuEdit(response.data.nome);
+           nomeMenuEdit=response.data.nome;
+            setNomeSubMenuEdit(response.data.subMenu[0]?.nome);
+            nomeSubMenuEdit=response.data.subMenu[0]?.nome;
+            setCodMenuEdit(response.data.codigo);
+            codMenuEdit=response.data.codigo;
+            setIdSubMenuEdit(response.data.subMenu[0]?.id);
+            idSubMenuEdit=response.data.subMenu[0]?.id;
+            setIdMenuEdit(response.data.id);
+            idMenuEdit=response.data.id;
+           setCodigo(String(response.data.codigo));
+           setUrl(response.data.url);
+           setIcon(response.data.icon);
+           GetSubMenuEdit()
         console.log('menu Id',response.data);
-        // console.log("menu get id",menuIdGet);
+        console.log("menu get id",menuIdGet);
+        setLoadingUpdate(false);
         // GetPaginasEdite();
       })
       .catch((error) => {
         console.log("Ocorreu um erro");
+        setLoadingUpdate(false);
       });
   }
+  //============================================================
+  async function GetSubMenuEdit() {
+    setFilter(true);
+    await api
+      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .then((response) => {
+      //  console.log('sub',response.data.data)
+        if (response.data.data.length > 0) {
+           let pagina = response.data.data.filter((p:any)=>p.url ==""&& p.codigo!=codMenuEdit)
+          let options:Array<iDataSelect>=new Array<iDataSelect>();
+          pagina.map((pagina:any) => {
+            let rowGrupo: iDataSelect = {};
+            rowGrupo.value = String(pagina.codigo);
+            // rowGrupo.label = String(pagina.codigo)+ " - " + pagina.nome ;
+            rowGrupo.label = pagina.nome ;
+
+             options.push(rowGrupo);
+            setSubMenuPesquisa(options);
+            subMenuPesquisa=options
+        //   console.log("Menu",subMenuPesquisa)
+          })
+        }
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+
+  }
+  //===========Editar Menu =====================================//
+async function EditeMenu(){
+    setLoadingUpdate(true)
+  await api.put(`/api/Menu/${idMenuExistente}`, {
+    id: idMenuExistente,
+   codigo:codMenu,
+   ordem:0,
+   nome: nomeMenu,
+   icon:iconMenu
+  })
+    .then(response => {
+      console.log("Editado com sucesso");
+    //  localStorage.setItem('@Portal/usuario/atualiza-menu','1')
+    })
+    .catch((error) => {
+
+    });
+  }
+ 
   function logado(){
    
     //  if(usuariolog.token && usuariolog.status=="1"&& usuariolog.grupoId==1){
@@ -216,10 +345,16 @@ export default function CadUsuarios() {
     //    history('/inicial-home'); 
     //  }
   }
- 
+  
+  // useEffect(() => {
+  //   GetPermissoesPorUser1();
+    
+  // });
   useEffect(() => {
     window.scrollTo(0, 0);
     GetMontarMenu();
+    GetSubMenu();
+    GetPaginas();
     if(!filter){
       GetUsuarios();
     }else{
@@ -227,9 +362,108 @@ export default function CadUsuarios() {
     }
     
   },[pagina]);
+  async function GetSubMenu() {
+    setFilter(true);
+    await api
+      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .then((response) => {
+      //  console.log('sub',response.data.data)
+        if (response.data.data.length > 0) {
+           let pagina = response.data.data.filter((p:any)=>p.url ==""&& p.codigo!=codMenu)
+          let options:Array<iDataSelect>=new Array<iDataSelect>();
+          pagina.map((pagina:any) => {
+            let rowGrupo: iDataSelect = {};
+            rowGrupo.value = String(pagina.codigo);
+            // rowGrupo.label = String(pagina.codigo)+ " - " + pagina.nome ;
+            rowGrupo.label = pagina.nome ;
+
+             options.push(rowGrupo);
+            setSubMenuPesquisa(options);
+            subMenuPesquisa=options
+        //   console.log("Menu",subMenuPesquisa)
+          })
+        }
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+
+  }
+   //====EXCLUIR PAGINA POR ID ============================================================
+   async function DeletePaginaId(id: any,IdMenu: any){
+    setLoadingUpdate(true)
+  await api.delete(`/api/Paginas/${id}`)
+    .then(response => {
+   GetPaginaId(IdMenu);
+ //  localStorage.setItem('@Portal/usuario/atualiza-menu','1')
+    })
+    .catch((error) => {
+    });
+  }
+
+  //========adicionar páginas na edição com submenu ================================//
+
+  async function AdicionarPaginaEditeSubMenu(subId: any){
+    setLoadingUpdate(true)
+  await api.put(`/api/Menu/${idMenuEdit}`, {
+    id: idMenuEdit,
+    codigo:codMenuEdit,
+    ordem:0,
+    nome: nomeMenuEdit,
+    icon:iconMenu,
+        pagina: [
+          {
+            codigo: codPagina,
+            nome: nomePagina,
+            url: urlPagina,
+            icon: "",
+            menuId: idMenuEdit,
+            subMenuId: subId
+          }
+        ]
+  })
+    .then(response => {
+      console.log("Pagina criada com sucesso");
+     // localStorage.setItem('@Portal/usuario/atualiza-menu','1')
+      GetPaginaId(idMenuEdit);
+      setLoadingUpdate(false);
+    })
+    .catch((error) => {
+      setLoadingUpdate(false)
+    });
+  }
+
+  async function GetPaginas() {
+    setFilter(true);
+    await api
+      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .then((response) => {
+    //    console.log('sub',response.data.data)
+        if (response.data.data.length > 0) {
+           let pagina = response.data.data.filter((p:any)=>p.url !=="")
+
+            setPagina_Base(pagina);
+            pagina_Base=pagina
+          // console.log("pagina",pagina_Base)
+        }
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+
+  }
   function handleShowMensage(){
    
     setShowMensage(true);
+    setTimeout(function() {
+            
+   //   setShowMensage(false);
+      
+     }, 1200);
+  }
+  function handleShowMensageCadPermi(){
+   
+    setShowMensageCadPermi(true);
     setTimeout(function() {
             
    //   setShowMensage(false);
@@ -284,6 +518,8 @@ export default function CadUsuarios() {
     setTipoUsuario(false);
     setSenha('');
     setSenhaConfirm('');
+    setPermissoesOk(false);
+    permissoesOk=false;
     setShow(true);
   }
  
@@ -351,7 +587,10 @@ export default function CadUsuarios() {
     await api
       .get(`/api/Usuarios/${id}`)
       .then((response) => {
-          setUsuariosget(response.data)
+       
+          setUsuariosget(response.data);
+          usuariosget=response.data;
+          console.log("usuario Id", usuariosget);
           setIdUser(response.data.id);
           setPrimeiroNome(response.data.nomeCompleto);
           setEmail(response.data.email);
@@ -363,10 +602,16 @@ export default function CadUsuarios() {
           setFuncao(response.data.funcao);
           setGrupo(String(response.data.grupoId));
     
-          setAdmin(response.data.admin);
-          setComercial(response.data.comercial);
-          setRepresentante(response.data.representante);
-          setTipoUsuario(response.data.usuario);
+         
+         
+
+         
+         // permissoesUser=response.data.data[0].userPermissoes;
+         // console.log("permissoes",permissoesUser)
+         // GetMontarMenu();
+      //     setPermissoesUser(response.data.userPermissoes);
+      //     permissoesUser=response.data.userPermissoes;
+      //  console.log("permissões do usuário",permissoesUser);
 
 
       })
@@ -422,6 +667,148 @@ export default function CadUsuarios() {
       return;
     });
   }
+  //=============GetPermissoes do Usuario ======================//
+  async function GetPermissoes() {
+    setFilter(true);
+    await api
+      .get(`/api/User_Permissoes/filter-UserId?pagina=1&totalpagina=999&userId=${search}`)
+      .then((response) => {
+        setUsuarios(response.data.data);
+        usuarios=response.data.data;
+       // setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
+      //  setUsuariosFilter(response.data);
+      //  usuariosFilter=response.data;
+       console.log('usuarios pesquisa',response.data);
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+     
+  }
+ 
+  //==============Criar Permissões==============================//
+  //================menu=============================//
+      async function AdicionarPermissoesMenu(codSub:any,codPag:any){
+
+        setLoadingCreate(true)
+    await api.post("/api/User_Permissoes",{
+      userId: userIdPermit,
+      codigo: codMenuPrincipal,
+      menu:true
+         })
+         
+          .then(response => {
+           
+            AdicionarPermissoesSubMenu(codSub,codPag)
+          //  GetPermissoesPorUser1();
+          })
+          .catch((error) => {
+          
+            AdicionarPermissoesSubMenu(codSub,codPag)
+          });
+        }
+        
+        //=============get permissoes por usuario===============//
+        
+        async function GetPermissoesPorUser(){
+          await api.get(`/api/User_Permissoes/filter-UserId?pagina=1&totalpagina=999&userId=${userIdPermit}`)
+          .then(response => {
+          console.log('permissões salvar',response.data)
+          
+          })
+          .catch((error) => {
+          
+           
+          });
+        }
+        //================submenu=============================//
+      async function AdicionarPermissoesSubMenu(codSub:any,codPag:any){
+        await api.get(`/api/SubMenu/${codSub}`)
+              .then(response => {
+                setIdSubMenu(response.data.codigo);
+                idSubMenu=response.data.codigo;
+                PaginaPermissao(codPag);
+              
+              })
+              .catch((error) => {
+              
+                PaginaPermissao(codPag);
+              });
+            }
+      async function  PaginaPermissao(codPag:any){
+        setLoadingCreate(true)
+        await api.post("/api/User_Permissoes",{
+          userId: userIdPermit,
+          codigo: idSubMenu,
+          subMenu:true,
+          codMenu:codMenuPrincipal
+             })
+              .then(response => {
+
+                AdicionarPermissoesPagina(codPag,idSubMenu)
+               // GetPermissoesPorUser1();
+              })
+              .catch((error) => {
+                AdicionarPermissoesPagina(codPag,idSubMenu)
+              });
+            }
+            //================submenu=============================//
+      async function AdicionarPermissoesPagina(codPag:any,subMenu:any){
+
+        setLoadingCreate(true)
+        await api.post("/api/User_Permissoes",{
+          userId: userIdPermit,
+          codigo: codPag,
+          codSubMenu:subMenu
+             })
+              .then(response => {
+                setLoadingCreate(false)
+                GetPermissoesPorUser()
+              //  GetPermissoesPorUser1();
+              })
+              .catch((error) => {
+                setLoadingCreate(false)
+              });
+            }
+            //===================criar permissão sem submenu=================//
+            async function AdicionarPermi(codPag:any){
+
+              setLoadingCreate(true)
+          await api.post("/api/User_Permissoes",{
+            userId: userIdPermit,
+            codigo: codMenuPrincipal
+               })
+               
+                .then(response => {
+                 
+                  AdicionarPermiPag(codPag)
+                 // GetPermissoesPorUser1();
+                })
+                .catch((error) => {
+                
+                  AdicionarPermiPag(codPag)
+                });
+              }
+
+
+            //============================
+            async function AdicionarPermiPag(codPag:any){
+
+              setLoadingCreate(true)
+              await api.post("/api/User_Permissoes",{
+                userId: userIdPermit,
+                codigo: codPag,
+                codMenu:codMenuPrincipal
+                   })
+                    .then(response => {
+                    GetPermissoesPorUser()
+                      setLoadingCreate(false)
+                    //  GetPermissoesPorUser1();
+                    })
+                    .catch((error) => {
+                      setLoadingCreate(false)
+                    });
+                  }
     //============ Criar Usuario ===============================//
     async function CreateUsuario(){
 
@@ -491,12 +878,18 @@ export default function CadUsuarios() {
        
         .then(response => {
           setLoadingCreate(false)
+          console.log('usuario cadastrado',response.data)
+          setUserIdPermit(response.data.data);
+          userIdPermit=response.data.data;
+          setUserGrupoId(response.data.grupo);
+          userGrupoId=response.data.grupo;
+          console.log('id do usuario',userIdPermit)
          // GetUsuariosAcount();
           GetUsuarios();
-          handleClose ();
-          handleShowMensage();
+// handleClose ();
+          handleShowMensageCadPermi();
           setAlertErroMensage(true);
-          setMsgErro("Usuário criado com sucesso.");
+          setMsgErro("Usuário criado com sucesso. Deseja concedor Permissões de acesso agora?");
         })
         .catch((error) => {
          // handleClose()
@@ -748,7 +1141,7 @@ function PesquisaStatus(){
 
       {/* ================Modal Register ============================================== */}
 
-      <Modal className='modal-cadastro-user ' show={show} onHide={handleClose}>
+      <Modal className={permissoesOk?'modal-cadastro-user':'modal-cadastro-user-inicial' } show={show} onHide={handleClose}>
         <Modal.Header  closeButton>
           <h1>Cadastro de Usuário</h1>
         </Modal.Header>
@@ -770,13 +1163,14 @@ function PesquisaStatus(){
 					</div>
 					)}
           <div className='conteudo-modal-cadastro-user'>
-        <div  className='coluna-dados-user' >
+        <div  className={permissoesOk?'coluna-dados-user':'coluna-dados-user-inicial'} >
             <div className='coluna-dupla'>
             <div  className='bloco-input'>
             <p className="title-input"  >Nome Completo: <span style={{color:'red'}}>*</span></p>
-              <input className='form-coontrol inputlogin' 
+              <input className='form-control inputlogin' 
               id='prinome'
               type="text"
+              disabled={permissoesOk}
               //name='user' 
               value={primeiroNome}
               //onKeyDown={LimparErro} 
@@ -795,6 +1189,7 @@ function PesquisaStatus(){
               <input className='form-control inputlogin' 
               id='email'
               type="text"
+              disabled={permissoesOk}
               //name='user' 
               value={email}
               //onKeyDown={LimparErro} 
@@ -807,9 +1202,10 @@ function PesquisaStatus(){
 
             <div className='bloco-input'>
             <p className="title-input"  >Usuário: <span style={{color:'red'}}>*</span></p>
-              <input className='form-coontrol inputlogin' 
+              <input className='form-control inputlogin' 
               id='usuario'
               type="text"
+              disabled={permissoesOk}
              // name='user' 
               value={usuario}
              // onKeyDown={LimparErro} 
@@ -828,6 +1224,7 @@ function PesquisaStatus(){
               <input className='form-control inputlogin' 
               id='senha'
               type="password"
+              disabled={permissoesOk}
               //name='user' 
               value={senha}
               //onKeyDown={LimparErro} 
@@ -846,6 +1243,7 @@ function PesquisaStatus(){
              // name='user' 
               value={senhaConfirm}
               onBlur={SenhanaoCofere}
+              disabled={permissoesOk}
              // onKeyDown={LimparErro} 
               onChange={(e)=>{ 
                 setSenhaConfirm(e.target.value);
@@ -863,10 +1261,44 @@ function PesquisaStatus(){
             <div  className='bloco-input'>
             <p id="grupos" className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
 
-                     <Select 
+           {permissoesOk?(<>
+            <select className="form-select select campo-select" 
+            id='grupo-create'
+            aria-label="" 
+           value={String(userGrupoId)}
+            disabled={permissoesOk}
+                         onChange={(e) => {setGrupo(e.target.value);
+                        }}
+                        >
+                        <option value="">---</option>
+                        {/* <option value="1">ADMINISTRATIVO</option> */}
+                        <option value="2">COMERCIAL</option>
+                        <option value="3">REPRESENTANTE</option>
+                        <option value="4">USUÁRIO</option>
+                    </select> 
+           </>):(<>
+            <select className="form-select select campo-select" 
+            id='grupo-create'
+            aria-label="" 
+            disabled={permissoesOk}
+                         onChange={(e) => {setGrupo(e.target.value);
+                        }}
+                        >
+                        <option value="">---</option>
+                        {/* <option value="1">ADMINISTRATIVO</option> */}
+                        <option value="2">COMERCIAL</option>
+                        <option value="3">REPRESENTANTE</option>
+                        <option value="4">USUÁRIO</option>
+                    </select> 
+           </>)}
+            
+
+
+                     {/* <Select 
                      id='grupo-create'
                      className=" select-comp" 
                      placeholder="Digite ou selecione"
+                     isDisabled={permissoesOk}
                   noOptionsMessage={() => "Nenhum status encontrado"}
                    //  value={search} 
                      options={grupoCreate}  
@@ -875,13 +1307,14 @@ function PesquisaStatus(){
                         LimparTodos();
                         console.log('Select',value)          
                       }} 
-                    />
+                    /> */}
                    </div>
                    <div  className='bloco-input'>
-            <p style={{marginTop:2, marginBottom:5}} className="title-input"  >Função: </p>
-              <input className='form-coontrol inputlogin' 
+            <p  className="title-input"  >Função: </p>
+              <input className='form-control inputlogin' 
               id='funcao'
               type="text"
+              disabled={permissoesOk}
               //name='user' 
               value={funcao}
               //onKeyDown={LimparErro} 
@@ -896,11 +1329,16 @@ function PesquisaStatus(){
                     
                     </div> 
                     <div className='coluna-botoes-cad-user'>
-                    
-                    <button disabled={loadingCreate} type='button' id='' className='btn btn-cadastrar btn-user' onClick={CreateUsuario}>Cadastrar</button>                  
+                    {permissoesOk?(<>
+                      <button disabled={loadingCreate} type='button' id='' className='btn btn-cadastrar btn-user' onClick={handleClose}>Finalizar</button>                  
+                    </>):(<>
+                      <button disabled={loadingCreate} type='button' id='' className='btn btn-cadastrar btn-user' onClick={CreateUsuario}>Cadastrar</button>                  
+                    </>)}
+
                     </div>
             </div>
-            <div className='acesso-personalizado'>
+{permissoesOk?(<>
+  <div className='acesso-personalizado'>
               <h2>Conceder permissões:</h2>
             <div className="table-responsive table-scroll tabela-responsiva">
 
@@ -934,7 +1372,7 @@ function PesquisaStatus(){
   <OverlayTrigger
     placement={"top"}
     delay={{ show: 100, hide: 250 }}
-    overlay={<Tooltip>Editar</Tooltip>}
+    overlay={<Tooltip>Adicionar</Tooltip>}
   >
     <button
     className='btn btn-table btn-edit'
@@ -948,21 +1386,11 @@ function PesquisaStatus(){
       <HiOutlinePencilSquare/>
     </button>
     </OverlayTrigger>
-
-
-    {/* <OverlayTrigger
-    placement={"top"}
-    delay={{ show: 100, hide: 250 }}
-    overlay={<Tooltip>Deletar</Tooltip>}
-  >
-    <button onClick={()=>{
-     DeletePagina(pagina_Base.id);
-    }}
-
-    className='btn btn-table btn-delete'>
-      <RiDeleteBin5Line/>
-    </button>
-    </OverlayTrigger> */}
+    {/* {permissoesUser?.map((p)=>(<>
+      {p.codigo==pagina_Base.codigo?(<>
+      <TiInputChecked style={{color:"#008000",fontSize:20}}/>
+    </>):(<></>)}
+    </>))} */}
     </td>
 </tr>
 ))}
@@ -987,6 +1415,10 @@ function PesquisaStatus(){
 </div>   
                 
                     </div>
+</>):(<></>)}
+      
+
+
             </div>
             </>    )}
         </Modal.Body>
@@ -1012,10 +1444,11 @@ function PesquisaStatus(){
                           ) : (<>
           <div className='conteudo-user'>
             <img src={PhotoUser} alt="" width={150} />
-            <h2>{usuario}</h2>
+            <h2 style={{marginTop:20}}>{usuario}</h2>
             <h2>{email}</h2>
             
-            <button disabled={loadingCreate || grupo=='1'} id='' className='btn btn-permissao '>Permissões</button>
+            
+            <button disabled={loadingCreate || grupo=='1'} id='' className='btn btn-permissao' onClick={()=>{setShowModalEditePer(true)}}>Permissões</button>
           
           </div>
         <div  className='form-cadastro-user' >
@@ -1146,7 +1579,7 @@ function PesquisaStatus(){
                       }} 
                     /> */}
                <select className="form-select select campo-select" 
-            aria-label="Escolha o número de quartos" 
+            aria-label="" 
             value={String(grupo)}
             disabled={grupo=='1'}
                          onChange={(e) => {setGrupo(e.target.value);
@@ -1172,74 +1605,9 @@ function PesquisaStatus(){
             <button disabled={loadingUpdate}  id='' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button>
             </div>
            
-                    {/* <div  className='bloco-input'>
-                    <p className=" title-input"  >Acesso Personalizado: </p>
-                    <div className='acesso-personalizado-edit'>
-                      
-                    {grupo !="1"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" name="grupo" 
-                      id="grupo" 
-                      disabled={grupo=='1'}
-                      checked={admin}  
-                      onChange={({ target }) => {
-                      setAdmin(target.checked);
-                      }} 
-                      />
-                      <p className='text'>Administrativo</p>
-                      </div>
-                      </>):(<></>)}
-                      {grupo !="2"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo"
-                      disabled={grupo=='1'}
-                      checked={comercial}  
-                      onChange={({ target }) => {
-                      setComercial(target.checked);
-                      }}  
-                      />
-                      <p className='text'>Comercial</p>
-                      </div>
-                      </>):(<></>)} 
-                      {grupo !="3"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo"
-                      disabled={grupo=='1'}
-                      checked={representante}  
-                      onChange={({ target }) => {
-                      setRepresentante(target.checked);
-                      }}  
-                      />
-                      <p className='text'>Representante</p>
-                      </div>
-                      </>):(<></>)} 
-                      {grupo !="4"?(<>
-                      <div className='check-grupo'>
-                      <input 
-                      type="checkbox" 
-                      name="grupo" 
-                      id="grupo" 
-                      disabled={grupo=='1'}
-                      checked={tipoUsuario}  
-                      onChange={({ target }) => {
-                      setTipoUsuario(target.checked);
-                      }} 
-                      />
-                      <p className='text'>Usuário</p>
-                      </div>
-                      </>):(<></>)} 
-                    </div>
-                    </div> */}
+  
                     </div> 
-                    {/* <button disabled={loadingUpdate ||grupo=='1'} type='button' id='btn-mob' className='btn btn-cadastrar' onClick={editUser}>Editar</button>                  
-                    <button disabled={loadingUpdate} style={{marginTop: 135}} id='btn-mob' className='btn btn-cancelar 'onClick={handleCloseEdit}>Cancelar</button> */}
+                   
             </div>
            </>)}
         </Modal.Body>
@@ -1252,7 +1620,7 @@ function PesquisaStatus(){
           </Button>
         </Modal.Footer>  */}
       </Modal>
-       {/* ================Modal Cofirmação ============================================== */}
+       {/* ================Modal Confirmação ============================================== */}
 
        <Modal className='modal-confirm' show={showMensage} onHide={handleCloseMensage}>
         <Modal.Header  closeButton>
@@ -1267,6 +1635,222 @@ function PesquisaStatus(){
           <button style={{width:130}} className='btn btn-primary' onClick={handleCloseMensage}>Ok</button>
         </Modal.Body>
       
+      </Modal>
+       {/* ================Modal conceder permissoes e Confirmação ============================================== */}
+
+       <Modal className='modal-confirm' show={showMensageCadPermi} onHide={handleCloseMensageCadPermi}>
+        <Modal.Header  closeButton>
+          <h1 className='titulo'>Status da solicitação</h1>
+        </Modal.Header>
+        <Modal.Body>
+        {alertErroMensage && (
+					<div className="mt-3 mb-0">
+						<Alert msg={msgErro} setAlertErro={setAlertErroMensage} />
+					</div>
+					)}
+          <button style={{width:130}} className='btn btn-primary' onClick={()=>{handleCloseMensageCadPermi();handleClose();}}>Finalizar</button>
+           <button style={{width:130, marginLeft:30}} className='btn btn-primary' onClick={()=>{PermissoesOk();handleCloseMensageCadPermi()}}>Conceder</button>
+        </Modal.Body>
+      
+      </Modal>
+
+
+        {/* ================Modal add permissoes ============================================== */}
+
+        <Modal className='modal-edit-vendedor modal-menu' show={showEditMenu} onHide={handleCloseEditMenu}>
+        <Modal.Header  closeButton>
+          <h1>Lista de permissões</h1>
+        </Modal.Header>
+        <Modal.Body>
+        {loadingUpdate ? (
+          <div className="d-flex justify-content-center total-loading total-loadingCreate">
+          <div className='div-loading'>
+          <div className="spinner-border" role="status">
+
+          </div>
+          <h2 className="sr-only">Carregando...</h2>
+          </div>
+        </div>
+
+                          ) : (<>
+
+<div  className='form-cadastro-user' >
+
+<div className='coluna-dupla coluna-dupla-menu'>
+    <div  className='bloco-input bloco-menu-cad'>
+    <p className="title-input"  >Menu Principal: </p>
+    <h1>{nomeMenuEdit}</h1>
+   
+    </div>
+
+    <div  className='bloco-input bloco-menu-cad'>
+
+    
+    </div>
+
+    </div>
+  
+    
+                    {menuGetID.length > 0 ? (<>
+                      
+                      
+                      {menuGetID?.map((SubMenu)=> (<>
+                        <div  className='bloco-paginas'>
+       
+         <div style={{width:"100%",marginBottom:20}}>
+         <div className='check-grupo grupo-de-paginas'>
+         <h2 style={{marginRight:8}}>{SubMenu?.nome} </h2>
+              
+               </div>
+                    </div>
+          
+          {SubMenu?.pagina.map((pagina_Base)=>(<>
+            <div className='check-grupo grupo-de-paginas'>
+            <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
+                       onChange={({ target }) => {
+                        AdicionarPermissoesMenu(pagina_Base.subMenuId,pagina_Base.codigo);
+                    setSalvar(true)
+                    salvar=true
+                       }}
+                      />
+                
+                   <p className='text'>{pagina_Base.nome}</p>
+                   </div>
+                   </>))}
+                   
+                   </div>
+
+                   
+                   </>   ))}
+                
+              
+                    
+                    </>):(<>
+                      <div  className='bloco-paginas'>
+                      
+                      
+                      {menuIdGet?.map((pagina_Base)=> (<>
+         <div className='check-grupo grupo-de-paginas'>
+         <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
+                       onChange={({ target }) => {
+                        AdicionarPermi(pagina_Base.codigo);
+                       
+                    setSalvar(true)
+                    salvar=true
+                       }}
+                      />
+                
+                   <p className='text'>{pagina_Base.nome}</p>
+
+                   </div>
+                  
+                   </>   ))}
+                   </div>
+                  
+                    </>)}
+   
+ 
+    <div  className='bloco-botoes-finalizar'>
+    <button disabled={loadingUpdate}  id='' className='btn btn-cadastrar btn-edit-vend'onClick={handleCloseEditMenu}>Finalizar</button>
+
+    </div>
+
+    </div>
+           </>)}
+        </Modal.Body>
+
+      </Modal>
+
+       {/* ================Modal add permissoes edite ============================================== */}
+
+       <Modal className='modal-edit-vendedor modal-menu' show={showModalEditePer} onHide={handleCloseModalEditePer}>
+        <Modal.Header  closeButton>
+          <h1>Lista de permissões</h1>
+        </Modal.Header>
+        <Modal.Body>
+        {loadingUpdate ? (
+          <div className="d-flex justify-content-center total-loading total-loadingCreate">
+          <div className='div-loading'>
+          <div className="spinner-border" role="status">
+
+          </div>
+          <h2 className="sr-only">Carregando...</h2>
+          </div>
+        </div>
+
+                          ) : (<>
+
+<div  className='form-cadastro-user' >
+
+<div className='coluna-dupla coluna-dupla-menu'>
+    <div  className='bloco-input bloco-menu-cad'>
+    <p className="title-input"  >Menu Principal: </p>
+    <h1>{nomeMenuEdit}</h1>
+   
+    </div>
+
+    <div  className='bloco-input bloco-menu-cad'>
+
+    
+    </div>
+
+    </div>
+  
+    
+                    {/* {permissoesUser.length > 0 ? (<>
+                      
+                      
+                      {permissoesUser?.map((menu)=>(<>
+                        <div  className='bloco-paginas'>
+                        <h2 style={{marginRight:8}}> </h2>
+                   </div>
+                   </>   ))}
+                
+              
+                    
+                    </>):(<>
+                      <div  className='bloco-paginas'>
+                      
+                      
+                      {menuIdGet?.map((pagina_Base)=> (<>
+         <div className='check-grupo grupo-de-paginas'>
+         <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
+                       onChange={({ target }) => {
+                        AdicionarPermi(pagina_Base.codigo);
+                       
+                    setSalvar(true)
+                    salvar=true
+                       }}
+                      />
+                
+                   <p className='text'>{pagina_Base.nome}</p>
+
+                   </div>
+                  
+                   </>   ))}
+                   </div>
+                  
+                    </>)} */}
+   
+ 
+    <div  className='bloco-botoes-finalizar'>
+    <button disabled={loadingUpdate}  id='' className='btn btn-cadastrar btn-edit-vend'onClick={handleCloseModalEditePer}>Finalizar</button>
+
+    </div>
+
+    </div>
+           </>)}
+        </Modal.Body>
+
       </Modal>
 
       </div>

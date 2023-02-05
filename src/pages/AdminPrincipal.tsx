@@ -15,6 +15,31 @@ import api from '../services/api';
 import Alert from "../components/Alert";
 import SideNavBar from '../components/Navbar/SideNavBar';
 import NavbarDashHeader from '../components/Navbar/NavbarDashHeader';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { fab } from '@fortawesome/free-brands-svg-icons'
+// import { fad } from '@fortawesome/pro-duotone-svg-icons'
+// import {
+//   faCoffee,
+//   faCog,
+//   faSpinner,
+//   faQuoteLeft,
+//   faSquare,
+//   faCheckSquare
+// } from '@fortawesome/free-solid-svg-icons'
+// import { library } from '@fortawesome/fontawesome-svg-core';
+
+// library.add(
+//   fab,
+//   fad,
+//   faCoffee,
+//   faCog,
+//   faSpinner,
+//   faQuoteLeft,
+//   faSquare,
+//   faCheckSquare
+// )
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 
 export default function AdminPrincipal() {
   const history = useNavigate();
@@ -48,6 +73,8 @@ export default function AdminPrincipal() {
          <NavbarDashHeader/>
          <div className='titulo-page'>
             <h1>Administrativo</h1>
+            <div className='fa fa-sm fa-eye'></div> 
+            
             </div>
          <div style={{justifyContent:'center'}} className="contain">
             <div style={{margin:"auto"}} className='logo-admin'></div>

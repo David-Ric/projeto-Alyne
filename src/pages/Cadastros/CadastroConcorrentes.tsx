@@ -368,7 +368,7 @@ function HandleInsert(){
               <div className='logo-cadastro-concorrentes'></div>
           <div className='conteudo'>
             <div style={{height:60}} className='div-button-top'>
-              
+            {inInsert?(<><button style={{marginRight:140,color:"#fff"}}className='btn btn-danger btn-direito' onClick={()=>{setInInsert(false);setAlertErroRegister(false)}}>Cancelar</button></>):(<></>)}           
           <OverlayTrigger
           placement={"top"}
           delay={{ show: 100, hide: 250 }}
@@ -390,6 +390,11 @@ function HandleInsert(){
       </button>
       </OverlayTrigger>
       </div>
+      {alertErroRegister && (
+					<div className="mt-3 mb-0">
+						<Alert msg={msgErro} setAlertErro={setAlertErroRegister} />
+					</div>
+					)}
             <div style={{marginTop:10, width:"100%"}} className={inInsert?'conteudo-input':'conteudo-botoes'}>
               <div className='div-input-grupo'>
               <p className="title-input"  >{inInsert?"Insira o nome do concorrente":"Pesquisar por nome:"} </p>
@@ -400,7 +405,7 @@ function HandleInsert(){
              value={search}
              onChange={(e)=>{ 
               setSearch(e.target.value.toUpperCase());
-             
+              LimparTodos();
             }}
               />
             </div>

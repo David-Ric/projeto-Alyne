@@ -3,7 +3,7 @@
 .side-nav-container {
 	background-color: var(--dark);
 	width: 370px;
-	min-height:1120px;
+	min-height:1140px;
 	position: absolute !important;
     z-index: 1000;
 	color: var(--light);
@@ -30,7 +30,7 @@
       line-height: 30px;
       padding-left: 0px;
       .menu-mobiledmin{
-        display: block;
+        display: block !important;
       }
       a{
         text-align: center;
@@ -44,7 +44,7 @@
     }
 }
 .iconMenuAdmin{
-  display: none;
+  display: none !important;
 }
 .iconMenuAdmin {
 @media(max-width:800px){
@@ -509,7 +509,7 @@
     right: -45px;
     z-index: 100;
     top:15px;
-   display: none;
+   display: none !important;
 }
 .menuNoEspand{
   @media (max-width:768px){
@@ -664,3 +664,4 @@
     text-align: center !important;
     align-items: center;
    }
+  

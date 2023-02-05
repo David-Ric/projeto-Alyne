@@ -404,7 +404,7 @@ function HandleInsert(){
              value={search}
              onChange={(e)=>{ 
               setSearch(e.target.value.toUpperCase());
-             
+             LimparTodos();
             }}
               />
             </div>
