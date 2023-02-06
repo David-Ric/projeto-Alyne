@@ -161,7 +161,7 @@ export default function Home() {
           <div className='bloco-login'>
           <img src={Logo} alt="" width={140} style={{marginBottom:10}}/>
           <div className='bloco-title'>
-          <h1>LOGIN</h1>
+          <span style={{fontSize:20,fontWeight:"bold"}}>LOGIN</span>
           </div>
           {alertErro && (
 					<div className="mt-3 mb-0">

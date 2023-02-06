@@ -172,12 +172,12 @@ function handleCloseMensage(){
           <div className='bloco-login'>
           <img src={Logo} alt="" width={140} style={{marginBottom:10}}/>
           <div className='bloco-title'>
-          <h1 style={{fontWeight:"bold", 
+          <span style={{fontWeight:"bold", 
           textAlign: "center", 
           
           fontSize: 18,
           color: "red"
-          }}>REDEFINIR SENHA</h1>
+          }}>REDEFINIR SENHA</span>
 
          
 

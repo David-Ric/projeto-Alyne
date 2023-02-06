@@ -73,7 +73,6 @@ export default function AdminPrincipal() {
          <NavbarDashHeader/>
          <div className='titulo-page'>
             <h1>Administrativo</h1>
-            <div className='fa fa-sm fa-eye'></div> 
             
             </div>
          <div style={{justifyContent:'center'}} className="contain">

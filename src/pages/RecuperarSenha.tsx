@@ -154,16 +154,16 @@ function handleCloseMensage(){
           <div className='logo-recuperar'></div>
           <div className='bloco-login'>
           <img src={Logo} alt="" width={140} style={{marginBottom:10}}/>
-          <div className='bloco-title'>
-          <h1 style={{fontWeight:"bold", 
+          <div id='bloco-recupera' className='bloco-title '>
+          <span style={{fontWeight:"bold", 
           textAlign: "left", 
-          marginLeft:33, 
-          fontSize: 18,
+          marginLeft:0,
+          marginRight:12,
           color: "red"
-          }}>ESQUECEU SUA SENHA?</h1>
+          }}>ESQUECEU SUA SENHA?</span>
 
-          <h1 style={{fontWeight:"bold", textAlign: "left", marginLeft:33}}>RECUPERAR SENHA</h1>
-          <h1 style={{textAlign: "left", marginLeft:33,maxWidth:280, lineHeight:2, fontSize:14, marginTop: 10 }}>informe seu e-mail cadastrado para recuperar sua senha:</h1>
+          <h1 id='bloco-recupera2' style={{fontWeight:"bold", textAlign: "left", marginLeft:33}}>RECUPERAR SENHA</h1>
+          <h1 id='bloco-segundo-texto' style={{textAlign: "left", marginLeft:33,maxWidth:280, lineHeight:2, fontSize:14, marginTop: 10 }}>informe seu e-mail cadastrado para recuperar sua senha:</h1>
 
           </div>
           {alertErro && (
