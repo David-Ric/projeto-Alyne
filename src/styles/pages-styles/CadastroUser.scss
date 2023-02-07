@@ -58,6 +58,25 @@
         width: 100%;
     }
 }
+
+.acesso-personalizado-edicao{
+    width: 80%;
+    margin-top: 30px;
+    margin-left: 70px;
+   // height: 208px;
+    background-color: #f9f5f5;
+    box-shadow: 0 4px 8px 1px #c6c6ca;
+    flex: 0 0 auto;
+    padding: 15px;
+    .tabela-responsiva{
+        margin-top: 10px !important;
+    }
+    @media(max-width:770px) {
+        margin-top: 30px;
+        width: 100%;
+        margin-left: 0 !important;
+    }
+}
 .check-grupo{
     display: flex;
     text-align: center;

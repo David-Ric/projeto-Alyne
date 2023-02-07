@@ -10,8 +10,9 @@ const token = usuario.token;
 //console.log("token",token)
   const api = axios.create({
     
-    // baseURL: "https://localhost:5001",
-    baseURL: "http://10.0.0.31:8091",
+    //  baseURL: "https://localhost:5001",
+     baseURL: "https://10.0.0.31:8095",
+    //baseURL: "http://10.0.0.31:8091",
     headers: {
       "Content-type": "application/json",
       "Authorization" : `Bearer ${usuario.token}`

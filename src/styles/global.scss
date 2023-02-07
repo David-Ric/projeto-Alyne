@@ -669,6 +669,9 @@ thead{
   .grupo-de-paginas{
 	width: 300px !important;
   }
+  .grupo-de-paginasEdit{
+	width: 270px !important;
+  }
   .btn-chek-excluir{
 	background-color: #da4f4f !important;
 	border:none;
@@ -736,3 +739,18 @@ p{
 	font-size: 18px !important;
 	line-height: 22px !important;
 }
+.modal-perm{
+	.modal-content{
+	box-shadow: 0 4px 8px 1px #121213 !important;
+	}
+}
+.bloco-paginasEdit{
+	display: flex !important;
+    flex-wrap: wrap;
+	width: 100%;
+	border: 2px solid #bcb9b9;
+	min-height: 40px;
+	margin:auto;
+	margin-top: 30px !important;
+	padding: 10px;
+  }

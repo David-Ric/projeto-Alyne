@@ -21,7 +21,7 @@ import { TfiNewWindow } from "react-icons/tfi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Table from 'react-bootstrap/Table';
-import { iMenu, iUsuarios } from '../@types';
+import { iMenu, IMenuPermissao, iUsuarios } from '../@types';
 import OverlayTrigger from 'react-bootstrap/esm/OverlayTrigger';
 import { Tooltip } from 'react-bootstrap';
 import Paginacao from "../components/Paginacao";
@@ -55,7 +55,15 @@ export default function CadUsuarios() {
   const [representante, setRepresentante] = useState(false);
   const [tipoUsuario, setTipoUsuario] = useState(false);
   let [menuPrincipal, setMenuPrincipal] = useState<iMenu[]>([]);
+
+  let [menuParaEdicao, setMenuParaEdicao] = useState<iMenu[]>([]);
   let [pagina_Base, setPagina_Base] = useState<iPaginaBase[]>([]);
+  let [paginaMap, setPaginaMap] = useState<iPaginaBase[]>([]);
+  let [paginaMap2, setPaginaMap2] = useState<iPaginaBase[]>([]);
+  let [paginaMap3, setPaginaMap3] = useState<iPaginaBase[]>([]);
+  let [paginaMap4, setPaginaMap4] = useState<iPaginaBase[]>([]);
+  let [paginaMap5, setPaginaMap5] = useState<iPaginaBase[]>([]);
+  let [paginaMap6, setPaginaMap6] = useState<iPaginaBase[]>([]);
 
   const [error, setError] = useState("");
   const [msgErro, setMsgErro] = useState("");
@@ -86,11 +94,13 @@ export default function CadUsuarios() {
 
    const handleClose = () => setShow(false);
    const handleCloseEdit = () => setShowEdit(false);
+   const handleCloseEditPermissoes = () => setShowEditPermissoes(false);
    const handleCloseEditMenu = () => setShowEditMenu(false);
 
    //=========modal edite permissoes ===========================//
    const handleCloseModalEditePer = () => setShowModalEditePer(false);
    const [showModalEditePer, setShowModalEditePer] = useState(false);
+   const [showEditPermissoes, setShowEditPermissoes] = useState(false);
    //==========================================================//
    const handleCloseMensage = () => setShowMensage(false);
    const handleCloseMensageCadPermi = () => setShowMensageCadPermi(false);
@@ -120,6 +130,7 @@ let [nomeMenuEdit, setNomeMenuEdit] = useState('');
 let [nomeSubMenuEdit, setNomeSubMenuEdit] = useState('');
 let [codMenuEdit, setCodMenuEdit] = useState(0);
 let [idSubMenuEdit, setIdSubMenuEdit] = useState(0);
+let [idSubMenuEdit2, setIdSubMenuEdit2] = useState(0);
 let [idMenuEdit, setIdMenuEdit] = useState(0);
 let [idMenu, setIdMenu] = useState(1);
 
@@ -134,6 +145,8 @@ const [idPagina, setIdPagina] = useState(0);
    const [qtdePagina, setQtdePagina] = useState(10);
    const [qtdePagMenu, setQtdePagMeu] = useState(5);
    let [subMenuPesquisa, setSubMenuPesquisa] = useState<iDataSelect[]>([]);
+
+   let [permissoesSalvas, setPermissoesSalvas] = useState<IMenuPermissao[]>([]);
   //  let [eMenu, setEmenu] = useState<iPermissoes[]>([]);
   //  let [esubMenu, setEsubMenu] = useState<iPermissoes[]>([]);
    
@@ -145,6 +158,7 @@ const [idPagina, setIdPagina] = useState(0);
    let [codMenuPrincipal, setCodMenuPrincipal] = useState(0);
 
    let [idMenuPrincipal, setIdMenuPrincipal] = useState(0);
+   let [idMenuPrincipalEdit, setIdMenuPrincipalEdit] = useState(0);
    let [idSubMenu, setIdSubMenu] = useState(0);
   
    let [userIdPermit, setUserIdPermit] = useState(0);
@@ -175,17 +189,7 @@ const [idPagina, setIdPagina] = useState(0);
      { value: '4', label: 'USUÁRIO' }
     
    ];
-  // const [grupoCreate, setGrupoCreate] = useState<iDataSelect[]>([
-  //    { value: '2', label: 'COMERCIAL' },
-  //    { value: '3', label: 'REPRESENTANTE' },
-  //    { value: '4', label: 'USUÁRIO' }
-  // ]);
-  //  const [grupos, setGrupos] = useState<iDataSelect[]>([
-  //    { value: '1', label: 'ADMINISTRATIVO' },
-  //    { value: '2', label: 'COMERCIAL' },
-  //    { value: '3', label: 'REPRESENTANTE' },
-  //    { value: '4', label: 'USUÁRIO' }
-  //  ]);
+
 
   //================================================//
 
@@ -227,14 +231,66 @@ function PermissoesOk(){
 
     await api
 
-      .get(`/api/Menu?pagina=${pagina}&totalpagina=${qtdePagMenu}`)
+      .get(`/api/Menu?pagina=1&totalpagina=10`)
       .then((response) => {
 
         setMenuPrincipal(response.data.data);
         menuPrincipal=response.data.data;
+        console.log("menu geral response",response.data.data)
        console.log("menu geral",menuPrincipal)
 
     
+        setTotalPaginasPerm(Math.ceil(response.data.total / qtdePagMenu));
+
+      })
+      .catch((error) => {
+        console.log("Ocorreu um erro");
+      });
+
+  }
+
+  //=============motar menu edit ======================================//
+  async function GetMontarMenuEdicao() {
+    setFilter(false);
+
+    await api
+
+      .get(`/api/Menu?pagina=1&totalpagina=10`)
+      .then((response) => {
+
+        // setMenuPrincipal(response.data.data);
+        // menuPrincipal=response.data.data;
+        console.log("menu geral response edição",response.data.data)
+       
+
+       setMenuParaEdicao(response.data.data.filter((e:any)=>
+       e?.codigo !=permissoesSalvas[0]?.codigo && 
+       e?.codigo !=permissoesSalvas[1]?.codigo &&
+       e?.codigo !=permissoesSalvas[2]?.codigo &&
+       e?.codigo !=permissoesSalvas[3]?.codigo &&
+       e?.codigo !=permissoesSalvas[4]?.codigo &&
+       e?.codigo !=permissoesSalvas[5]?.codigo &&
+       e?.codigo !=permissoesSalvas[6]?.codigo &&
+       e?.codigo !=permissoesSalvas[7]?.codigo &&
+       e?.codigo !=permissoesSalvas[8]?.codigo &&
+       e?.codigo !=permissoesSalvas[9]?.codigo &&
+       e?.codigo !=permissoesSalvas[10]?.codigo 
+       ));
+       menuParaEdicao=response.data.data.filter((e:any)=>
+       e?.codigo !=permissoesSalvas[0]?.codigo && 
+       e?.codigo !=permissoesSalvas[1]?.codigo &&
+       e?.codigo !=permissoesSalvas[2]?.codigo &&
+       e?.codigo !=permissoesSalvas[3]?.codigo &&
+       e?.codigo !=permissoesSalvas[4]?.codigo &&
+       e?.codigo !=permissoesSalvas[5]?.codigo &&
+       e?.codigo !=permissoesSalvas[6]?.codigo &&
+       e?.codigo !=permissoesSalvas[7]?.codigo &&
+       e?.codigo !=permissoesSalvas[8]?.codigo &&
+       e?.codigo !=permissoesSalvas[9]?.codigo &&
+       e?.codigo !=permissoesSalvas[10]?.codigo 
+       );
+      console.log('resultado filtrado',menuParaEdicao);
+       //permissoesSalvas
         setTotalPaginasPerm(Math.ceil(response.data.total / qtdePagMenu));
 
       })
@@ -300,7 +356,7 @@ function PermissoesOk(){
         if (response.data.data.length > 0) {
            let pagina = response.data.data.filter((p:any)=>p.url ==""&& p.codigo!=codMenuEdit)
           let options:Array<iDataSelect>=new Array<iDataSelect>();
-          pagina.map((pagina:any) => {
+          pagina?.map((pagina:any) => {
             let rowGrupo: iDataSelect = {};
             rowGrupo.value = String(pagina.codigo);
             // rowGrupo.label = String(pagina.codigo)+ " - " + pagina.nome ;
@@ -439,20 +495,7 @@ async function EditeMenu(){
    
     setLoadingUpdate(true)
   await api.put(`/api/Menu/${idMenuEdit}`, {
-    // id: idMenuEdit,
-    // codigo:codMenuEdit,
-    // ordem:0,
-    // nome: nomeMenuEdit,
-    // icon:iconMenu,
-    //     pagina: [
-    //       {
-    //         codigo: codPagina,
-    //         nome: nomePagina,
-    //         url: urlPagina,
-    //         icon:iconPagina,
-    //         menuId: idMenuEdit
-    //       }
-    //     ]
+  
   })
     .then(response => {
       console.log("Pagina criada com sucesso");
@@ -507,15 +550,50 @@ function AdicionarRemoverPag(){
       });
 
   }
-   //====EXCLUIR PAGINA POR ID ============================================================
-   async function DeletePaginaId(id: any,IdMenu: any){
+  //====excluir menu com paginas =========================================================
+  
+  async function DeleteMenuTotal(id: any){
     setLoadingUpdate(true)
-  await api.delete(`/api/Paginas/${id}`)
+  await api.delete(`/api/PaginaPermissao/menuId?menuId=${id}`)
     .then(response => {
-   GetPaginaId(IdMenu);
+   console.log("excluido com sucesso")
+   DeleteMenu(id);
  //  localStorage.setItem('@Portal/usuario/atualiza-menu','1')
     })
     .catch((error) => {
+      GetUsuarioPermissaoId()
+      setLoadingUpdate(false)
+      console.log("ocorreu um erro")
+    });
+  }
+  //========================================================
+  async function DeleteMenu(id: any){
+    setLoadingUpdate(true)
+  await api.delete(`/api/MenuPermissao/${id}`)
+    .then(response => {
+   console.log("excluido com sucesso")
+   GetUsuarioPermissaoId()
+   setLoadingUpdate(false)
+ //  localStorage.setItem('@Portal/usuario/atualiza-menu','1')
+    })
+    .catch((error) => {
+      GetUsuarioPermissaoId()
+      setLoadingUpdate(false)
+      console.log("ocorreu um erro")
+    });
+  }
+   //====EXCLUIR PAGINA POR ID ============================================================
+   async function DeletePaginaId(id: any,IdMenu: any){
+    setLoadingUpdate(true)
+  await api.delete(`/api/PaginaPermissao/${id}`)
+    .then(response => {
+   //GetPaginaId(IdMenu);
+   setLoadingUpdate(false)
+   GetUsuarioPermissaoId()
+ //  localStorage.setItem('@Portal/usuario/atualiza-menu','1')
+    })
+    .catch((error) => {
+      setLoadingUpdate(false)
     });
   }
 
@@ -678,7 +756,46 @@ function AdicionarRemoverPag(){
       });
      
   }
- 
+ //==============get usuario id permissoes===============================
+ async function GetUsuarioPermissaoId() {
+  GetMontarMenuEdicao()
+ setUserIdPermit(idUser);
+  userIdPermit=idUser;
+  await api
+    .get(`/api/Usuarios/${idUser}`)
+    .then((response) => {
+     
+        setUsuariosget(response.data);
+        usuariosget=response.data;
+        console.log("usuario Id", usuariosget);
+        
+        setPermissoesSalvas(response.data.menuPermissao);
+        permissoesSalvas=response.data.menuPermissao;
+        setPaginaMap(response.data.menuPermissao.pagina);
+        paginaMap=response.data.menuPermissao.pagina;
+          setPaginaMap2(response.data.menuPermissao[1]?.pagina);
+          paginaMap2=response.data.menuPermissao[1]?.pagina;
+          setPaginaMap3(response.data.menuPermissao[2]?.pagina);
+          paginaMap3=response.data.menuPermissao[2]?.pagina;
+          setPaginaMap4(response.data.menuPermissao[3]?.pagina);
+          paginaMap4=response.data.menuPermissao[3]?.pagina;
+          setPaginaMap5(response.data.menuPermissao[4]?.pagina);
+          paginaMap5=response.data.menuPermissao[4]?.pagina;
+          setPaginaMap6(response.data.menuPermissao[5]?.pagina);
+          paginaMap6=response.data.menuPermissao[5]?.pagina;
+        console.log('permissoes',permissoesSalvas)
+        console.log("paginas da permi", paginaMap)
+  
+       
+       
+
+      
+
+    })
+    .catch((error) => {
+      console.log("Ocorreu um erro");
+    });
+}
   
     //=========== get usuarios por ID ==================================//
   async function GetUsuarioId(id:any) {
@@ -719,6 +836,23 @@ function AdicionarRemoverPag(){
           setAtivo(response.data.status);
           setFuncao(response.data.funcao);
           setGrupo(String(response.data.grupoId));
+          setPermissoesSalvas(response.data.menuPermissao);
+          permissoesSalvas=response.data.menuPermissao;
+          setPaginaMap(response.data.menuPermissao[0]?.pagina);
+          paginaMap=response.data.menuPermissao[0]?.pagina;
+          setPaginaMap2(response.data.menuPermissao[1]?.pagina);
+          paginaMap2=response.data.menuPermissao[1]?.pagina;
+          setPaginaMap3(response.data.menuPermissao[2]?.pagina);
+          paginaMap3=response.data.menuPermissao[2]?.pagina;
+          setPaginaMap4(response.data.menuPermissao[3]?.pagina);
+          paginaMap4=response.data.menuPermissao[3]?.pagina;
+          setPaginaMap5(response.data.menuPermissao[4]?.pagina);
+          paginaMap5=response.data.menuPermissao[4]?.pagina;
+          setPaginaMap6(response.data.menuPermissao[5]?.pagina);
+          paginaMap6=response.data.menuPermissao[5]?.pagina;
+          console.log('permissoes',permissoesSalvas)
+          console.log("paginas da permi", paginaMap)
+        
     
          
          
@@ -772,15 +906,10 @@ function AdicionarRemoverPag(){
       window.scrollTo(0, 0);
       handleShowMensage()
       setAlertErroMensage(true);
-      //console.log('resposta', error.response.data)
-      //setAuthenticated(false);
+    
     const { data } = error.response;
     setMsgErro(data.message);
-      //setMsgErro(
-        // error.response.data.message
-        //   ? error.response.data.message
-        //   : "Houve um erro ao tentar editar o usuário. Tente novamente mais tarde."
-      //);
+      
      
       return;
     });
@@ -793,9 +922,7 @@ function AdicionarRemoverPag(){
       .then((response) => {
         setUsuarios(response.data.data);
         usuarios=response.data.data;
-       // setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
-      //  setUsuariosFilter(response.data);
-      //  usuariosFilter=response.data;
+      
        console.log('usuarios pesquisa',response.data);
       })
       .catch((error) => {
@@ -829,13 +956,46 @@ function AdicionarRemoverPag(){
             AdicionarPermissoesSubMenu(codSub,codPag)
           });
         }
-        //=================get remover pagina ao desmarcar=================//
-        async function GetRemoverPorCodigo(codigo:any){
-          await api.get(`/api/PaginaPermissao/codigo?pagina=1&totalpagina=10&codigo=${codigo}&idMenu=${idMenuSub}`)
+        //=================get remover pagina existente====================//
+        async function GetRemoverPorCodigoEdit(codigo:any){
+          console.log('id menu',idMenuPrincipal)
+          console.log('codigo pagina',codigo)
+          await api.get(`/api/PaginaPermissao/codigo?pagina=1&totalpagina=999&codigo=${codigo}&idMenu=${idMenuPrincipal}`)
           .then(response => {
           console.log('pagina por código',response.data);
-          setIdPaginaExcluir(response.data.id);
-          idPaginaExcluir=response.data.id;
+          setIdPaginaExcluir(response.data[0].id);
+          idPaginaExcluir=response.data[0].id;
+          console.log('código pelo response',response.data[0].id);
+          console.log('código',idPaginaExcluir);
+          ExcluirPagina();
+          })
+          .catch((error) => {
+          
+           
+          });
+        }
+        async function ExcluirPaginaEdit(){
+          await api.delete(`/api/PaginaPermissao/${idPaginaExcluir}`)
+          .then(response => {
+          console.log('pagina excluída com sucesso');
+         
+          })
+          .catch((error) => {
+          
+           
+          });
+        }
+        //=================get remover pagina ao desmarcar=================//
+        async function GetRemoverPorCodigo(codigo:any){
+          console.log('id menu',idMenuPrincipal)
+          console.log('codigo pagina',codigo)
+          await api.get(`/api/PaginaPermissao/codigo?pagina=1&totalpagina=999&codigo=${codigo}&idMenu=${idMenuPrincipal}`)
+          .then(response => {
+          console.log('pagina por código',response.data);
+          setIdPaginaExcluir(response.data[0].id);
+          idPaginaExcluir=response.data[0].id;
+          console.log('código pelo response',response.data[0].id);
+          console.log('código',idPaginaExcluir);
           ExcluirPagina();
           })
           .catch((error) => {
@@ -923,6 +1083,70 @@ function AdicionarRemoverPag(){
                 setLoadingCreate(false)
               });
             }
+            //==================criar Menu inexistente na edição =============//
+            async function AdicionarPermiEdit(codMenu:any,nomeMenu:any,codSubMenu:any,nomeSub:any,codPag:any,nomePag:any){
+             
+              setLoadingCreate(true)
+          await api.post("/api/MenuPermissao",{
+            userId: userIdPermit,
+            codigo: codMenu,
+            nome:nomeMenu
+               })
+               
+                .then(response => {
+                  console.log(response.data)
+                  idMenuPrincipalEdit=response.data.menu.id;
+                  setIdMenuPrincipalEdit(response.data.menu.id)
+                  console.log("idMenu",idMenuPrincipalEdit)
+                  PaginaPermissaoEdit(codSubMenu,nomeSub,codPag,nomePag)
+                //  GetPermissoesPorUser1();
+                })
+                .catch((error) => {
+                  PaginaPermissaoEdit(codSubMenu,nomeSub,codPag,nomePag)
+                  // AdicionarPermissoesSubMenuEdit(codSub,codPag)
+                });
+              }
+
+           
+              async function  PaginaPermissaoEdit(codSub:any,nomeSub:any,codPag:any, nomePag:any){
+                setLoadingCreate(true)
+                await api.post("/api/SubMenuPermissao",{
+                  codigo: codSub,
+                  nome:nomeSub,
+                  menuPermissaoId:idMenuPrincipalEdit
+                     })
+                      .then(response => {
+                        console.log(response.data)
+                        idSubMenuEdit2=response.data.menu.id;
+                        setIdSubMenuEdit2(response.data.menu.id);
+                        setIdMenuSub(response.data.menu.menuPermissaoId);
+                        idMenuSub=response.data.menu.menuPermissaoId;
+                        AdicionarPermissoesPaginaEdit(codPag)
+                       // GetPermissoesPorUser1();
+                      })
+                      .catch((error) => {
+                        AdicionarPermissoesPaginaEdit(codPag)
+                      });
+                    }
+                    //================submenu=============================//
+              async function AdicionarPermissoesPaginaEdit(codPag:any){
+        
+                setLoadingCreate(true)
+                await api.post("/api/PaginaPermissao",{
+                  codigo: codPag,
+                  nome:nomePagina,
+                  menuPermissaoId:idMenuPrincipalEdit,
+                  subMenuPermissaoId:idSubMenuEdit2
+                     })
+                      .then(response => {
+                        setLoadingCreate(false)
+                        GetPermissoesPorUser()
+                      //  GetPermissoesPorUser1();
+                      })
+                      .catch((error) => {
+                        setLoadingCreate(false)
+                      });
+                    }
             //===================criar permissão sem submenu=================//
             async function AdicionarPermi(codPag:any,nomePagina:any){
 
@@ -965,9 +1189,52 @@ function AdicionarRemoverPag(){
                       setLoadingCreate(false)
                     });
                   }
+    //======criar menu sem submenu na edição ==========================//
+    async function AdicionarPermiEd(menuCod:any,menuNome:any,codPag:any,nomePagina:any){
+
+      setLoadingCreate(true)
+      await api.post("/api/MenuPermissao",{
+        userId: userIdPermit,
+        codigo: menuCod,
+        nome:menuNome
+           })
+       
+        .then(response => {
+          idMenuPrincipalEdit=response.data.menu.id;
+          setIdMenuPrincipalEdit(response.data.menu.id)
+          console.log("idMenu",idMenuPrincipal)
+          AdicionarPermiPagEd(codPag,nomePagina)
+         // GetPermissoesPorUser1();
+        })
+        .catch((error) => {
+        
+          AdicionarPermiPagEd(codPag,nomePagina)
+        });
+      }
+
+
+    //============================
+    async function AdicionarPermiPagEd(codPag:any,nomePagina:any){
+
+      setLoadingCreate(true)
+      await api.post("/api/PaginaPermissao",{
+        codigo: codPag,
+        nome:nomePagina,
+        menuPermissaoId:idMenuPrincipalEdit,
+           })
+            .then(response => {
+            GetPermissoesPorUser()
+              setLoadingCreate(false)
+            //  GetPermissoesPorUser1();
+            })
+            .catch((error) => {
+              setLoadingCreate(false)
+            });
+          }
     //============ Criar Usuario ===============================//
     async function CreateUsuario(){
-
+      setUserIdPermit(0);
+      userIdPermit=0;
       if(primeiroNome==''){
         let senhaconf: any;
         senhaconf = document.getElementById("prinome");
@@ -1604,7 +1871,7 @@ function PesquisaStatus(){
             <h2>{email}</h2>
             
             
-            <button disabled={loadingCreate || grupo=='1'} id='' className='btn btn-permissao' onClick={()=>{setShowModalEditePer(true)}}>Permissões</button>
+            <button disabled={loadingCreate || grupo=='1'} id='' className='btn btn-permissao' onClick={()=>{setShowEditPermissoes(true);GetMontarMenu();GetUsuarioPermissaoId(); }}>Permissões</button>
           
           </div>
         <div  className='form-cadastro-user' >
@@ -1847,7 +2114,7 @@ function PesquisaStatus(){
     </div>
   
     
-                    {menuGetID.length > 0 ? (<>
+                    {menuGetID?.length > 0 ? (<>
                       
                       
                       {menuGetID?.map((SubMenu)=> (<>
@@ -1908,7 +2175,7 @@ function PesquisaStatus(){
                         if(document.getElementById(`grupo2${pagina_Base.codigo}`)?.toggleAttribute(':checked')){
                           AdicionarPermi(pagina_Base.codigo,pagina_Base.nome);
                       } else {
-                        console.log("desmarcado");
+                        GetRemoverPorCodigo(pagina_Base.codigo)
                       }
                      
                        setNomePagina(pagina_Base.nome);
@@ -2026,7 +2293,7 @@ function PesquisaStatus(){
       </Modal>
         {/* ================Modal Editar Permissões ============================================== */}
 
-        <Modal className='modal-edit-vendedor' show={showEdit} onHide={handleCloseEdit}>
+        <Modal className='modal-edit-vendedor modal-perm' show={showEditPermissoes} onHide={handleCloseEditPermissoes}>
         <Modal.Header  closeButton>
           <h1>Editar Permissões</h1>
         </Modal.Header>
@@ -2045,52 +2312,116 @@ function PesquisaStatus(){
 
         <div  className='form-cadastro-user' >
 
-        <div className='coluna-dupla coluna-dupla-menu'>
-            <div  className='bloco-input bloco-menu-cad'>
-            <p className="title-input"  >Menu Principal: </p>
-            <h1>{nomeMenuEdit}</h1>
-           
-            </div>
 
-            <div  className='bloco-input bloco-menu-cad'>
-
-            
-            </div>
-
-            </div>
-
-                            {menuGetID.length > 0 ? (<>
+                            {permissoesSalvas?.length > 0 ? (<>
                               
                               
-                              {menuGetID?.map((SubMenu)=> (<>
+                              {permissoesSalvas?.map((Menu)=> (<>
+                                <div style={{marginLeft:30}}>
+                                <p className="title-input"  >Menu: </p>
+                              <div style={{display:"flex"}}><h1>{Menu?.nome}</h1>
+                              <button style={{marginLeft:20}}  name="grupo"
+                           id="grupo"
+                           className='btn-chek-excluir' onClick={()=>{
+                            console.log('menu id',Menu?.id)
+                            DeleteMenuTotal(Menu.id);
+                            // DeletePaginaId(pagina_Base.id, pagina_Base.menuPermissaoId)                           
+                           }}>x</button></div>
+                              </div>
+                              {Menu.subMenu?.length>0?(<>
+                                {Menu.subMenu?.map((SubMenu)=> (<> 
                                 <div  className='bloco-paginas'>
                
                  <div style={{width:"100%",marginBottom:20}}>
                
-                 <h2>{SubMenu?.nome} </h2>
+                  <h2>{SubMenu?.nome} </h2> 
                        
                             </div>
                   
                   {SubMenu?.pagina.map((pagina_Base)=>(<>
+                  
                     <div className='check-grupo grupo-de-paginas'>
                   <button  name="grupo"
                            id="grupo"
                            className='btn-chek-excluir' onClick={()=>{
-                            DeletePaginaId(pagina_Base.id, pagina_Base.menuId)                           
+                            DeletePaginaId(pagina_Base.id, pagina_Base.menuPermissaoId)                           
                            }}>x</button>
-                        
+                      
                            <p className='text'>{pagina_Base.nome}</p>
                            </div>
-                           </>))}
+                         
+                         
+                           </>))} 
                            
                            </div>
-
                            <div  className='bloco-paginas'>
                             <div style={{width:"100%",marginBottom:20}}>
                             <h2>Adicionar Novos</h2>
                             </div>
                           
-                            {pagina_BaseEdite.map((pagina_Base)=> (
+                          {menuPrincipal?.map((pagina)=> (<>
+                            {/* {pagina.subMenu?.filter(sub=>sub.codigo==SubMenu.codigo).map(subMe=>(<> */}
+                              {pagina.subMenu?.filter((sub)=>sub.codigo==SubMenu.codigo).map(sub=>(<>
+                              
+                               {sub.pagina?.map((paginaFilter)=>(<> 
+                          
+                      <div className='check-grupo grupo-de-paginas'>
+                      <input
+                      type="checkbox"
+                      name="grupo"
+                      id="grupo"
+                      //checked={}
+                       onChange={({ target }) => {
+                        setCodPagina(paginaFilter.codigo);
+                        codPagina=paginaFilter.codigo;
+                        setNomePagina(paginaFilter.nome);
+                        nomePagina=paginaFilter.nome;
+                        // setUrlPagina(pagina_Base.url);
+                        // urlPagina=pagina_Base.url;
+                        // setIconPagina(pagina_Base?.icon);
+                        // iconPagina=pagina_Base?.icon;
+                     //              console.log('submenu',SubMenu.id);
+                     //             AdicionarPaginaEditeSubMenu(SubMenu.id);
+                        // AdicionarPaginaEdite();
+                    //   setComercial(target.checked);
+                    // setSalvar(true)
+                    // salvar=true
+                       }}
+                      />
+                      <p className='text'>{paginaFilter.nome}</p>
+
+                      </div>
+
+                      </>))} 
+                      </>))}
+                      </>  ))} 
+                            </div>
+
+                            
+                            </>))}
+                              </>):(<>
+                                <div  className='bloco-paginas'>
+                                {Menu.pagina?.map((pagina)=> (<> 
+                  
+                    <div className='check-grupo grupo-de-paginas'>
+                  <button  name="grupo"
+                           id="grupo"
+                           className='btn-chek-excluir' onClick={()=>{
+                            DeletePaginaId(pagina.id, pagina.menuPermissaoId)                           
+                           }}>x</button>
+                        
+                           <p className='text'>{pagina.nome}</p>
+                           </div>
+                          
+ 
+                           </>))}
+                           </div>
+                           <div  className='bloco-paginas'>
+                            <div style={{width:"100%",marginBottom:20}}>
+                            <h2>Adicionar Novos</h2>
+                            </div>
+                          
+                            {/* {pagina_BaseEdite.map((pagina_Base)=> (
             <div className='check-grupo grupo-de-paginas'>
                       <input
                       type="checkbox"
@@ -2106,8 +2437,8 @@ function PesquisaStatus(){
                         urlPagina=pagina_Base.url;
                         // setIconPagina(pagina_Base?.icon);
                         // iconPagina=pagina_Base?.icon;
-                        console.log('submenu',SubMenu.id);
-                        AdicionarPaginaEditeSubMenu(SubMenu.id);
+                     //              console.log('submenu',SubMenu.id);
+                     //             AdicionarPaginaEditeSubMenu(SubMenu.id);
                         // AdicionarPaginaEdite();
                     //   setComercial(target.checked);
                     setSalvar(true)
@@ -2117,79 +2448,225 @@ function PesquisaStatus(){
                       <p className='text'>{pagina_Base.nome}</p>
 
                       </div>
-             ))}
+             ))} */}
                             </div>
+ 
+                              </>)}
+                             
                            </>   ))}
-                        
+                           {menuGetID?.length > 0 ? (<>
                       
-                            
-                            </>):(<>
-                              <div  className='bloco-paginas'>
-                              <div style={{width:"100%",marginBottom:20}}>
-                              <h2>Excluir existentes</h2>
-                            </div>
-                              
-                              {menuIdGet?.map((pagina_Base)=> (<>
-                 <div className='check-grupo grupo-de-paginas'>
-                  <button  name="grupo"
-                           id="grupo"
-                           className='btn-chek-excluir' onClick={()=>{
-                            DeletePaginaId(pagina_Base.id, pagina_Base.menuId)                           
-                           }}>x</button>
-                        
-                           <p className='text'>{pagina_Base.nome}</p>
-
-                           </div>
-                          
-                           </>   ))}
-                           </div>
-                           <div  className='bloco-paginas'>
-                            <div style={{width:"100%",marginBottom:20}}>
-                            <h2>Adicionar Novos</h2>
-                            </div>
-                          
-                            {pagina_BaseEdite.map((pagina_Base)=> (
+                      
+                      {menuGetID?.map((SubMenu)=> (<>
+                        <div  className='bloco-paginas'>
+       
+         <div style={{width:"100%",marginBottom:20}}>
+         <div className='check-grupo grupo-de-paginas'>
+         <h2 style={{marginRight:8}}>{SubMenu?.nome} </h2>
+              
+               </div>
+                    </div>
+          
+          {SubMenu?.pagina.map((pagina_Base)=>(<>
             <div className='check-grupo grupo-de-paginas'>
-                      <input
+            <input
                       type="checkbox"
                       name="grupo"
-                      id="grupo"
-                      //checked={}
+                      style={{marginRight:10}}
+                      id={`grupo${pagina_Base.codigo}`}
                        onChange={({ target }) => {
-                        setCodPagina(pagina_Base.codigo);
-                        codPagina=pagina_Base.codigo;
                         setNomePagina(pagina_Base.nome);
-                        nomePagina=pagina_Base.nome;
-                        setUrlPagina(pagina_Base.url);
-                        urlPagina=pagina_Base.url;
-                        // setIconPagina(pagina_Base?.icon);
-                        // iconPagina=pagina_Base?.icon;
-                        AdicionarPaginaEdite();
-                    //   setComercial(target.checked);
+                        nomePagina= pagina_Base.nome;
+                      //  AdicionarRemoverPag()
+                        if(document.getElementById(`grupo${pagina_Base.codigo}`)?.toggleAttribute(':checked')){
+                          AdicionarPermissoesMenu(pagina_Base.subMenuId,pagina_Base.codigo);
+                      } else {
+                        GetRemoverPorCodigo(pagina_Base.codigo)
+                      }
+                      
                     setSalvar(true)
                     salvar=true
                        }}
                       />
-                      <p className='text'>{pagina_Base.nome}</p>
+                
+                   <p className='text'>{pagina_Base.nome}</p>
+                   </div>
+                   </>))}
+                   
+                   </div>
 
+                   
+                   </>   ))}
+                
+              
+                    
+                    </>):(<>
+                    
+                  
+                    </>)}
+                    {menuParaEdicao?.length>0?(<>
+                      
+                      <div  className='bloco-paginasEdit'>
+                     
+                      {menuParaEdicao?.map((menu)=> (<>
+                        <div style={{width: '100%'}}>
+                      <h2>Menu sem Permissões:</h2>
+                      <div className='divisa'></div>
+                      <h2 style={{marginBottom:0,marginTop:10}}>{menu.nome}</h2>
                       </div>
-             ))}
-                            </div>
-                            </>)}
-           
-                         
-                         
-                           
+                      {menu.subMenu?.length>0?(<>
+                      {menu.subMenu?.map((pagina_Base)=>(<>
+                        <div  className='bloco-paginasEdit'>
+                        <div style={{width: '100%'}}>
+                        <h2>{pagina_Base.nome}</h2>
+                        </div>
+                        {pagina_Base.pagina?.map((pagina)=>(<>
                           
-                 {/* </div> */}
+                        <div  className='check-grupo grupo-de-paginasEdit'>
+                     <input
+                      type="checkbox"
+                      name="grupo"
+                      style={{marginRight:10}}
+                      id={`grupo2${pagina.codigo}`}
+                       onChange={({ target }) => {
+                        if(document.getElementById(`grupo2${pagina.codigo}`)?.toggleAttribute(':checked')){
+                        
+                         AdicionarPermiEdit(menu.codigo,menu.nome,pagina_Base.codigo,pagina_Base.nome,pagina.codigo,pagina.nome);
+                      } else {
+                        GetRemoverPorCodigo(pagina.codigo)
+                      }
+                     
+                       setNomePagina(pagina.nome);
+                       nomePagina=pagina.nome;
+                    setSalvar(true)
+                    salvar=true
+                       }}
+                      />
+                
+                   <p className='text'>{pagina.nome}</p>
+
+                   </div>
+                  
+                   </>))}
+                   </div>
+                   </>))}
+                      
+                      </>):(<>
+                        {menu.pagina?.map((pagina_Base)=>(<>
+                        <div className='check-grupo grupo-de-paginas'>
+                     <input
+                      type="checkbox"
+                      name="grupo"
+                      style={{marginRight:10}}
+                      id={`grupo2${pagina_Base.codigo}`}
+                       onChange={({ target }) => {
+                        if(document.getElementById(`grupo2${pagina_Base.codigo}`)?.toggleAttribute(':checked')){
+                          AdicionarPermiEd(menu.codigo,menu.nome,pagina_Base.codigo,pagina_Base.nome);
+                      } else {
+                        GetRemoverPorCodigo(pagina_Base.codigo)
+                      }
+                     
+                       setNomePagina(pagina_Base.nome);
+                       nomePagina=pagina_Base.nome;
+                    setSalvar(true)
+                    salvar=true
+                       }}
+                      />
+                
+                   <p className='text'>{pagina_Base.nome}</p>
+
+                   </div>
+                   </>))}</>)}  
+         
+                  
+                   </>   ))}
+                   </div>
+                    </>):(<></>)}
+                  
+
+                            </>):(<>
+                              <div className='acesso-personalizado-edicao'>
+              <h2>Conceder permissões:</h2>
+            <div className="table-responsive table-scroll tabela-responsiva">
+
+<div className=' table-wrap'>
+<Table responsive className='table-global table  main-table'>
+<thead>
+<tr className="tituloTab">
+<th style={{width: 100}} className="th1 cod-grupo">Codigo</th>
+<th className="th1 Nome-completo">Nome</th>
+<th style={{textAlign:'center',color:"transparent"}} className="th4 ">..........</th>
+<th style={{textAlign:'center',color:"transparent"}} className="th4 ">..........</th>
+<th style={{textAlign:'center'}} className="th4 fixed-table">Ações</th>
+</tr>
+</thead>
+<tbody>
+
+{menuPrincipal?.length > 0 ? (
+              <>
+{menuPrincipal?.map((pagina_Base)=> (
+<tr >
+<td style={{textAlign:"center"}} className=''>{pagina_Base.codigo}</td>
+<td className='Nome-completo'>{pagina_Base.nome}</td>
+
+
+
+
+  <td style={{textAlign:'center'}} className="fixed-table td-fixo">
+
+  <OverlayTrigger
+    placement={"top"}
+    delay={{ show: 100, hide: 250 }}
+    overlay={<Tooltip>Adicionar</Tooltip>}
+  >
+    <button
+    className='btn btn-table btn-edit'
+    style={{marginRight:15,marginLeft:15}}
+    onClick={()=>{
+
+      GetPaginaId(pagina_Base.id);
+    
+      }}>
+      <HiOutlinePencilSquare/>
+    </button>
+    </OverlayTrigger>
+   
+    </td>
+</tr>
+))}
+</>
+): (
+
+<div style={{margin:"auto"}} className="alert alert-warning alerta-Vendedor" role="alert">
+  Nenhum menu encontrado.
+</div>
+
+
+)}
+</tbody>
+</Table>
+<Paginacao
+          total={totalPaginasPerm}
+          limit={1}
+          paginaAtual={pagina}
+          setPagina={setPagina}
+        />
+</div>
+</div>   
+                
+                    </div>
+                           </>   )}
+                 
+                            </div>
+                           
                
 
             <div  className='bloco-botoes-finalizar'>
-            <button disabled={loadingUpdate}  id='' className='btn btn-cadastrar btn-edit-vend'onClick={handleCloseEdit}>Finalizar</button>
+            <button disabled={loadingUpdate}  id='' className='btn btn-cadastrar btn-edit-vend'onClick={()=>{handleCloseEditPermissoes();GetUsuarioPermissaoId()}}>Finalizar</button>
         
             </div>
 
-            </div>
+     
            </>)}
           
         </Modal.Body>

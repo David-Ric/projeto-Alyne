@@ -13,7 +13,7 @@ import { BsCoin } from "react-icons/bs";
 import { FiUsers } from "react-icons/fi";
 import { FaHospitalUser, FaLayerGroup,FaIndustry } from "react-icons/fa";
 import { TiShoppingCart } from "react-icons/ti";
-import { RiShoppingBag3Line } from "react-icons/ri";
+import { RiPagesLine, RiShoppingBag3Line } from "react-icons/ri";
 import { TbBusinessplan } from "react-icons/tb";
 import api from '../../services/api';
 
@@ -262,6 +262,16 @@ export default function SideNavBar() {
                 </span>
               
                 <span className={isExpanded?'visivel':'invisivel'} style={{marginLeft:12,marginTop:6}}>Montar Menu</span>
+               
+              </Link>
+                </li>
+                <li>
+                <Link style={{display:"flex"}} onClick={Trade} to="/cadastro-de-paginas">
+                <span>
+                  <RiPagesLine id="" fontSize={23} />
+                </span>
+              
+                <span className={isExpanded?'visivel':'invisivel'} style={{marginLeft:12,marginTop:6}}>Cadastro de Paginas</span>
                
               </Link>
                 </li>
