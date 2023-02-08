@@ -210,7 +210,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   }
   //===== get pagina por codigo e por menuid =================================
   async function GetPaginaMenuExistente(codPagina: any) {
-   
+   console.log('verificar',idMenuExistente)
     await api
       .get(`/api/Pagina/codigo?pagina=1&totalpagina=999&codigo=${codPagina}&idMenu=${idMenuExistente}`)
       .then((response) => {
