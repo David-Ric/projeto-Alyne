@@ -164,7 +164,7 @@ export default function CadastroGruposProdutos() {
     
     await api
     
-      .get(`/api/Grupo_Produtos?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/GrupoProduto?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setGrupos(response.data.data);
         console.log("grupo",grupos)
@@ -181,7 +181,7 @@ export default function CadastroGruposProdutos() {
   async function GetGruposFilter() {
     setFilter(true);
     await api
-      .get(`/api/Grupo_Produtos/filter?pagina=${pagina}&totalpagina=999&Nome_Grupo=${search}`)
+      .get(`/api/GrupoProduto/filter?pagina=${pagina}&totalpagina=999&Nome_Grupo=${search}`)
       .then((response) => {
         setGrupos(response.data.data);
         grupos=response.data.data;
@@ -203,7 +203,7 @@ export default function CadastroGruposProdutos() {
  
     
     await api
-      .get(`/api/Grupo_Produtos/${id}`)
+      .get(`/api/GrupoProduto/${id}`)
       .then((response) => {
          // setUsuariosget(response.data)
           setIdGrupo(response.data.id);
@@ -219,7 +219,7 @@ export default function CadastroGruposProdutos() {
   //============ Editar Usuario ===============================//
   async function EditGrupos(){
     setLoadingUpdate(true)
-  await api.put(`/api/Grupo_Produtos/${idGrupo}`, {
+  await api.put(`/api/GrupoProduto/${idGrupo}`, {
   id: idGrupo,
   NameGrupo:nameGrupo
  
@@ -263,7 +263,7 @@ export default function CadastroGruposProdutos() {
 
       
   setLoading(true)
-  await api.post("/api/Grupo_Produtos",{
+  await api.post("/api/GrupoProduto",{
         nameGrupo: search,
         
        })
@@ -295,7 +295,7 @@ export default function CadastroGruposProdutos() {
       //==== EXCLUIR GRUPO ======================================
       async function DeleteGrupo(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Grupo_Produtos/${id}`)
+      await api.delete(`/api/GrupoProduto/${id}`)
         .then(response => {
           handleCloseEdit()
           GetGrupos();

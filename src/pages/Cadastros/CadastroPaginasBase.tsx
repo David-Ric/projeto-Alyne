@@ -154,7 +154,7 @@ export default function CadastroPaginasBase() {
     setFilter(false);
     await api
     
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
     
         setPagina_Base(response.data.data);
@@ -175,7 +175,7 @@ export default function CadastroPaginasBase() {
     setFilter(true);
     if(pesquisaNome){
         await api
-        .get(`/api/Pagina_Base/Get-Nome?pagina=${pagina}&totalpagina=999&Nome=${search}`)
+        .get(`/api/PaginaBase/Get-Nome?pagina=${pagina}&totalpagina=999&Nome=${search}`)
         .then((response) => {
          
           setPagina_Base(response.data.data);
@@ -189,7 +189,7 @@ export default function CadastroPaginasBase() {
 
     }else{
         await api
-        .get(`/api/Pagina_Base/Get-Codigo?pagina=${pagina}&totalpagina=999&Codigo=${search}`)
+        .get(`/api/PaginaBase/Get-Codigo?pagina=${pagina}&totalpagina=999&Codigo=${search}`)
         .then((response) => {
          
           setPagina_Base(response.data.data);
@@ -227,7 +227,7 @@ export default function CadastroPaginasBase() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Pagina_Base/${id}`)
+      .get(`/api/PaginaBase/${id}`)
       .then((response) => {
           setIdPagina(response.data.id);
            setNome(response.data.nome);
@@ -245,7 +245,7 @@ export default function CadastroPaginasBase() {
   async function editePagina(){
     console.log('id',idPagina)
     setLoadingUpdate(true)
-  await api.put(`/api/Pagina_Base/${idPagina}`, {
+  await api.put(`/api/PaginaBase/${idPagina}`, {
     id: idPagina,
     codigo: Number(codigo),
     nome: nome,
@@ -298,7 +298,7 @@ export default function CadastroPaginasBase() {
 
       
   setLoadingCreate(true)
-  await api.post("/api/Pagina_Base",{
+  await api.post("/api/PaginaBase",{
     codigo: Number(codigo),
     nome: nome,
     url: url,
@@ -330,7 +330,7 @@ export default function CadastroPaginasBase() {
        //==== EXCLUIR GRUPO ======================================
        async function DeletePagina(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Pagina_Base/${id}`)
+      await api.delete(`/api/PaginaBase/${id}`)
         .then(response => {
           handleCloseEdit()
           GetPagina();

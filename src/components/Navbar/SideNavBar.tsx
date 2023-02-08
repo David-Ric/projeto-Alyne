@@ -22,7 +22,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 
 import { MdOutlineAppRegistration } from "react-icons/md";
-import { iDadosUsuario, iMenu, iPaginas } from '../../@types';
+import { iDadosUsuario, iMenu, IMenuPermissao, iPaginaPermissao, iPaginas, iSubMenuPermissao,  iUsuarios } from '../../@types';
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 import { GrTableAdd } from "react-icons/gr";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -41,6 +41,10 @@ export default function SideNavBar() {
     const [filter, setFilter] = useState(false);
     let [menuPrincipal, setMenuPrincipal] = useState<iMenu[]>([]);
     let [paginasMenu, setPaginasMenu] = useState<iPaginas[]>([]);
+    let [usuarioPermissao, setUsuarioPermissao] = useState<iUsuarios[]>([]);
+    let [permissoes, setPermissoes] = useState<iMenu[]>([]);
+    let [subMenuPermissoes, setSubMenuPermissoes] = useState<iSubMenuPermissao[]>([]);
+    let [pagPermissoes, setPagPermissoes] = useState<iPaginaPermissao[]>([]);
     const [pagina, setPagina] = useState(1);
     const [qtdePagina, setQtdePagina] = useState(10);
     let [totalPaginas, setTotalPaginas] = useState(0);
@@ -69,9 +73,38 @@ export default function SideNavBar() {
     useEffect(() => {
       window.scrollTo(0, 0);
       GetMontarMenu();
+      GetUsuarioId();
 
     },[pagina]);
-
+    //=============get usuario id ==========================================//
+   
+    async function GetUsuarioId() {
+    console.log('id usuario',usuario.id)
+    console.log('grupo id',usuario.grupoId)
+      await api
+      
+        .get(`/api/Usuario/${usuario.id}`)
+        .then((response) => {
+      
+          setUsuarioPermissao(response.data);
+          usuarioPermissao=response.data;
+          console.log("usuario logado",usuarioPermissao)
+          setPermissoes(response.data.menuPermissao);
+          permissoes=response.data.menuPermissao;
+          console.log("permissoes do usuario",permissoes)
+          setSubMenuPermissoes(response.data.subMenuPermissao)
+          subMenuPermissoes=response.data.subMenuPermissao
+          setPagPermissoes(response.data.paginaPermissao)
+          pagPermissoes=response.data.paginaPermissao
+          setTotalPaginas(Math.ceil(response.data.total / qtdePagina));
+     
+        })
+        .catch((error) => {
+          console.log("Ocorreu um erro");
+        });
+       
+    }
+//====================get do menu ===========================================//
     async function GetMontarMenu() {
       setFilter(false);
       localStorage.removeItem('@Portal/usuario/atualiza-menu')
@@ -192,9 +225,10 @@ export default function SideNavBar() {
            {/* ============inicio do menu ==================================================== */}
 
             <li className="menuInterativo">
-          {menuPrincipal.length>0?(<>
-            {menuPrincipal.map((menu,index)=> (<>
-            <li style={{marginTop:30}}>
+          {menuPrincipal?.length>0?(<>
+            {menuPrincipal?.map((menu,index)=> (<>
+            {menu.codigo==permissoes[0]?.codigo || menu.codigo==permissoes[1]?.codigo || menu.codigo==permissoes[2]?.codigo|| menu.codigo==permissoes[3]?.codigo|| menu.codigo==permissoes[4]?.codigo|| menu.codigo==permissoes[5]?.codigo|| menu.codigo==permissoes[6]?.codigo?(<>
+              <li style={{marginTop:30}}>
              <Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" flush key={index}>
                <Accordion.Item eventKey="">
               
@@ -204,9 +238,25 @@ export default function SideNavBar() {
                    </Accordion.Header>
          
                  <Accordion.Body>
+{/* ========================================== inicio subMenu =============================================== */}
                   {menu.subMenu[0]?.codigo>0?(<>
                     {menu.subMenu.map((menu,index)=> (<>
-                    <Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" key={index} flush>
+                    
+                      { menu.codigo==subMenuPermissoes[0]?.codigo || 
+                      menu.codigo==subMenuPermissoes[1]?.codigo || 
+                      menu.codigo==subMenuPermissoes[2]?.codigo|| 
+                      menu.codigo==subMenuPermissoes[3]?.codigo|| 
+                      menu.codigo==subMenuPermissoes[4]?.codigo|| 
+                      menu.codigo==subMenuPermissoes[5]?.codigo|| 
+                      menu.codigo==subMenuPermissoes[6]?.codigo||
+                      menu.codigo==subMenuPermissoes[7]?.codigo||
+                      menu.codigo==subMenuPermissoes[8]?.codigo||
+                      menu.codigo==subMenuPermissoes[9]?.codigo||
+                      menu.codigo==subMenuPermissoes[10]?.codigo||
+                      menu.codigo==subMenuPermissoes[11]?.codigo
+                      
+                      ?(<>
+<Accordion className={isExpanded?"menuAberto":"menuFechado"} defaultActiveKey="0" key={index} flush>
                <Accordion.Item eventKey="">
                  
                  <Accordion.Header 	onClick={() => {setExpendState(true);TextMenu()}}>
@@ -223,35 +273,104 @@ export default function SideNavBar() {
                     
                     <div>
                         {menu.pagina?.map((pagina)=>(<>
-                        <Link style={{display:"flex", marginLeft:10}} 
+                          {pagina.codigo==pagPermissoes[0]?.codigo || 
+                      pagina.codigo==pagPermissoes[1]?.codigo || 
+                      pagina.codigo==pagPermissoes[2]?.codigo|| 
+                      pagina.codigo==pagPermissoes[3]?.codigo|| 
+                      pagina.codigo==pagPermissoes[4]?.codigo|| 
+                      pagina.codigo==pagPermissoes[5]?.codigo|| 
+                      pagina.codigo==pagPermissoes[6]?.codigo||
+                      pagina.codigo==pagPermissoes[7]?.codigo||
+                      pagina.codigo==pagPermissoes[8]?.codigo||
+                      pagina.codigo==pagPermissoes[9]?.codigo||
+                      pagina.codigo==pagPermissoes[10]?.codigo||
+                      pagina.codigo==pagPermissoes[11]?.codigo||
+                      pagina.codigo==pagPermissoes[12]?.codigo||
+                      pagina.codigo==pagPermissoes[13]?.codigo||
+                      pagina.codigo==pagPermissoes[14]?.codigo||
+                      pagina.codigo==pagPermissoes[15]?.codigo||
+                      pagina.codigo==pagPermissoes[16]?.codigo||
+                      pagina.codigo==pagPermissoes[17]?.codigo||
+                      pagina.codigo==pagPermissoes[18]?.codigo||
+                      pagina.codigo==pagPermissoes[19]?.codigo||
+                      pagina.codigo==pagPermissoes[20]?.codigo||
+                      pagina.codigo==pagPermissoes[21]?.codigo||
+                      pagina.codigo==pagPermissoes[22]?.codigo||
+                      pagina.codigo==pagPermissoes[23]?.codigo||
+                      pagina.codigo==pagPermissoes[24]?.codigo||
+                      pagina.codigo==pagPermissoes[25]?.codigo
+                      
+                      ?(<>
+                       <Link style={{display:"flex", marginLeft:10}} 
                               to={pagina?.url}>
                           <span  className="menus-nav"><span id="icon-sub-menu"  className={pagina?.icon}/>
                           <span className={isExpanded?'visivel':'invisivel'} >{pagina?.nome}</span></span> 
-                        </Link> 
+                        </Link>
+                      </>):(<></>)}
+                        
+                       
                         </>))} 
                     </div>
                  
                  </Accordion.Body>
          
                </Accordion.Item>
-             </Accordion> </>))}
+             </Accordion> 
+                      </>):(<></>)}
+                    
+             
+             </>))}
+             {/* ========================================== fim =============================================== */}
                   </>):(<>
-                  
+              {/* =================================inicio so paginas ============================================== */}
                     {menu.pagina.map((pagina)=>(<>
+                    
+                      {pagina.codigo==pagPermissoes[0]?.codigo || 
+                      pagina.codigo==pagPermissoes[1]?.codigo || 
+                      pagina.codigo==pagPermissoes[2]?.codigo|| 
+                      pagina.codigo==pagPermissoes[3]?.codigo|| 
+                      pagina.codigo==pagPermissoes[4]?.codigo|| 
+                      pagina.codigo==pagPermissoes[5]?.codigo|| 
+                      pagina.codigo==pagPermissoes[6]?.codigo||
+                      pagina.codigo==pagPermissoes[7]?.codigo||
+                      pagina.codigo==pagPermissoes[8]?.codigo||
+                      pagina.codigo==pagPermissoes[9]?.codigo||
+                      pagina.codigo==pagPermissoes[10]?.codigo||
+                      pagina.codigo==pagPermissoes[11]?.codigo||
+                      pagina.codigo==pagPermissoes[12]?.codigo||
+                      pagina.codigo==pagPermissoes[13]?.codigo||
+                      pagina.codigo==pagPermissoes[14]?.codigo||
+                      pagina.codigo==pagPermissoes[15]?.codigo||
+                      pagina.codigo==pagPermissoes[16]?.codigo||
+                      pagina.codigo==pagPermissoes[17]?.codigo||
+                      pagina.codigo==pagPermissoes[18]?.codigo||
+                      pagina.codigo==pagPermissoes[19]?.codigo||
+                      pagina.codigo==pagPermissoes[20]?.codigo||
+                      pagina.codigo==pagPermissoes[21]?.codigo||
+                      pagina.codigo==pagPermissoes[22]?.codigo||
+                      pagina.codigo==pagPermissoes[23]?.codigo||
+                      pagina.codigo==pagPermissoes[24]?.codigo||
+                      pagina.codigo==pagPermissoes[25]?.codigo
+                      ?(<>
+
                          <Link style={{display:"flex", marginLeft:10}} 
                           to={pagina?.url}>
                           <span className="menus-nav"><span id="icon-menu"  className={pagina?.icon}/>
                           <span style={{fontSize:17}} className="nome-menu">{pagina?.nome}</span></span> 
                        </Link> 
+                       </>):(<></>)}
                      </>))}
+              {/* ========================================== fim =============================================== */}
                     </>)}
-                      
+              
                  
                  </Accordion.Body>
          
                </Accordion.Item>
              </Accordion> 
              </li>
+            </>):(<></>)}
+            
              </>))} 
           </>):(<>
                 <ul>

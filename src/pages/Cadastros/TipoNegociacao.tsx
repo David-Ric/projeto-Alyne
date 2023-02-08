@@ -164,7 +164,7 @@ export default function CadastroTipoNegociacao() {
     
     await api
     
-      .get(`/api/Tipo_Negociacao?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/TipoNegociacao?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setTipoNegociacao(response.data.data);
         console.log("grupo",tipoNegociacao)
@@ -181,7 +181,7 @@ export default function CadastroTipoNegociacao() {
   async function GetTipoNegociacaoFilter() {
     setFilter(true);
     await api
-      .get(`/api/Tipo_Negociacao/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/TipoNegociacao/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setTipoNegociacao(response.data.data);
         tipoNegociacao=response.data.data;
@@ -203,7 +203,7 @@ export default function CadastroTipoNegociacao() {
  
     
     await api
-      .get(`/api/Tipo_Negociacao/${id}`)
+      .get(`/api/TipoNegociacao/${id}`)
       .then((response) => {
          // setUsuariosget(response.data)
           setId(response.data.id);
@@ -219,7 +219,7 @@ export default function CadastroTipoNegociacao() {
   //============ Editar Usuario ===============================//
   async function EditTipoNegociacao(){
     setLoadingUpdate(true)
-  await api.put(`/api/Tipo_Negociacao/${id}`, {
+  await api.put(`/api/TipoNegociacao/${id}`, {
   id: id,
   descricao:descricao
  
@@ -263,7 +263,7 @@ export default function CadastroTipoNegociacao() {
 
       
   setLoading(true)
-  await api.post("/api/Tipo_Negociacao",{
+  await api.post("/api/TipoNegociacao",{
         descricao: search,
         
        })
@@ -295,7 +295,7 @@ export default function CadastroTipoNegociacao() {
       //==== EXCLUIR GRUPO ======================================
       async function DeleteTipoNegociacao(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Tipo_Negociacao/${id}`)
+      await api.delete(`/api/TipoNegociacao/${id}`)
         .then(response => {
           handleCloseEdit()
           GetTipoNegociacao();

@@ -205,7 +205,7 @@ export default function CadastroVendedores() {
     setFilter(false);
     await api
     
-      .get(`/api/Vendedores?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Vendedor?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setNome(response.data.data[0].nome)
         setVendedores(response.data.data);
@@ -226,7 +226,7 @@ export default function CadastroVendedores() {
   async function GetVendedoresFilter() {
     setFilter(true);
     await api
-      .get(`/api/Vendedores/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Vendedor/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
        
         setVendedores(response.data.data);
@@ -273,7 +273,7 @@ export default function CadastroVendedores() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Vendedores/${id}`)
+      .get(`/api/Vendedor/${id}`)
       .then((response) => {
           setVendedorGetId(response.data.id);
           vendedorGetId=response.data.id;
@@ -295,7 +295,7 @@ export default function CadastroVendedores() {
   async function editeVendedor(){
     console.log('id',vendedorGetId)
     setLoadingUpdate(true)
-  await api.put(`/api/Vendedores/${vendedorGetId}`, {
+  await api.put(`/api/Vendedor/${vendedorGetId}`, {
     id:vendedorGetId,
     codVendedor:codVendedor,
     nome: nome,
@@ -318,7 +318,7 @@ export default function CadastroVendedores() {
     custo_Variavel: custoVariavel,
     email: email,
     tipo: tipo,
-    atua_Compras:atuaComprador,
+    atuaCompras:atuaComprador,
   })
     .then(response => {
       handleCloseEdit()
@@ -371,7 +371,7 @@ export default function CadastroVendedores() {
 
       
   setLoadingCreate(true)
-  await api.post("/api/Vendedores",{
+  await api.post("/api/Vendedor",{
     codVendedor:codVendedor,
     nome: nome,
     status: 'true',
@@ -393,7 +393,7 @@ export default function CadastroVendedores() {
     custo_Variavel: custoVariavel,
     email: email,
     tipo: tipo,
-    atua_Compras:atuaComprador,
+    atuaCompras:atuaComprador,
        })
        
         .then(response => {
@@ -421,7 +421,7 @@ export default function CadastroVendedores() {
        //==== EXCLUIR GRUPO ======================================
        async function DeleteVendedor(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Vendedores/${id}`)
+      await api.delete(`/api/Vendedor/${id}`)
         .then(response => {
           handleCloseEdit()
           GetVendedores();

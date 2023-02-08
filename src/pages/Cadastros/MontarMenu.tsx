@@ -184,7 +184,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   async function GetMenu() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
         if (response.data.data.length > 0) {
            let pagina = response.data.data.filter((p:any)=>p.url ==""&& p.codigo !==codMenu)
@@ -212,7 +212,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   async function GetPaginaMenuExistente(codPagina: any) {
    
     await api
-      .get(`/api/Paginas/codigo?pagina=1&totalpagina=999&codigo=${codPagina}&idMenu=${idMenuExistente}`)
+      .get(`/api/Pagina/codigo?pagina=1&totalpagina=999&codigo=${codPagina}&idMenu=${idMenuExistente}`)
       .then((response) => {
         console.log('menu',response.data)
         if (response.data.length > 0) {
@@ -239,7 +239,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   async function DeletePaginaCodId(idPagina: any) {
    console.log("id pagina delete",idPagina)
      await api
-       .delete(`/api/Paginas/${idPagina}`)
+       .delete(`/api/Pagina/${idPagina}`)
        .then((response) => {
      
          
@@ -266,7 +266,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   async function GetSubMenu() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
       //  console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -293,7 +293,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   async function GetSubMenuEdit() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
       //  console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -320,7 +320,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   async function GetPaginas() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
     //    console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -339,7 +339,7 @@ let [subMenuExiste, setSubMenuExiste] = useState(false);
   async function GetPaginasEdite() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
     //    console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -894,7 +894,7 @@ async function GetSubmenu(){
         //====EXCLUIR PAGINA POR ID ============================================================
         async function DeletePaginaId(id: any,IdMenu: any){
           setLoadingUpdate(true)
-        await api.delete(`/api/Paginas/${id}`)
+        await api.delete(`/api/Pagina/${id}`)
           .then(response => {
          GetPaginaId(IdMenu);
          localStorage.setItem('@Portal/usuario/atualiza-menu','1')
@@ -908,7 +908,7 @@ async function GetSubmenu(){
 
        async function DeletePagina(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Paginas/menuCod?menuCod=${id}`)
+      await api.delete(`/api/Pagina/menuCod?menuCod=${id}`)
         .then(response => {
           handleCloseEdit()
          // GetMontarMenu();

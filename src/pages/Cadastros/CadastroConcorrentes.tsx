@@ -164,7 +164,7 @@ export default function CadastroConcorrentes() {
     
     await api
     
-      .get(`/api/Concorrentes?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Concorrente?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setConcorrentes(response.data.data);
         console.log("grupo",concorrentes)
@@ -181,7 +181,7 @@ export default function CadastroConcorrentes() {
   async function GetConcorrentesFilter() {
     setFilter(true);
     await api
-      .get(`/api/Concorrentes/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Concorrente/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setConcorrentes(response.data.data);
         concorrentes=response.data.data;
@@ -203,7 +203,7 @@ export default function CadastroConcorrentes() {
  
     
     await api
-      .get(`/api/Concorrentes/${id}`)
+      .get(`/api/Concorrente/${id}`)
       .then((response) => {
          // setUsuariosget(response.data)
           setId(response.data.id);
@@ -219,7 +219,7 @@ export default function CadastroConcorrentes() {
   //============ Editar Usuario ===============================//
   async function EditConcorrentes(){
     setLoadingUpdate(true)
-  await api.put(`/api/Concorrentes/${id}`, {
+  await api.put(`/api/Concorrente/${id}`, {
   id: id,
   nome:nome
  
@@ -264,7 +264,7 @@ export default function CadastroConcorrentes() {
 
       
   setLoading(true)
-  await api.post("/api/Concorrentes",{
+  await api.post("/api/Concorrente",{
         nome: search,
         
        })
@@ -296,7 +296,7 @@ export default function CadastroConcorrentes() {
       //==== EXCLUIR GRUPO ======================================
       async function DeleteConcorrente(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Concorrentes/${id}`)
+      await api.delete(`/api/Concorrente/${id}`)
         .then(response => {
           handleCloseEdit()
           GetConcorrentes();

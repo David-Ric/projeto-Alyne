@@ -200,8 +200,8 @@ export default function CadastroParceiros() {
   async function GetPromotor() {
     setFilter(true);
     await api
-    // .get(`/api/Vendedores/promotor?pagina=${pagina}&totalpagina=999&filter=`)
-      .get(`/api/Vendedores?pagina=${pagina}&totalpagina=999`)
+    // .get(`/api/Vendedor/promotor?pagina=${pagina}&totalpagina=999&filter=`)
+      .get(`/api/Vendedor?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
        
         if (response.data.data.length > 0) {
@@ -273,7 +273,7 @@ export default function CadastroParceiros() {
     
     await api
     
-      .get(`/api/Tipo_Negociacao?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/TipoNegociacao?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
         setNegociacaoTipo(response.data.data);
         negociacaoTipo=response.data.data;
@@ -353,7 +353,7 @@ export default function CadastroParceiros() {
     setFilter(false);
     await api
     
-      .get(`/api/Parceiros?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Parceiro?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setParceiros(response.data.data);
      //   console.log('dados',response.data);
@@ -371,7 +371,7 @@ export default function CadastroParceiros() {
   async function GetParceirosFilter() {
     setFilter(true);
     await api
-      .get(`/api/Parceiros/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Parceiro/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setParceiros(response.data.data);
         parceiros=response.data.data;
@@ -425,7 +425,7 @@ export default function CadastroParceiros() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Parceiros/${id}`)
+      .get(`/api/Parceiro/${id}`)
       .then((response) => {
         console.log("parceiro id",response.data)
         setId(response.data.id);
@@ -472,7 +472,7 @@ export default function CadastroParceiros() {
   //============ Editar Usuario ===============================//
   async function editParceiro(){
     setLoadingUpdate(true)
-  await api.put(`/api/Parceiros/${id}`, {
+  await api.put(`/api/Parceiro/${id}`, {
     id: id,
     nome: nome,
     tipoPessoa: tipoPessoa,
@@ -615,7 +615,7 @@ console.log('codVendedor',codVendedor)
 
      
   setLoadingCreate(true)
-  await api.post("/api/Parceiros",{
+  await api.post("/api/Parceiro",{
   nome: nome,
   tipoPessoa: tipoPessoa,
   nomeFantasia: nomeFantasia,

@@ -175,7 +175,7 @@ export default function CadastroProdutosConcorrentes() {
     
     await api
     
-      .get(`/api/Produtos?pagina=1&totalpagina=999`)
+      .get(`/api/Produto?pagina=1&totalpagina=999`)
       .then((response) => {
       //  console.log("grupo",response.data.data)
         
@@ -204,7 +204,7 @@ export default function CadastroProdutosConcorrentes() {
     
     await api
     
-      .get(`/api/Produtos_Concorrentes?pagina=1&totalpagina=999`)
+      .get(`/api/ProdutoConcorrente?pagina=1&totalpagina=999`)
       .then((response) => {
        // console.log("grupo",response.data.data)
        if (response.data.data.length > 0) {
@@ -245,7 +245,7 @@ export default function CadastroProdutosConcorrentes() {
     
     await api
     
-      .get(`/api/Concorrentes?pagina=1&totalpagina=999`)
+      .get(`/api/Concorrente?pagina=1&totalpagina=999`)
       .then((response) => {
       //  console.log("grupo",response.data.data)
         
@@ -274,7 +274,7 @@ export default function CadastroProdutosConcorrentes() {
     setFilter(false);
     await api
     
-      .get(`/api/Produtos_Concorrentes?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/ProdutoConcorrente?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setProdutosConcorrentes(response.data.data);
         produtosConcorrentes=response.data.data;
@@ -293,7 +293,7 @@ export default function CadastroProdutosConcorrentes() {
     setFilter(true);
     console.log('entrou produto')
     await api
-      .get(`/api/Produtos_Concorrentes/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/ProdutoConcorrente/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setProdutosConcorrentes(response.data.data);
         produtosConcorrentes=response.data.data;
@@ -311,7 +311,7 @@ export default function CadastroProdutosConcorrentes() {
   async function GetProdutosConcorrentesConcorrente() {
     console.log('entrou')
     await api
-      .get(`/api/Produtos_Concorrentes/concorrente?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/ProdutoConcorrente/concorrente?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setProdutosConcorrentes(response.data.data);
         produtosConcorrentes=response.data.data;
@@ -345,7 +345,7 @@ export default function CadastroProdutosConcorrentes() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Produtos_Concorrentes/${id}`)
+      .get(`/api/ProdutoConcorrente/${id}`)
       .then((response) => {
           //setUsuariosget(response.data)
           setGrupoSelecionado(response.data.nomeGrupo)
@@ -367,7 +367,7 @@ export default function CadastroProdutosConcorrentes() {
   //============ Editar produto ===============================//
   async function EditeProduto(){
     setLoadingUpdate(true)
-  await api.put(`/api/Produtos_Concorrentes/${id}`, {
+  await api.put(`/api/ProdutoConcorrente/${id}`, {
   id: id,
   codProduto:codProduto,
   nomeProduto: nomeProduto,
@@ -433,7 +433,7 @@ export default function CadastroProdutosConcorrentes() {
       }
     
   setLoadingCreate(true)
-  await api.post("/api/Produtos_Concorrentes",{
+  await api.post("/api/ProdutoConcorrente",{
    // codProduto:codProduto ,
     nomeProduto: nomeProduto,
     codProduto:codProduto,
@@ -473,7 +473,7 @@ export default function CadastroProdutosConcorrentes() {
       //==== EXCLUIR PRODUTO ======================================
       async function DeleteProdutoConcorrente(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Produtos_Concorrentes/${id}`)
+      await api.delete(`/api/ProdutoConcorrente/${id}`)
         .then(response => {
           handleCloseEdit()
           GetProdutosConcorrentes();

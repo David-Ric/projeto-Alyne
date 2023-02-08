@@ -62,15 +62,18 @@ menuPermissao: [
 export interface iGrupos {
   id: number,
   nameGrupo: string,
+  atualizadoEm:string,
   }
 
   export interface iTipoNegociacao {
     id: number,
     descricao: string,
+    atualizadoEm:string,
     }
   export interface iConcorrentes {
     id: number,
     nome: string,
+    atualizadoEm:string,
     }
     export interface iProdutoConcorrente{
       id: number,
@@ -79,7 +82,8 @@ export interface iGrupos {
       codConcorrente: string,
       nomeConcorrente: string,
       codProdutoConcorrente: string,
-      nomeProdutoSimilar: string
+      nomeProdutoSimilar: string,
+      atualizadoEm:string,
     }
     export interface iParceiros {
       id: number,
@@ -113,7 +117,8 @@ export interface iGrupos {
       sabado: boolean
       tipoNegociacao: string,
       empresa: string,
-      codVendedor:number
+      codVendedor:number,
+      atualizadoEm:string
     }
   export interface iVendedores {
      id:number,
@@ -123,7 +128,8 @@ export interface iGrupos {
      regiao: string,
      email: string,
      tipo: string,
-     atua_Compras: boolean,
+     atuaCompras: boolean,
+     atualizadoEm:string
     }
     export interface  iDataSelect {
       value?: string;
@@ -134,8 +140,9 @@ export interface iGrupos {
       id: number,
       codigo: string,
       nome: string,
-      idGrupo: string,
-      nomeGrupo: string
+      grupoId: string,
+      nomeGrupo: string,
+      atualizadoEm:string
     }
 
       export interface IFile {
@@ -153,11 +160,13 @@ export interface iGrupos {
         descricao: string,
         dataInicial: string,
         dataFinal: string,
+        atualizadoEm:string,
         itemTabela: [
           {
             id: number,
             idTabelaPreco: number,
             idProd: number,
+            atualizadoEm:string,
             produtos: {
               id: number,
               codigo: string,
@@ -173,6 +182,7 @@ export interface iGrupos {
             id:number,
             idTabelaPreco: number,
             idProd: number,
+            atualizadoEm:string,
             produtos: {
               nome: string,
             },
@@ -181,11 +191,13 @@ export interface iGrupos {
       export interface  iEmpresa {
         id: number;
         descricao: string;
+        atualizadoEm:string,
       }
       export interface iTabelaCliente{
         id: number,
         codEmpresa: number,
         codParceiro: number,
+        atualizadoEm:string,
         parceiros: {
          id: number,
           nome: string,
@@ -281,13 +293,15 @@ export interface iGrupos {
             codigo: number,
             nome: string,
             menuPermissaoId: number,
+            userId: number,
             pagina: [
               {
                 id: number,
                 codigo: number,
                 nome: string,
                 menuPermissaoId: number,
-                subMenuPermissaoId: number
+                subMenuPermissaoId: number,
+                userId: number
               }
             ]
           }
@@ -298,29 +312,33 @@ export interface iGrupos {
             codigo: number,
             nome: string,
             menuPermissaoId: number,
-            subMenuPermissaoId: number
+            subMenuPermissaoId: number,
+            userId: number
           }
         ]
       }
-      export interface ISubMenuPermissao{
+      export interface iSubMenuPermissao{
         id: number,
         codigo: number,
         nome: string,
         menuPermissaoId: number,
+        userId: number,
         pagina: [
           {
             id: number,
             codigo: number,
             nome: string,
             menuPermissaoId: number,
-            subMenuPermissaoId: number
+            subMenuPermissaoId: number,
+            userId: number
           }
         ]
       }
-      export interface IpaginaPermissao{
+      export interface iPaginaPermissao{
         id: number,
             codigo: number,
             nome: string,
             menuPermissaoId: number,
-            subMenuPermissaoId: number
+            subMenuPermissaoId: number,
+            userId: number
       }

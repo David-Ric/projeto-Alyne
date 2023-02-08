@@ -21,7 +21,7 @@ import { TfiNewWindow } from "react-icons/tfi";
 import { HiOutlinePencilSquare } from "react-icons/hi2";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import Table from 'react-bootstrap/Table';
-import { iMenu, IMenuPermissao, iUsuarios } from '../@types';
+import { iMenu, IMenuPermissao, iSubMenu, iUsuarios } from '../@types';
 import OverlayTrigger from 'react-bootstrap/esm/OverlayTrigger';
 import { Tooltip } from 'react-bootstrap';
 import Paginacao from "../components/Paginacao";
@@ -87,6 +87,7 @@ export default function CadUsuarios() {
   let [menuIdGet, setMenuIdGet] = useState<iPaginas[]>([]);
 
   let [permissoesUser, setPermissoesUser] = useState<iMenu[]>([]);
+  let [subMenuNaoExiste, setSubMenuNaoExiste] = useState<iSubMenu[]>([]);
 
   let [totalPaginas, setTotalPaginas] = useState(0);
   let [totalPaginasPerm, setTotalPaginasPerm] = useState(0);
@@ -170,6 +171,10 @@ const [idPagina, setIdPagina] = useState(0);
 
    let [selectGrupo, setSelectGrupo] = useState<iDataSelect>();
 
+   const usuarioLogado: iDadosUsuario = JSON.parse(
+    localStorage.getItem("@Portal/usuario") || "{}"
+  );
+
    //======options dos selects ===================//
    const status = [
     { value: '1', label: 'Ativo' },
@@ -236,8 +241,8 @@ function PermissoesOk(){
 
         setMenuPrincipal(response.data.data);
         menuPrincipal=response.data.data;
-        console.log("menu geral response",response.data.data)
-       console.log("menu geral",menuPrincipal)
+       // console.log("menu geral response",response.data.data)
+       //console.log("menu geral",menuPrincipal)
 
     
         setTotalPaginasPerm(Math.ceil(response.data.total / qtdePagMenu));
@@ -261,7 +266,6 @@ function PermissoesOk(){
         // setMenuPrincipal(response.data.data);
         // menuPrincipal=response.data.data;
         console.log("menu geral response edição",response.data.data)
-       
 
        setMenuParaEdicao(response.data.data.filter((e:any)=>
        e?.codigo !=permissoesSalvas[0]?.codigo && 
@@ -350,7 +354,7 @@ function PermissoesOk(){
   async function GetSubMenuEdit() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
       //  console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -431,7 +435,7 @@ async function EditeMenu(){
   async function GetPaginasEdite() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
     //    console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -526,7 +530,7 @@ function AdicionarRemoverPag(){
   async function GetSubMenu() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
       //  console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -632,7 +636,7 @@ function AdicionarRemoverPag(){
   async function GetPaginas() {
     setFilter(true);
     await api
-      .get(`/api/Pagina_Base?pagina=${pagina}&totalpagina=999`)
+      .get(`/api/PaginaBase?pagina=${pagina}&totalpagina=999`)
       .then((response) => {
     //    console.log('sub',response.data.data)
         if (response.data.data.length > 0) {
@@ -724,7 +728,7 @@ function AdicionarRemoverPag(){
     setFilter(false);
     await api
     
-      .get(`/api/Usuarios?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Usuario?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setUsuarios(response.data.data);
      //   console.log('dados',response.data);
@@ -742,7 +746,7 @@ function AdicionarRemoverPag(){
   async function GetUsuariosFilter() {
     setFilter(true);
     await api
-      .get(`/api/Usuarios/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Usuario/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setUsuarios(response.data.data);
         usuarios=response.data.data;
@@ -762,7 +766,7 @@ function AdicionarRemoverPag(){
  setUserIdPermit(idUser);
   userIdPermit=idUser;
   await api
-    .get(`/api/Usuarios/${idUser}`)
+    .get(`/api/Usuario/${idUser}`)
     .then((response) => {
      
         setUsuariosget(response.data);
@@ -820,7 +824,7 @@ function AdicionarRemoverPag(){
     setShowEdit(true);
     
     await api
-      .get(`/api/Usuarios/${id}`)
+      .get(`/api/Usuario/${id}`)
       .then((response) => {
        
           setUsuariosget(response.data);
@@ -874,7 +878,7 @@ function AdicionarRemoverPag(){
   //============ Editar Usuario ===============================//
   async function editUser(){
     setLoadingUpdate(true)
-  await api.put(`/api/Usuarios/${idUser}`, {
+  await api.put(`/api/Usuario/${idUser}`, {
   id: idUser,
   username:usuario,
   password: senha,
@@ -1049,7 +1053,8 @@ function AdicionarRemoverPag(){
         await api.post("/api/SubMenuPermissao",{
           codigo: codSubMenu,
           nome:nomeSubMenu,
-          menuPermissaoId:idMenuPrincipal
+          menuPermissaoId:idMenuPrincipal,
+          userId: userIdPermit,
              })
               .then(response => {
                 console.log(response.data)
@@ -1072,7 +1077,8 @@ function AdicionarRemoverPag(){
           codigo: codPag,
           nome:nomePagina,
           menuPermissaoId:idMenuSub,
-          subMenuPermissaoId:idSubMenu
+          subMenuPermissaoId:idSubMenu,
+          userId: userIdPermit,
              })
               .then(response => {
                 setLoadingCreate(false)
@@ -1179,6 +1185,7 @@ function AdicionarRemoverPag(){
                 codigo: codPag,
                 nome:nomePagina,
                 menuPermissaoId:idMenuPrincipal,
+                userId: userIdPermit,
                    })
                     .then(response => {
                     GetPermissoesPorUser()
@@ -1507,12 +1514,13 @@ function PesquisaStatus(){
             <td style={{color: "transparent"}} >.............</td>
             <td style={{textAlign:'center'}} className="fixed-table td-fixo">
             
-            <OverlayTrigger
+            {/* <OverlayTrigger
               placement={"top"}
               delay={{ show: 100, hide: 250 }}
               overlay={<Tooltip>Editar</Tooltip>}
-            >
+            > */}
               <button 
+              disabled={usuarios.grupoId==1 && usuarioLogado.grupoId!=1}
               className='btn btn-table btn-edit' 
               style={{marginRight:15,marginLeft:15}}
               onClick={()=>{
@@ -1520,7 +1528,7 @@ function PesquisaStatus(){
                 }}>
                 <HiOutlinePencilSquare/>
               </button>
-              </OverlayTrigger>
+              {/* </OverlayTrigger> */}
 
 {/* 
               <OverlayTrigger
@@ -1871,7 +1879,7 @@ function PesquisaStatus(){
             <h2>{email}</h2>
             
             
-            <button disabled={loadingCreate || grupo=='1'} id='' className='btn btn-permissao' onClick={()=>{setShowEditPermissoes(true);GetMontarMenu();GetUsuarioPermissaoId(); }}>Permissões</button>
+            <button disabled={loadingCreate} id='' className='btn btn-permissao' onClick={()=>{setShowEditPermissoes(true);GetMontarMenu();GetUsuarioPermissaoId(); }}>Permissões</button>
           
           </div>
         <div  className='form-cadastro-user' >
@@ -2354,38 +2362,26 @@ function PesquisaStatus(){
                            </>))} 
                            
                            </div>
-                           <div  className='bloco-paginas'>
+                            {/* <div  className='bloco-paginas'>
                             <div style={{width:"100%",marginBottom:20}}>
                             <h2>Adicionar Novos</h2>
                             </div>
                           
                           {menuPrincipal?.map((pagina)=> (<>
-                            {/* {pagina.subMenu?.filter(sub=>sub.codigo==SubMenu.codigo).map(subMe=>(<> */}
                               {pagina.subMenu?.filter((sub)=>sub.codigo==SubMenu.codigo).map(sub=>(<>
-                              
-                               {sub.pagina?.map((paginaFilter)=>(<> 
-                          
+                                 {sub.pagina?.map((paginaFilter)=>(<> 
+                               
                       <div className='check-grupo grupo-de-paginas'>
                       <input
                       type="checkbox"
                       name="grupo"
                       id="grupo"
-                      //checked={}
                        onChange={({ target }) => {
                         setCodPagina(paginaFilter.codigo);
                         codPagina=paginaFilter.codigo;
                         setNomePagina(paginaFilter.nome);
                         nomePagina=paginaFilter.nome;
-                        // setUrlPagina(pagina_Base.url);
-                        // urlPagina=pagina_Base.url;
-                        // setIconPagina(pagina_Base?.icon);
-                        // iconPagina=pagina_Base?.icon;
-                     //              console.log('submenu',SubMenu.id);
-                     //             AdicionarPaginaEditeSubMenu(SubMenu.id);
-                        // AdicionarPaginaEdite();
-                    //   setComercial(target.checked);
-                    // setSalvar(true)
-                    // salvar=true
+                       
                        }}
                       />
                       <p className='text'>{paginaFilter.nome}</p>
@@ -2395,14 +2391,14 @@ function PesquisaStatus(){
                       </>))} 
                       </>))}
                       </>  ))} 
-                            </div>
+                            </div>  */}
 
                             
                             </>))}
                               </>):(<>
                                 <div  className='bloco-paginas'>
                                 {Menu.pagina?.map((pagina)=> (<> 
-                  
+                                 
                     <div className='check-grupo grupo-de-paginas'>
                   <button  name="grupo"
                            id="grupo"
@@ -2415,95 +2411,41 @@ function PesquisaStatus(){
                           
  
                            </>))}
+
                            </div>
-                           <div  className='bloco-paginas'>
-                            <div style={{width:"100%",marginBottom:20}}>
-                            <h2>Adicionar Novos</h2>
-                            </div>
+                           {/* <div  className='bloco-paginas'>
+                          {menuPrincipal?.filter((sub)=>sub.codigo==Menu.codigo).map(sub=>(<>
+                              {/* {sub.pagina?.filter(sub=>
+                              sub.codigo!=Menu.pagina.map(c)
+                                ).map(sub=>(<> 
+                                {sub.pagina?.map(sub=>(<> 
+                               
                           
-                            {/* {pagina_BaseEdite.map((pagina_Base)=> (
-            <div className='check-grupo grupo-de-paginas'>
+                      <div className='check-grupo grupo-de-paginas'>
                       <input
                       type="checkbox"
                       name="grupo"
                       id="grupo"
-                      //checked={}
                        onChange={({ target }) => {
-                        setCodPagina(pagina_Base.codigo);
-                        codPagina=pagina_Base.codigo;
-                        setNomePagina(pagina_Base.nome);
-                        nomePagina=pagina_Base.nome;
-                        setUrlPagina(pagina_Base.url);
-                        urlPagina=pagina_Base.url;
-                        // setIconPagina(pagina_Base?.icon);
-                        // iconPagina=pagina_Base?.icon;
-                     //              console.log('submenu',SubMenu.id);
-                     //             AdicionarPaginaEditeSubMenu(SubMenu.id);
-                        // AdicionarPaginaEdite();
-                    //   setComercial(target.checked);
-                    setSalvar(true)
-                    salvar=true
+                        setCodPagina(sub.codigo);
+                        codPagina=sub.codigo;
+                        setNomePagina(sub.nome);
+                        nomePagina=sub.nome;
+                       
                        }}
                       />
-                      <p className='text'>{pagina_Base.nome}</p>
+                      <p className='text'>{sub.nome}</p>
 
                       </div>
-             ))} */}
-                            </div>
- 
+
+                      
+                      </>))}
+                      </>  ))} 
+                      </div> */}
                               </>)}
                              
                            </>   ))}
-                           {menuGetID?.length > 0 ? (<>
-                      
-                      
-                      {menuGetID?.map((SubMenu)=> (<>
-                        <div  className='bloco-paginas'>
-       
-         <div style={{width:"100%",marginBottom:20}}>
-         <div className='check-grupo grupo-de-paginas'>
-         <h2 style={{marginRight:8}}>{SubMenu?.nome} </h2>
-              
-               </div>
-                    </div>
-          
-          {SubMenu?.pagina.map((pagina_Base)=>(<>
-            <div className='check-grupo grupo-de-paginas'>
-            <input
-                      type="checkbox"
-                      name="grupo"
-                      style={{marginRight:10}}
-                      id={`grupo${pagina_Base.codigo}`}
-                       onChange={({ target }) => {
-                        setNomePagina(pagina_Base.nome);
-                        nomePagina= pagina_Base.nome;
-                      //  AdicionarRemoverPag()
-                        if(document.getElementById(`grupo${pagina_Base.codigo}`)?.toggleAttribute(':checked')){
-                          AdicionarPermissoesMenu(pagina_Base.subMenuId,pagina_Base.codigo);
-                      } else {
-                        GetRemoverPorCodigo(pagina_Base.codigo)
-                      }
-                      
-                    setSalvar(true)
-                    salvar=true
-                       }}
-                      />
-                
-                   <p className='text'>{pagina_Base.nome}</p>
-                   </div>
-                   </>))}
-                   
-                   </div>
-
-                   
-                   </>   ))}
-                
-              
-                    
-                    </>):(<>
-                    
-                  
-                    </>)}
+                     {/* ========================MENUS NÃO ADICIONADOS =============================
                     {menuParaEdicao?.length>0?(<>
                       
                       <div  className='bloco-paginasEdit'>
@@ -2581,12 +2523,14 @@ function PesquisaStatus(){
                   
                    </>   ))}
                    </div>
-                    </>):(<></>)}
+                    </>):(<></>)} */}
                   
 
                             </>):(<>
-                              <div className='acesso-personalizado-edicao'>
-              <h2>Conceder permissões:</h2>
+              
+                           </>   )}
+                           <div className='acesso-personalizado-edicao'>
+              <h2>Conceder novas permissões:</h2>
             <div className="table-responsive table-scroll tabela-responsiva">
 
 <div className=' table-wrap'>
@@ -2655,7 +2599,6 @@ function PesquisaStatus(){
 </div>   
                 
                     </div>
-                           </>   )}
                  
                             </div>
                            

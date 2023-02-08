@@ -61,7 +61,9 @@ export default function UsuarioPrincipal() {
             <h1>Portal Grupo Alyne</h1>
             </div>
          <div className="contain">
-            
+            <div className='plano-fundo-usuario'>
+
+            </div>
             
        
          </div>

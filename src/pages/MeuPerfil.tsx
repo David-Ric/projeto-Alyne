@@ -159,7 +159,7 @@ export default function MeuPerfil() {
   async function GetUsuarioByName() {
     setLoading(true);
     await api
-      .get(`/api/Usuarios/userName?name=${userLog.username}`)
+      .get(`/api/Usuario/userName?name=${userLog.username}`)
       .then((response) => {
           setImageURL(response.data[0].imagemURL);
           imageURL=response.data[0].imagemURL;
@@ -199,7 +199,7 @@ export default function MeuPerfil() {
     setShowEdit(true);
 
     await api
-      .get(`/api/Usuarios/${id}`)
+      .get(`/api/Usuario/${id}`)
       .then((response) => {
           setUsuariosget(response.data)
           setIdUser(response.data.id);
@@ -228,7 +228,7 @@ export default function MeuPerfil() {
   async function editUser(){
     setLoading(true);
     setLoadingUpdate(true)
-  await api.put(`/api/Usuarios/${idUser}`, {
+  await api.put(`/api/Usuario/${idUser}`, {
   id: idUser,
   username:usuario,
   password: senha,
@@ -289,7 +289,7 @@ export default function MeuPerfil() {
    console.log("foto",file)
 
     await api
-      .post(`/api/Usuarios/UploadImage/?name=${usuario}`, {
+      .post(`/api/Usuario/UploadImage/?name=${usuario}`, {
         file,
       })
       .catch((error) => {
@@ -306,7 +306,7 @@ export default function MeuPerfil() {
     // new FormData();
     // formdata.append('avatar', userInfo);
     // console.log('image', formdata)
-     await api.post(`/api/Usuarios/UploadImage/?name=${usuario}`
+     await api.post(`/api/Usuario/UploadImage/?name=${usuario}`
      )
       .then((response) => {
      console.log(response.data)
@@ -385,7 +385,7 @@ export default function MeuPerfil() {
               />
             </div>
             <div  className='bloco-input'>
-            <p className="title-input" >Nome de Usuário: </p>
+            <p className="title-input" >Nome Completo: </p>
               <input className='form-control inputlogin'
               id=''
               type="text"
@@ -411,7 +411,7 @@ export default function MeuPerfil() {
               value={funcao}
               //onKeyDown={LimparErro}
               onChange={(e)=>{
-                setFuncao(e.target.value.toLowerCase());
+                setFuncao(e.target.value);
               }}
               disabled
               />
@@ -436,7 +436,7 @@ export default function MeuPerfil() {
             </div>
             <div className='coluna-dupla'>
 
-            <div  className='bloco-input'>
+            {/* <div  className='bloco-input'>
             <p className="title-input" >Status </p>
 
               <select className="form-select select campo-select"
@@ -448,14 +448,14 @@ export default function MeuPerfil() {
                         <option value="1">Ativo</option>
                         <option value="2">Inativo</option>
                     </select>
-            </div>
+            </div> */}
             <div className='bloco-input'>
             <p className=" title-input"  >Grupo de Acesso: <span style={{color:'red'}}>*</span></p>
             {grupo=="1"?(<>
               <select className="form-select select campo-select"
             aria-label="Escolha o número de quartos"
             value={grupo}
-            disabled={grupo=='1'}
+            disabled
                          onChange={(e) => {setGrupo(e.target.value);
                         }}
                         >
@@ -469,7 +469,7 @@ export default function MeuPerfil() {
               <select className="form-select select campo-select"
             aria-label="Escolha o número de quartos"
             value={grupo}
-            disabled={grupo=='1'}
+            disabled
                          onChange={(e) => {setGrupo(e.target.value);
                         }}
                         >

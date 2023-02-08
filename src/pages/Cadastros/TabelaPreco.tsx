@@ -205,7 +205,7 @@ const [descricao, setDescricao] = useState("");
     
     await api
     
-      .get(`/api/Produtos?pagina=1&totalpagina=999`)
+      .get(`/api/Produto?pagina=1&totalpagina=999`)
       .then((response) => {
       //  console.log("grupo",response.data.data)
         
@@ -233,7 +233,7 @@ const [descricao, setDescricao] = useState("");
     setFilter(false);
     await api
     
-      .get(`/api/Tabela_de_Preco?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/TabelaPreco?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setTabelaPreco(response.data.data);
      //   console.log('dados',response.data);
@@ -251,7 +251,7 @@ const [descricao, setDescricao] = useState("");
 //   async function GettabelaPrecoFilter() {
 //     setFilter(true);
 //     await api
-//       .get(`/api/Tabela_de_Preco/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+//       .get(`/api/TabelaPreco/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
 //       .then((response) => {
 //         setTabelaPreco(response.data.data);
 //         tabelaPreco=response.data.data;
@@ -279,7 +279,7 @@ async function GetitensEditId(idIt: any ) {
     setShowEditItem(true);
     
     await api
-      .get(`/api/Item_Tabela_Preco/${idIt}`)
+      .get(`/api/ItemTabelaPreco/${idIt}`)
       .then((response) => {
          
        //  console.log("valor", response.data)
@@ -306,7 +306,7 @@ async function GetitensId() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Tabela_de_Preco/${idTabelaPreco}`)
+      .get(`/api/TabelaPreco/${idTabelaPreco}`)
       .then((response) => {
           //setUsuariosget(response.data)
         //  console.log('itens da tabela',response.data)
@@ -362,7 +362,7 @@ async function GetitensId() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Tabela_de_Preco/${id}`)
+      .get(`/api/TabelaPreco/${id}`)
       .then((response) => {
           //setUsuariosget(response.data)
        //   console.log('itens da tabela',response.data)
@@ -409,7 +409,7 @@ async function GetitensId() {
   async function EditeTabelaPreco(){
     setLoadingUpdate(true)
     setEditarTabela(true)
-  await api.put(`/api/Tabela_de_Preco/${idTabelaPreco}`, {
+  await api.put(`/api/TabelaPreco/${idTabelaPreco}`, {
         id: idTabelaPreco,
         codigo: Number(codigo),
         descricao:descricao,
@@ -458,7 +458,7 @@ async function GetitensId() {
     }
     
     
-      await api.put(`/api/Item_Tabela_Preco/${idItemEdit}`, {
+      await api.put(`/api/ItemTabelaPreco/${idItemEdit}`, {
         id: idItemEdit,
         idTabelaPreco: idTabelaPreco,
         idProd: idProdutoEdit,
@@ -522,7 +522,7 @@ async function GetitensId() {
     }
 })
   if(prodExist){
-    await api.put(`/api/Tabela_de_Preco/${idTabelaPreco}`, {
+    await api.put(`/api/TabelaPreco/${idTabelaPreco}`, {
         id: idTabelaPreco,
         codigo: Number(codigo),
         descricao:descricao,
@@ -591,7 +591,7 @@ async function GetitensId() {
       }
     
   setLoadingCreate(true)
-  await api.post("/api/Tabela_de_Preco",{
+  await api.post("/api/TabelaPreco",{
         codigo: Number(codigo),
         descricao:descricao,
         dataInicial: dataInicial,
@@ -628,7 +628,7 @@ async function GetitensId() {
       //==== EXCLUIR PRODUTO ======================================
       async function DeleteItem(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Item_Tabela_Preco/${id}`)
+      await api.delete(`/api/ItemTabelaPreco/${id}`)
         .then(response => {
        //   handleCloseEdit()
           GettabelaPreco();

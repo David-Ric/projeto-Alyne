@@ -167,7 +167,7 @@ export default function CadastroProdutos() {
     
     await api
     
-      .get(`/api/Produtos?pagina=1&totalpagina=999`)
+      .get(`/api/Produto?pagina=1&totalpagina=999`)
       .then((response) => {
         console.log("grupo",response.data.data)
         
@@ -197,7 +197,7 @@ export default function CadastroProdutos() {
     
     await api
     
-      .get(`/api/Grupo_Produtos?pagina=1&totalpagina=999`)
+      .get(`/api/GrupoProduto?pagina=1&totalpagina=999`)
       .then((response) => {
         console.log("grupo",response.data.data)
         
@@ -225,7 +225,7 @@ export default function CadastroProdutos() {
     setFilter(false);
     await api
     
-      .get(`/api/Produtos?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/Produto?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setProdutos(response.data.data);
         console.log('dados',response.data);
@@ -243,7 +243,7 @@ export default function CadastroProdutos() {
   async function GetProdutosFilter() {
     setFilter(true);
     await api
-      .get(`/api/Produtos/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Produto/filter?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setProdutos(response.data.data);
         produtos=response.data.data;
@@ -260,7 +260,7 @@ export default function CadastroProdutos() {
   async function GetProdutosFilterGrupo() {
     setFilter(true);
     await api
-      .get(`/api/Produtos/filter/grupo?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/Produto/filter/grupo?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setProdutos(response.data.data);
         produtos=response.data.data;
@@ -287,7 +287,7 @@ export default function CadastroProdutos() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Produtos/${id}`)
+      .get(`/api/Produto/${id}`)
       .then((response) => {
           //setUsuariosget(response.data)
           setGrupoSelecionado(response.data.nomeGrupo)
@@ -307,11 +307,11 @@ export default function CadastroProdutos() {
   //============ Editar produto ===============================//
   async function EditeProduto(){
     setLoadingUpdate(true)
-  await api.put(`/api/Produtos/${idProduto}`, {
+  await api.put(`/api/Produto/${idProduto}`, {
   id: idProduto,
   codigo:codigo,
   nome: nome,
-  idGrupo: idGrupo,
+  grupoId: idGrupo,
   nomeGrupo: nomeGrupo,
   })
     .then(response => {
@@ -363,10 +363,10 @@ export default function CadastroProdutos() {
       }
     
   setLoadingCreate(true)
-  await api.post("/api/Produtos",{
+  await api.post("/api/Produto",{
     codigo:codigo,
     nome: nome,
-    idGrupo: idGrupo,
+    grupoId: idGrupo,
     nomeGrupo: nomeGrupo,
        })
        
@@ -400,7 +400,7 @@ export default function CadastroProdutos() {
       //==== EXCLUIR PRODUTO ======================================
       async function DeleteProduto(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Produtos/${id}`)
+      await api.delete(`/api/Produto/${id}`)
         .then(response => {
           handleCloseEdit()
           GetProdutos();
@@ -612,7 +612,7 @@ function PesquisaCod(){
           {/* <td className='div-cod-prod' style={produtos.codigo== null || produtos.codigo==""?{color:"red",textAlign:'center'}:{textAlign:'center'}} >{produtos.codigo==null || produtos.codigo==""?"0000":produtos.codigo }</td> */}
           <td className='div-cod-prod'  style={{textAlign:'center'}}>{produtos.id}</td>
          <td className='Nome-complet'>{produtos.nome}</td> 
-          <td className='div-cod-prod'  style={{textAlign:'center'}}>{produtos.idGrupo}</td>
+          <td className='div-cod-prod'  style={{textAlign:'center'}}>{produtos.grupoId}</td>
           <td className='Nome-complet'>{produtos.nomeGrupo}</td> 
            
             <td style={{color: "transparent"}} >.............</td>

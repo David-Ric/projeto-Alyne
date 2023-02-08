@@ -189,7 +189,7 @@ export default function CadastroTabelaPrecoCliente() {
     
     await api
     
-      .get(`/api/Parceiros?pagina=1&totalpagina=999`)
+      .get(`/api/Parceiro?pagina=1&totalpagina=999`)
       .then((response) => {
       //  console.log("grupo",response.data.data)
         
@@ -248,7 +248,7 @@ export default function CadastroTabelaPrecoCliente() {
     
     await api
     
-      .get(`/api/Tabela_de_Preco?pagina=1&totalpagina=999`)
+      .get(`/api/TabelaPreco?pagina=1&totalpagina=999`)
       .then((response) => {
       //  console.log("grupo",response.data.data)
         
@@ -277,7 +277,7 @@ export default function CadastroTabelaPrecoCliente() {
     
   //   await api
     
-  //     .get(`/api/Produtos_Concorrentes?pagina=1&totalpagina=999`)
+  //     .get(`/api/ProdutoConcorrente?pagina=1&totalpagina=999`)
   //     .then((response) => {
   //      // console.log("grupo",response.data.data)
   //      if (response.data.data.length > 0) {
@@ -320,7 +320,7 @@ export default function CadastroTabelaPrecoCliente() {
     setFilter(false);
     await api
     
-      .get(`/api/Tabela_de_Preco_Cliente?pagina=${pagina}&totalpagina=${qtdePagina}`)
+      .get(`/api/TabelaPrecoCliente?pagina=${pagina}&totalpagina=${qtdePagina}`)
       .then((response) => {
         setTabela(response.data.data);
         tabela=response.data.data;
@@ -339,7 +339,7 @@ export default function CadastroTabelaPrecoCliente() {
     setFilter(true);
     console.log('entrou produto')
     await api
-      .get(`/api/Tabela_de_Preco_Cliente?pagina=${pagina}&totalpagina=999&filter=${search}`)
+      .get(`/api/TabelaPrecoCliente?pagina=${pagina}&totalpagina=999&filter=${search}`)
       .then((response) => {
         setTabela(response.data.data);
         tabela=response.data.data;
@@ -357,7 +357,7 @@ export default function CadastroTabelaPrecoCliente() {
   // async function GetTabelaConcorrente() {
   //   console.log('entrou')
   //   await api
-  //     .get(`/api/Tabela_de_Preco_Cliente?pagina=${pagina}&totalpagina=999&filter=${search}`)
+  //     .get(`/api/TabelaPrecoCliente?pagina=${pagina}&totalpagina=999&filter=${search}`)
   //     .then((response) => {
   //       setTabela(response.data.data);
   //       tabela=response.data.data;
@@ -393,7 +393,7 @@ export default function CadastroTabelaPrecoCliente() {
     setShowEdit(true);
     
     await api
-      .get(`/api/Tabela_de_Preco_Cliente/${id}`)
+      .get(`/api/TabelaPrecoCliente/${id}`)
       .then((response) => {
           //setUsuariosget(response.data)
           console.log("tabela id",response.data)
@@ -421,7 +421,7 @@ export default function CadastroTabelaPrecoCliente() {
   //============ Editar produto ===============================//
   async function EditeTabela(){
     setLoadingUpdate(true)
-  await api.put(`/api/Tabela_de_Preco_Cliente/${id}`, {
+  await api.put(`/api/TabelaPrecoCliente/${id}`, {
   id: id,
   codEmpresa:Number(codEmpresa),
   codParceiro: Number(codParceiro),
@@ -485,7 +485,7 @@ export default function CadastroTabelaPrecoCliente() {
       }
     
   setLoadingCreate(true)
-  await api.post("/api/Tabela_de_Preco_Cliente",{
+  await api.post("/api/TabelaPrecoCliente",{
     codEmpresa:Number(codEmpresa),
     codParceiro: Number(codParceiro),
     codTabelaPreco: Number(codTabelaPreco),
@@ -522,7 +522,7 @@ export default function CadastroTabelaPrecoCliente() {
       //==== EXCLUIR PRODUTO ======================================
       async function DeleteTabela(id: any){
         setLoadingUpdate(true)
-      await api.delete(`/api/Tabela_de_Preco_Cliente/${id}`)
+      await api.delete(`/api/TabelaPrecoCliente/${id}`)
         .then(response => {
           handleCloseEdit()
           GetTabela();
